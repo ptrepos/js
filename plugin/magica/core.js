@@ -445,7 +445,7 @@ function FormValidator(form)
 
 FormValidator.prototype.validate = function()
 {
-	var messages = [];
+	var messages = this._validate();
 	
 	if(messages.length > 0) {
 		alert(messages.join('\r\n'));
@@ -492,6 +492,8 @@ FormValidator.prototype.getRequired = function(input)
 FormValidator.prototype._analayzeValidators = function(input, expression)
 {
 	if(input.analyzed == true)
+		return;
+	if(expression == null || expression.length <= 0)
 		return;
 
 	var _required = false;
@@ -579,6 +581,8 @@ FormValidator.prototype._analayzeValidators = function(input, expression)
 			}
 		}
 	});
+	
+	input.analyzed = true;
 }
 var __mgFocused = null;
 
@@ -586,7 +590,7 @@ FormValidator.prototype._validate = function()
 {
 	var messages = [];
 	for(var i = 0; i < this.form.elements.length; i++) {
-		var submessages = this._validateInput(this.form.elements[i]);
+		var submessages = this._validateInput(this.form.elements[i], true);
 		for(var j = 0; j < submessages.length; j++) {
 			messages.push(submessages[j]);
 		}
@@ -594,8 +598,13 @@ FormValidator.prototype._validate = function()
 	return messages;
 }
 
-FormValidator.prototype._validateInput = function(input)
+FormValidator.prototype._validateInput = function(input, requiredMessage)
 {
+	if(requiredMessage == undefined)
+		requiredMessage = false;
+	if(input.validators == null || input.validators == undefined)
+		return true;
+
 	var value = input.value;
 	
 	if(value != null || value.length > 0) {
@@ -614,6 +623,9 @@ FormValidator.prototype._validateInput = function(input)
 		if(value == null || value.length <= 0 || messages.length > 0) {
 			mgRemoveClass(input, "mg_required_ok");
 			mgAddClass(input, "mg_required_ng");
+			if(requiredMessage) {
+				messages.push(input.alt + ValidationMessages.required);
+			}
 		} else {
 			mgRemoveClass(input, "mg_required_ng");
 			mgAddClass(input, "mg_required_ok");
@@ -622,7 +634,6 @@ FormValidator.prototype._validateInput = function(input)
 
 	return messages;
 }
-
 
 function _convertToSampleType(value, sample)
 {
