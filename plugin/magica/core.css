@@ -5,6 +5,7 @@
  */
 body {
 	font-family: Avenir , "Open Sans" , "Helvetica Neue" , Helvetica , Arial , Verdana , Roboto , "游ゴシック" , "Yu Gothic" , "游ゴシック体" , "YuGothic" , "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro" , "Meiryo UI" , "メイリオ" , Meiryo , "ＭＳ Ｐゴシック" , "MS PGothic" , sans-serif;
+	background-color: #f8f8f8;
 }
 
 .mg_popupbox {
@@ -22,8 +23,16 @@ body {
 
 .mg_popupbox ul {
 	list-style: none;
-	padding: 8px 24px 8px 24px;
+	padding: 8px 8px 8px 8px;
 	margin: 0px;
+}
+
+input, textarea {
+	border:solid 1px #808080;
+	border-radius: 2px;
+	box-shadow: inner 0 0 2px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+	-webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.2);
 }
 
 .mg_required_ng {

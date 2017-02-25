@@ -51,6 +51,7 @@ function mgShowMessages(messages, element)
 	__mgBox = new PopupBox(ul, 10000);
 	
 	if(element != null) {
+		__mgBox.element.style.position = "absolute";
 		var left1 = element.offsetLeft + element.offsetWidth / 2;
 		__mgBox.element.style.left = mgToPxStr(left1);
 		__mgBox.element.style.top = mgToPxStr(element.offsetTop + element.offsetHeight);
@@ -78,7 +79,6 @@ function Action()
 Action.prototype._next = null;
 Action.prototype._previous = null;
 Action.prototype.ticks = 0;
-
 
 function ActionEvent(ticks)
 {
@@ -448,7 +448,7 @@ FormValidator.prototype.validate = function()
 	var messages = this._validate();
 	
 	if(messages.length > 0) {
-		alert(messages.join('\r\n'));
+		alert(messages.join('\n'));
 		return false;
 	}
 	return true;
@@ -479,8 +479,11 @@ FormValidator.prototype.setRequired = function(input, value)
 	
 	if(input._required) {
 		mgAddClass(input, "mg_required");
+		this._validateInput(input);
 	} else {
 		mgRemoveClass(input, "mg_required");
+		mgRemoveClass(input, "mg_required_ng");
+		mgRemoveClass(input, "mg_required_ok");
 	}
 }
 
@@ -554,7 +557,23 @@ FormValidator.prototype._analayzeValidators = function(input, expression)
 	{
 		return new MinValidator(value);
 	}
-	
+	function UTF16(maxLength)
+	{
+		return new Utf16LengthValidator(maxLength);
+	}
+	function UTF8(maxLength)
+	{
+		return new Utf8LengthValidator(maxLength);
+	}
+	function Shift_JIS(maxLength)
+	{
+		return new ShiftJisLengthValidator(maxLength);
+	}
+	function EUC_JP(maxLength)
+	{
+		return new EucJpLengthValidator(maxLength);
+	}
+
 	var formValidator = this;
 
 	input.analyzed = true;
@@ -624,7 +643,7 @@ FormValidator.prototype._validateInput = function(input, requiredMessage)
 			mgRemoveClass(input, "mg_required_ok");
 			mgAddClass(input, "mg_required_ng");
 			if(requiredMessage) {
-				messages.push(input.alt + ValidationMessages.required);
+				messages.push(ValidationMessages.required.replace("${caption}", input.alt));
 			}
 		} else {
 			mgRemoveClass(input, "mg_required_ng");
@@ -646,23 +665,27 @@ function _convertToSampleType(value, sample)
 }
 
 var ValidationMessagesDefault = {
-	required: ": 値は必須入力です。",
-	number: ": 値は整数でなければいけません。",
-	numberDigits: ": 値は整数部${digits}桁以下の整数でなければいけません。",
-	numberPrecision: ": 値は少数部${precision}桁以内でなければいけません。",
-	numberDigitsPrecision: ": 値は整数部${digits}桁,少数部${precision}桁以内でなければいけません。",
-	yearMonth: ": 値は年月でなければいけません。(yyyy/MM)",
-	date: ": 値は日付でなければいけません。(yyyy/MM/dd)",
-	timeMinute: ": 値は時刻でなければいけません。(HH:mm)",
-	timeSecond: ": 値は時刻でなければいけません。(HH:mm:ss)",
-	dateTimeMinute: ": 値は日時でなければいけません。(yyyy/MM/dd HH:mm)",
-	dateTimeSecond: ": 値は日時でなければいけません。(yyyy/MM/dd HH:mm:ss)",
-	letter: ": 値は英字でなければいけません。",
-	digits: ": 値は数字でなければいけません。",
-	letterOrDigits: ": 値は英数字でなければいけません。",
-	mailAddress: ": 値はメールアドレスでなければいけません。",
-	max: ": 値は${value}以下でなければいけません。",
-	min: ": 値は${value}以上でなければいけません。",
+	required: "「${caption}」は必須入力です。",
+	number: "「${caption}」は整数です。",
+	numberDigits: "「${caption}」は整数部${digits}桁以下の整数です。",
+	numberPrecision: "「${caption}」は少数部${precision}桁以内です。",
+	numberDigitsPrecision: "「${caption}」は整数部${digits}桁,少数部${precision}桁以内です。",
+	yearMonth: "「${caption}」の値は年月です。(yyyy/MM)",
+	date: "「${caption}」は日付です。(yyyy/MM/dd)",
+	timeMinute: "「${caption}」は時刻です。(HH:mm)",
+	timeSecond: "「${caption}」は時刻です。(HH:mm:ss)",
+	dateTimeMinute: "「${caption}」は日時です。(yyyy/MM/dd HH:mm)",
+	dateTimeSecond: "「${caption}」は日時です。(yyyy/MM/dd HH:mm:ss)",
+	letter: "「${caption}」は英字です。",
+	digits: "「${caption}」は数字です。",
+	letterOrDigits: "「${caption}」は英数字です。",
+	mailAddress: "「${caption}」はメールアドレスです。",
+	max: "「${caption}」は${value}以下です。",
+	min: "「${caption}」は${value}以上です。",
+	utf16: "「${caption}」の最大長は${maxLength}文字です。(現在${n}文字)",
+	utf8: "「${caption}」の最大長は${maxLength}byte(UTF-8)です。(現在${n}byte)",
+	shiftJis: "「${caption}」の最大長は${maxLength}byte(Shift_JIS)です。(現在${n}byte)",
+	eucJp: "「${caption}」の最大長は${maxLength}byte(EUC-JP)です。(現在${n}byte)",
 };
 
 var ValidationMessages = ValidationMessagesDefault;
@@ -695,12 +718,13 @@ function _RegExpValidatorBase(expression, className)
 {
 	this.pattern = new RegExp(expression);
 	this.className = className;
+	this.allowed = null;
 }
 _RegExpValidatorBase.prototype = new Validator();
 
 _RegExpValidatorBase.prototype.createMessage = function(caption)
 {
-	return caption + ValidationMessages[this.messageId];
+	return ValidationMessages[this.messageId].replace("${caption}", caption);
 }
 
 _RegExpValidatorBase.prototype.validate = function(value, caption)
@@ -717,6 +741,33 @@ _RegExpValidatorBase.prototype.validate = function(value, caption)
 _RegExpValidatorBase.prototype.layout = function(element)
 {
 	mgAddClass(element, this.className);
+	
+	if(this.allowed != null) {
+		var allowed = this.allowed;
+		element.addEventListener("keypress", function(e) {
+			__mgKeyCheck(e, allowed);
+		});
+	}
+}
+
+function __mgCreateKeySet(chars)
+{
+	var set = new Object();
+	for(var i = 0; i < chars.length; i++) {
+		set[chars[i]] = true;
+	}
+	return set;
+}
+var __MG_CHECK_CHARS_SET = __mgCreateKeySet(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+
+function __mgKeyCheck(e, allowed) {
+	if(e.ctrlKey || e.altKey)
+		return;
+	if(__MG_CHECK_CHARS_SET[e.key] == true) {
+		if(allowed[e.key] != true) {
+			e.preventDefault();
+		}
+	}
 }
 
 _RegExpValidatorBase.prototype.unlayout = function(element)
@@ -754,8 +805,16 @@ function NumberValidator(digits, precision)
 	this.precision = precision;
 	this.pattern = new RegExp(pattern);
 	this.className = "number_field";
+	
+	if(precision <= 0) {
+		this.allowed = __MG_INTEGER_CHAR_SET;
+	} else {
+		this.allowed = __MG_DECIMAL_CHAR_SET;
+	}
 }
 NumberValidator.prototype = new _RegExpValidatorBase();
+__MG_INTEGER_CHAR_SET = __mgCreateKeySet("+-0123456789");
+__MG_DECIMAL_CHAR_SET = __mgCreateKeySet("+-0123456789.");
 
 NumberValidator.prototype.createMessage = function(caption)
 {
@@ -769,8 +828,8 @@ NumberValidator.prototype.createMessage = function(caption)
 	} else {
 		text = ValidationMessages.number;
 	}
-	return caption + 
-	       text.replace("${digits}", this.digits == null ? "null": this.digits.toString())
+	return text.replace("${caption}", caption)
+	           .replace("${digits}", this.digits == null ? "null": this.digits.toString())
 	           .replace("${precision}", this.precision.toString());
 }
 
@@ -784,6 +843,7 @@ function LetterValidator()
 	this.messageId = "letter";
 }
 LetterValidator.prototype = new _RegExpValidatorBase();
+LetterValidator.prototype.allowed = __mgCreateKeySet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
 
 /*
  * class DigitValidator;
@@ -793,8 +853,10 @@ function DigitValidator()
 	this.pattern = new RegExp("^[0-9]$");
 	this.className = "digit_field";
 	this.messageId = "digits";
+	this.allowed = "0123456789";
 }
 DigitValidator.prototype = new _RegExpValidatorBase();
+DigitValidator.prototype.allowed = __mgCreateKeySet("0123456789");
 
 /*
  * class LetterOrDigitValidator;
@@ -804,9 +866,10 @@ function LetterOrDigitValidator()
 	this.pattern = new RegExp("^[0-9]+$");
 	this.className = "letter_or_digit_field";
 	this.messageId = "letterOrDigit";
+	this.allowed = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 }
 LetterOrDigitValidator.prototype = new _RegExpValidatorBase();
-
+LetterOrDigitValidator.prototype.allowed = __mgCreateKeySet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
 
 /**
  * class YearValidator;
@@ -816,8 +879,10 @@ function YearMonthValidator()
 	this.pattern = new RegExp("^[0-9]{1,4}[-/][0-9]{1,2}$");
 	this.className = "year_month_field";
 	this.messageId = "yearMonth";
+	this.allowed = "0123456789/-";
 }
 YearMonthValidator.prototype = new _RegExpValidatorBase();
+YearMonthValidator.prototype.allowed = __mgCreateKeySet("0123456789/-");
 
 YearMonthValidator.prototype.validate = function(value, caption)
 {
@@ -840,6 +905,7 @@ function DateValidator()
 	this.messageId = "date";
 }
 DateValidator.prototype = new YearMonthValidator();
+DateValidator.prototype.allowed = __mgCreateKeySet("0123456789/-");
 
 /**
  * class TimeValidator;
@@ -858,8 +924,10 @@ function TimeValidator(type)
 		this.messageId = "timeMinute";
 	}
 	this.className = "time_field";
+	this.allowed = "0123456789:";
 }
 TimeValidator.prototype = new YearMonthValidator();
+TimeValidator.prototype.allowed = __mgCreateKeySet("0123456789:");
 
 TimeValidator.MINUTE = "minute";
 TimeValidator.SECOND = "second";
@@ -883,6 +951,7 @@ function DateTimeValidator(type)
 	this.className = "date_time_field";
 }
 DateTimeValidator.prototype = new YearMonthValidator();
+DateTimeValidator.prototype.allowed = __mgCreateKeySet("0123456789/-: T");
 
 /**
  * class MailAddressValidator;
@@ -911,7 +980,9 @@ MaxValidator.prototype.validate = function(value, caption)
 
 	var converted = _convertToSampleType(value, this.value);
 	if(converted > this.value) {
-		return caption + ValidationMessages.max.replace("${value}", this.value.toString());
+		return ValidationMessages.max
+			.replace("${caption}", caption)
+			.replace("${value}", this.value.toString());
 	}
 	return null;
 }
@@ -932,7 +1003,155 @@ MinValidator.prototype.validate = function(value, caption)
 
 	var converted = _convertToSampleType(value, this.value);
 	if(converted < this.value) {
-		return caption + ValidationMessages.min.replace("${value}", this.value.toString());
+		return ValidationMessages.min
+			.replace("${caption}", caption)
+			.replace("${value}", this.value.toString());
+	}
+	return null;
+}
+
+/**
+ * 文字列長チェックを実装する。
+ * UTF-8, Shift_JIS(なんちゃって), EUC-JP(なんちゃって)
+ */
+function __mgGetUtf8Length(str)
+{
+	var length = 0;
+	for(var i = 0; i < str.length; i++) {
+		var ucs4;
+		// UTF16のサロゲートペアを解決してUCS4のコードを生成
+		var c1 = str.charCodeAt(i);
+		if(c1 < 0xD800 || 0xDFFF < c1) {
+			ucs4 = c1;
+		} else {
+			var c2 = str.charCodeAt(i+1);
+			if(!((0xD800 <= c1 && c1 <= 0xDBFF) && (0xDC00 <= c2 && c2 <= 0xDFFF))) {
+				throw new Error("UTF16 is invalid.");
+			}
+			ucs4 = 0x10000 + (c1 - 0xD800) * 0x400 + (c2 - 0xDC00);
+			i++;
+		}
+		
+		// UCS4のコードから変換されるUTF8の長さを得る
+		if(ucs4 <= 0x007F) {
+			length += 1;
+		} else if(ucs4 <= 0x07FF) {
+			length += 2;
+		} else if(ucs4 <= 0xFFFF) {
+			length += 3;
+		} else if(ucs4 <= 0x1FFFFF) {
+			length += 4;
+		}  else {
+			throw new Error("UCS4 is invalid.");
+		}
+	}
+	return length;
+}
+
+function __mgGetShiftJisLength(str)
+{
+	var length = 0;
+	for(var i = 0; i < str.length; i++) {
+		var c = str.charCodeAt(i);
+		if(c <= 127) {
+			length += 1;	// ASCII
+		} else if(0xFF61 <= c && c <= 0xFF9F) {
+			length += 1;	// 半角カナ
+		} else {
+			length += 2;	// ASCII以外だったら日本語コードと割り切る
+		}
+	}
+	return length;
+}
+
+function __mgGetEucJpLength(str)
+{
+	var length = 0;
+	for(var i = 0; i < str.length; i++) {
+		var c = str.charCodeAt(i);
+		if(c <= 127) {
+			length += 1;	// ASCII
+		} else {
+			length += 2;	// ASCII以外だったら日本語コードと割り切る
+		}
+	}
+	return length;
+}
+
+function Utf16LengthValidator(maxLength)
+{
+	if(maxLength == undefined || maxLength == null)
+		throw new Error("The maxLength is required.");
+		
+	this.maxLength = maxLength;
+}
+Utf16LengthValidator.prototype = new Validator();
+
+Utf16LengthValidator.prototype.validate = function(value, caption)
+{
+	var length = value.length;
+	if(length > this.maxLength) {
+		return ValidationMessages.utf16.replace("${caption}", caption)
+		                              .replace("${maxLength}", this.maxLength)
+		                              .replace("${n}", length);
+	}
+	return null;
+}
+
+function Utf8LengthValidator(maxLength)
+{
+	if(maxLength == undefined || maxLength == null)
+		throw new Error("The maxLength is required.");
+		
+	this.maxLength = maxLength;
+}
+Utf8LengthValidator.prototype = new Validator();
+
+Utf8LengthValidator.prototype.validate = function(value, caption)
+{
+	var length = __mgGetUtf8Length(value);
+	if(length > this.maxLength) {
+		return ValidationMessages.utf8.replace("${caption}", caption)
+		                              .replace("${maxLength}", this.maxLength)
+		                              .replace("${n}", length);
+	}
+	return null;
+}
+
+function ShiftJisLengthValidator(maxLength)
+{
+	if(maxLength == undefined || maxLength == null)
+		throw new Error("The maxLength is required.");
+	this.maxLength = maxLength;
+}
+ShiftJisLengthValidator.prototype = new Validator();
+
+ShiftJisLengthValidator.prototype.validate = function(value, caption)
+{
+	var length = __mgGetShiftJisLength(value);
+	if(length > this.maxLength) {
+		return ValidationMessages.shiftJis.replace("${caption}", caption)
+		                                  .replace("${maxLength}", this.maxLength)
+		                                  .replace("${n}", length);
+	}
+	return null;
+}
+
+function EucJpLengthValidator(maxLength)
+{
+	if(maxLength == undefined || maxLength == null)
+		throw new Error("The maxLength is required.");
+	this.maxLength = maxLength;
+}
+EucJpLengthValidator.prototype = new Validator();
+
+EucJpLengthValidator.prototype.validate = function(value, caption)
+{
+	var length = __mgGetEucJpLength(value);
+	if(length > this.maxLength) {
+		return ValidationMessages.eucJp.replace("${caption}", caption)
+		                               .replace("${maxLength}", this.maxLength)
+		                               .replace("${n}", length);
 	}
 	return null;
 }
