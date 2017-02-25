@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link type="text/css" href="../plugin/magica/table_grid.css" rel="stylesheet"/>
+<script type="text/javascript" src="../plugin/magica/table_grid.js"></script>
+<style type="text/css">
+<!--
+.section {
+	margin-top: 1em;
+}
+-->
+</style>
+<script type="text/javascript">
+<!--
+window.addEventListener('load', function() {
+	grid1 = new MgTableGrid(document.getElementById("mg_grid_sample1"));
+	grid2 = new MgTableGrid(document.getElementById("mg_grid_sample2"));
+	grid3 = new MgTableGrid(document.getElementById("mg_grid_sample3"));
+	grid4 = new MgTableGrid(document.getElementById("mg_grid_sample4"));
+	grid5 = new MgTableGrid(document.getElementById("mg_grid_sample5"));
+	
+	console.time('createDataSource');
+	var dataSource = [];
+	for(var i = 0; i < 500; i++) {
+		dataSource.push(
+			{url: "http://example.com", data1: "DATA1",data2: "DATA2-" + (i+1).toString(),data3: "DATA3",data4: "DATA4",data5: "DATA5",data6: "DATA6",data7: "DATA73aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",data8: "DATA8"});
+	}
+	console.timeEnd('createDataSource');
+	
+	setTimeout(function() {
+		console.time('grid1');
+		grid1.setDataSource(dataSource);
+		console.timeEnd('grid1');
+
+		console.time('grid2');
+		grid2.setDataSource(dataSource);
+		console.timeEnd('grid2');
+		
+		console.time('grid3');
+		grid3.setDataSource(dataSource);
+		console.timeEnd('grid3');
+		
+		console.time('grid4');
+		grid4.setDataSource(dataSource);
+		console.timeEnd('grid4');
+		
+		console.time('grid5');
+		grid5.setDataSource(dataSource);
+		console.timeEnd('grid5');
+	}, 0);
+});
+-->
+</script>
+</head>
+<body>
+
+<div class="section">
+
+<table id="mg_grid_sample1" grid-style="left: 1em; width: calc(100% - 2em); height: 350px;">
+	<thead>
+		<tr>
+			<td style="width: 40px;" rowspan="2" fix="true">AAAA</td>
+			<td style="width: 100px;" rowspan="2" fix="true">BBBB</td>
+			<td colspan="3" style="width: 300px;">XXX1</td>
+			<td colspan="2" style="width: 200px;">XXX2</td>
+		</tr>
+		<tr>
+			<td style="width: 100px;">CCCC</td>
+			<td style="width: 100px;">DDDD</td>
+			<td style="width: 100px;">EEEE</td>
+			<td style="width: 100px;">FFFF</td>
+			<td style="width: 100px;">GGGG</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="width: 40px;" rowspan="2" fix="true"><row-number href-field="url"/></td>
+			<td style="width: 100px;" rowspan="2" fix="true"><out field="data1" href-field="url"/></td>
+			<td colspan="3" style="width: 300px;"><out field="data2" href-field="url"/></td>
+			<td colspan="2" style="width: 200px;"><out field="data3" href-field="url"/></td>
+		</tr>
+		<tr>
+			<td style="width: 100px;"><out field="data4" href-field="url"/></td>
+			<td style="width: 100px;"><out field="data5" href-field="url"/></td>
+			<td style="width: 100px;"><out field="data6" href-field="url"/></td>
+			<td style="width: 100px;"><out field="data7" href-field="url"/></td>
+			<td style="width: 100px;"><out field="data8" href-field="url"/></td>
+		</tr>
+	</tbody>
+</table>
+
+<button onclick="grid1.addDataSourceItem({})">要素追加</button>
+</div>
+
+<div class="section">
+
+<table id="mg_grid_sample2" grid-style="left: 1em; width: calc(100% - 2em); height: 350px;">
+	<thead>
+		<tr>
+			<td style="width: 40px;" fix="true">No.</td>
+			<td style="width: 100px;" fix="true">field1</td>
+			<td style="width: 300px;" fix="true">field2</td>
+			<td style="width: 200px;">field3</td>
+			<td style="width: 200px;">field4</td>
+			<td style="width: 200px;">field5</td>
+			<td style="width: 200px;">field6</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="width: 40px;" fix="true"><row-number href-field="url"/></td>
+			<td style="width: 100px;" fix="true"><out field="data1"/></td>
+			<td style="width: 300px;" fix="true"><out field="data2"/></td>
+			<td style="width: 200px;"><out field="data3"/></td>
+			<td style="width: 200px;"><out field="data4"/></td>
+			<td style="width: 200px;"><out field="data5"/></td>
+			<td style="width: 200px;"><out field="data7"/></td>
+		</tr>
+	</tbody>
+</table>
+
+</div>
+
+<div class="section">
+
+<table id="mg_grid_sample3" grid-style="left: 1em; width: calc(100% - 2em); height: 350px;">
+	<thead>
+		<tr>
+			<td rowspan="3" style="width: 40px;" fix="true">No.</td>
+			<td style="width: 100px;" fix="true">field1</td>
+			<td rowspan="3" style="width: 100px;" fix="true">field2</td>
+			<td colspan="2" rowspan="2" style="width: 400px;">field3</td>
+			<td colspan="2" style="width: 200px;">field4</td>
+			<td style="width: 200px;">field5</td>
+		</tr>
+		<tr>
+			<td style="width: 100px;" fix="true">field1</td>
+			<td style="width: 200px;">field3</td>
+			<td style="width: 200px;">field4</td>
+			<td style="width: 200px;">field5</td>
+		</tr>
+		<tr>
+			<td style="width: 100px;" fix="true">field1</td>
+			<td style="width: 200px;">field2</td>
+			<td style="width: 200px;">field3</td>
+			<td style="width: 200px;">field4</td>
+			<td style="width: 200px;">field5</td>
+			<td style="width: 200px;">field6</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td rowspan="3" style="width: 40px;" fix="true"><row-number href-field="url"/></td>
+			<td style="width: 100px;" fix="true"><out field="data1"></td>
+			<td rowspan="3" style="width: 100px;" fix="true"><out field="data1"></td>
+			<td colspan="2" rowspan="2" style="width: 400px;"><out field="data1"></td>
+			<td colspan="2" style="width: 200px;"><out field="data1"></td>
+			<td style="width: 200px;"><out field="data1"></td>
+		</tr>
+		<tr>
+			<td style="width: 100px;" fix="true"><out field="data1"></td>
+			<td style="width: 200px;"><out field="data1"></td>
+			<td style="width: 200px;"><out field="data1"></td>
+			<td style="width: 200px;"><out field="data1"></td>
+		</tr>
+		<tr>
+			<td style="width: 100px;" fix="true"><out field="data1"></td>
+			<td style="width: 200px;"><out field="data1"></td>
+			<td style="width: 200px;"><out field="data2"></td>
+			<td style="width: 200px;"><out field="data3"></td>
+			<td style="width: 200px;"><out field="data1"></td>
+			<td style="width: 200px;"><out field="data1"></td>
+		</tr>
+	</tbody>
+</table>
+
+</div>
+<div class="section">
+
+<table id="mg_grid_sample4" grid-style="left: 1em; width: calc(100% - 2em); height: 350px;">
+	<thead>
+		<tr>
+			<td style="width: 40px;" fix="true">No.</td>
+			<td style="width: 100px;" fix="true">field1</td>
+			<td style="width: 300px;" fix="true">field2</td>
+			<td style="width: 200px;">field3</td>
+			<td style="width: 200px;">field4</td>
+			<td style="width: 200px;">field5</td>
+			<td style="width: 200px;">field6</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="width: 40px;" fix="true"><row-number href-field="url"/></td>
+			<td style="width: 100px;" fix="true"><out field="data1"/></td>
+			<td style="width: 300px;" fix="true"><out field="data2"/></td>
+			<td style="width: 200px;"><out field="data3"/></td>
+			<td style="width: 200px;"><out field="data4"/></td>
+			<td style="width: 200px;"><out field="data5"/></td>
+			<td style="width: 200px;"><img bind-src="url" width="16" height="16"/></td>
+		</tr>
+	</tbody>
+</table>
+
+</div>
+
+<div class="section">
+
+<table id="mg_grid_sample5" grid-style="left: 1em; width: calc(100% - 2em); height: 350px;">
+	<thead>
+		<tr>
+			<td style="width: 40px;">No.</td>
+			<td style="width: 100px;">field1</td>
+			<td style="width: 300px;">field2</td>
+			<td style="width: 200px;">field3</td>
+			<td style="width: 200px;">field4</td>
+			<td style="width: 200px;">field5</td>
+			<td style="width: 200px;">field6</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style="width: 40px;"><row-number href-field="url"/></td>
+			<td style="width: 100px;"><out field="data1"/></td>
+			<td style="width: 300px;"><out field="data2"/></td>
+			<td style="width: 200px;"><out field="data3"/></td>
+			<td style="width: 200px;"><out field="data4"/></td>
+			<td style="width: 200px;"><out field="data5"/></td>
+			<td style="width: 200px;"><img bind-src="url" width="16" height="16"/></td>
+		</tr>
+	</tbody>
+</table>
+
+</div>
+
+</body>
+</html>

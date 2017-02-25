@@ -1,0 +1,63 @@
+/**
+ * t.hada 2017/02/18
+ *
+ * table grid plugin.
+ */
+body {
+	font-family: Avenir , "Open Sans" , "Helvetica Neue" , Helvetica , Arial , Verdana , Roboto , "游ゴシック" , "Yu Gothic" , "游ゴシック体" , "YuGothic" , "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro" , "Meiryo UI" , "メイリオ" , Meiryo , "ＭＳ Ｐゴシック" , "MS PGothic" , sans-serif;
+}
+
+.mg_popupbox {
+	visibility: hidden;
+	position: fixed;
+	width: 350px;
+	background-color: #080816;
+	color: #ffffff;
+	border: solid 1px #c0c0c0;
+	border-radius: 2px 2px 2px 2px; 
+	font-size: 80%;
+	box-shadow: 5px 5px rgba(0,0,0,0.4);
+	opacity: 0.8;
+}
+
+.mg_popupbox ul {
+	list-style: none;
+	padding: 8px 24px 8px 24px;
+	margin: 0px;
+}
+
+.required_ng {
+	backgroud-color: #ffd1d9;
+}
+.required_ok {
+	backgroud-color: #d1ffe0;
+}
+
+.number_field {
+	ime-mode: disabled;
+	text-align: right;
+}
+.letter_field {
+	ime-mode: disabled;
+}
+.digit_field {
+	ime-mode: disabled;
+}
+.letter_or_digit_field {
+	ime-mode: disabled;
+}
+.year_month_field {
+	ime-mode: disabled;
+	text-align: center;
+}
+.date_field {
+	ime-mode: disabled;
+	text-align: center;
+}
+.date_time_field {
+	ime-mode: disabled;
+	text-align: center;
+}
+.mail_address_field {
+	ime-mode: disabled;
+}

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link type="text/css" href="../plugin/magica/core.css" rel="stylesheet"/>
+<script type="text/javascript" src="../plugin/magica/core.js"></script>
+<script type="text/javascript">
+
+function showMessage(message)
+{
+	var div = document.createElement("div");
+	div.innerHTML = message;
+	
+	var box = new PopupBox(div);
+	box.element.style.left = mgToPxStr(Math.random() * 1024);
+	box.element.style.top = mgToPxStr(Math.random() * 768);
+	box.show();
+}
+
+function showMessages(messages)
+{
+	var ul = document.createElement("ul");
+	for(var i = 0; i < messages.length; i++) {
+		var li = document.createElement("li");
+		li.appendChild(document.createTextNode(messages[i]));
+		ul.appendChild(li);
+	}
+	
+	var box = new PopupBox(ul);
+	box.element.style.right = "16px";
+	box.element.style.bottom = "16px";
+	box.show();
+}
+
+function message()
+{
+	showMessages(["FIELD1: 値は必須入力です。", "FIELD1: 値は小数点5桁以内でなければいけません。"]);
+}
+
+ActionManager.start();
+
+/*
+window.addEventListener('load', function() {
+	window.setInterval(function() {
+		showMessages(["FIELD1: 値は必須入力です。", "FIELD1: 値は小数点5桁以内でなければいけません。"]);
+	}, 300);
+});
+*/
+
+var showCloseBox = new PopupBox(document.createTextNode("message message message message message message message message message message message message message message message message message message"));;
+showCloseBox.onclosed = function() {
+	shown = false;
+}
+var shown = false;
+function showClose()
+{
+	if(shown == false) {
+		showCloseBox.element.style.left = mgToPxStr(Math.random() * 640);
+		showCloseBox.element.style.top = mgToPxStr(Math.random() * 480);
+		showCloseBox.show();
+		shown = true;
+	} else {
+		showCloseBox.close();
+	}
+}
+
+function timerPopup()
+{
+	var id = window.setInterval(function() {
+		showMessage("メッセージが重要<br/>警告！！！！！");
+	}, 300);
+		
+	window.setTimeout(function() { window.clearInterval(id); }, 10000);
+}
+
+</script>
+</head>
+<body>
+	<input type="text" onkeypress="message()"/>
+	<button onclick="showClose()">開いて閉じる</button>
+	<button onclick="timerPopup()">タイマーポップアップ</button>
+</body>
+</html>

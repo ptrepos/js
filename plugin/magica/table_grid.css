@@ -1,0 +1,45 @@
+/**
+ * t.hada 2017/02/18
+ *
+ * table grid plugin.
+ */
+body {
+	font-family: Avenir , "Open Sans" , "Helvetica Neue" , Helvetica , Arial , Verdana , Roboto , "ŸàƒSƒVƒbƒN" , "Yu Gothic" , "ŸàƒSƒVƒbƒN‘Ì" , "YuGothic" , "ƒqƒ‰ƒMƒmŠpƒS Pro W3" , "Hiragino Kaku Gothic Pro" , "Meiryo UI" , "ƒƒCƒŠƒI" , Meiryo , "‚l‚r ‚oƒSƒVƒbƒN" , "MS PGothic" , sans-serif;
+}
+
+.mg_grid {
+	border: solid 2px #000000;
+	background-color: #f8f8f8;
+}
+.mg_grid table {
+	border-collapse: collapse;
+	table-layout: fixed;
+}
+
+.mg_grid .mg_grid_head {
+	border-bottom: solid 1px #000000;
+}
+
+.mg_grid .mg_grid_body {
+}
+
+.mg_grid table thead td, .mg_grid table thead th {
+	word-break: break-all;
+	border: solid 1px #c0c0c0;
+	color: #f0f8ff;
+	background-color: #242432;
+	//background-color: #191970;
+}
+
+.mg_grid table tbody td, .mg_grid table tbody th {
+	word-break: break-all;
+	border: solid 1px #c0c0c0;
+	background-color: #ffffff;
+}
+
+.mg_grid .odd td, .mg_grid .odd th{
+	background-color: #f0f0f0;
+}
+
+.mg_grid .odd even, .mg_grid .even th{
+}
