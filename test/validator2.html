@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link type="text/css" href="../plugin/magica/core.css" rel="stylesheet"/>
+<script type="text/javascript" src="../plugin/magica/core.js"></script>
+<script type="text/javascript">
+var formValidator = null;
+window.addEventListener('load', function(e) {
+	formValidator = new FormValidator(document.forms["test1"]);
+
+});
+
+</script>
+</head>
+<body>
+	<form id="test1">
+		<input type="text" alt="数値項目1" name="numberField1" validate="required(),number(18,4),min(-10),max(100000000)"/><br/>
+		<input type="text" alt="数値項目2" name="numberField2" validate="required(),number(18)"/><br/>
+		<input type="text" alt="数値項目3" name="numberField3" validate="required(),number(9)"/><br/>
+		<input type="text" alt="数値項目4" name="numberField4" validate="number(4,4)"/><br/>
+		<textarea alt="数値項目5" name="numberField5" validate="required(),number(99,99)" cols="80" rows="8"></textarea><br/>
+	</form>
+</body>
+</html>

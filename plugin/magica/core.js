@@ -1,17 +1,74 @@
 function mgAddClass(element, className)
 {
-	element.className = element.className + " " + className;
+	if(element.className.length <= 0) {
+		element.className = className;
+	} else {
+		var classes = element.className.split(" ");
+		var index = classes.indexOf(className);
+		if(index >= 0) {
+			classes.splice(index, 1);
+		}
+		classes.push(className);
+		
+		element.className = classes.join(" ");
+	}
 }
+
 function mgRemoveClass(element, className)
 {
 	var classes = element.className.split(" ");
-	classes.remove(className);
-	element.className = classes.join(" ");
+	var index = classes.indexOf(className);
+	if(index >= 0) {
+		classes.splice(index, 1);
+		element.className = classes.join(" ");
+	}
 }
+
 function mgToPxStr(value)
 {
 	return value.toString() + "px";
 }
+
+var __mgBox = null;
+function mgShowMessages(messages, element)
+{
+	if(element == undefined) {
+		element = null;
+	}
+	
+	if(__mgBox != null) {
+		__mgBox.close();
+		__mgBox = null;
+	}
+
+	var ul = document.createElement("ul");
+	for(var i = 0; i < messages.length; i++) {
+		var li = document.createElement("li");
+		li.appendChild(document.createTextNode(messages[i]));
+		ul.appendChild(li);
+	}
+	
+	__mgBox = new PopupBox(ul, 10000);
+	
+	if(element != null) {
+		var left1 = element.offsetLeft + element.offsetWidth / 2;
+		__mgBox.element.style.left = mgToPxStr(left1);
+		__mgBox.element.style.top = mgToPxStr(element.offsetTop + element.offsetHeight);
+	} else {
+		__mgBox.element.style.right = "16px";
+		__mgBox.element.style.bottom = "16px";
+	}
+	
+	__mgBox.show();
+}
+function mgCloseMessages()
+{
+	if(__mgBox != null) {
+		__mgBox.close();
+		__mgBox = null;
+	}
+}
+
 /**
  * class Action;
  */
@@ -369,21 +426,6 @@ PopupBox.prototype.doAction = function(e)
 	}
 }
 
-function __showMessages(messages)
-{
-	var ul = document.createElement("ul");
-	for(var i = 0; i < messages.length; i++) {
-		var li = document.createElement("li");
-		li.appendChild(document.createTextNode(messages[i]));
-		ul.appendChild(li);
-	}
-	
-	var box = new PopupBox(ul);
-	box.element.style.right = "16px";
-	box.element.style.bottom = "16px";
-	box.show();
-}
-
 /**
  * class FormValidator;
  */
@@ -416,7 +458,7 @@ FormValidator.prototype.reanalayze = function()
 {
 	for(var i = 0; i < this.form.elements.length; i++) {
 		var elem = this.form.elements[i];
-		this._analayzeValidators(elem, elem.getAttribute("mg_validate"));
+		this._analayzeValidators(elem, elem.getAttribute("validate"));
 	}
 	this._validate();
 }
@@ -424,9 +466,8 @@ FormValidator.prototype.reanalayze = function()
 FormValidator.prototype.validateInput = function(input)
 {
 	var messages = this._validateInput(input);
-	
 	if(messages.length > 0) {
-		__showMessages(messages);
+		mgShowMessages(messages, input);
 		return false;
 	}
 	return true;
@@ -434,20 +475,18 @@ FormValidator.prototype.validateInput = function(input)
 
 FormValidator.prototype.setRequired = function(input, value) 
 {
-	input.required = value;
+	input._required = value;
 	
-	if(input.required) {
+	if(input._required) {
 		mgAddClass(input, "mg_required");
 	} else {
 		mgRemoveClass(input, "mg_required");
 	}
-	
-	formValidator._validateInput(input);
 }
 
 FormValidator.prototype.getRequired = function(input) 
 {
-	return input.required;
+	return input._required;
 }
 
 FormValidator.prototype._analayzeValidators = function(input, expression)
@@ -457,8 +496,8 @@ FormValidator.prototype._analayzeValidators = function(input, expression)
 
 	var _required = false;
 	
-	const SECOND = TimeField.SECOND;
-	const MINUTE = TimeField.MINUTE;
+	const SECOND = TimeValidator.SECOND;
+	const MINUTE = TimeValidator.MINUTE;
 
 	function required()
 	{
@@ -467,43 +506,43 @@ FormValidator.prototype._analayzeValidators = function(input, expression)
 	}
 	function number(digits, precision)
 	{
-		return new NumberField(digits, precision);
+		return new NumberValidator(digits, precision);
 	}
 	function digit()
 	{
-		return new DigitField();
+		return new DigitValidator();
 	}
 	function letter()
 	{
-		return new LetterField();
+		return new LetterValidator();
 	}
 	function letterOrDigit()
 	{
-		return new LetterOrDigitField();
+		return new LetterOrDigitValidator();
 	}
 	function year()
 	{
-		return new YearField();
+		return new YearValidator();
 	}
 	function yearMonth()
 	{
-		return new YearMonthField();
+		return new YearMonthValidator();
 	}
 	function date()
 	{
-		return new DateField();
+		return new DateValidator();
 	}
 	function time(type)
 	{
-		return new TimeField(type);
+		return new TimeValidator(type);
 	}
 	function dateTime(type)
 	{
-		return new DateTimeField(type);
+		return new DateTimeValidator(type);
 	}
 	function mailAddress()
 	{
-		return new MailAddressField();
+		return new MailAddressValidator();
 	}
 	function max(value)
 	{
@@ -520,30 +559,36 @@ FormValidator.prototype._analayzeValidators = function(input, expression)
 	input.validators = eval("[" + expression + "]");
 	
 	this.setRequired(input, _required);
-
+	
 	for(var i = 0; i < input.validators.length; i++) {
 		input.validators[i].layout(input);
 	}
 	
-	input.unchangedValue = input.value;
-	
-	input.addEventListener('focus', function(e) {
-		this.unchangedValue = this.value;
-	});
-	input.addEventListener('bulr', function(e) {
-		if(formValidator._validateInput(this) == false) {
-			this.value = this.unchangedValue;
+	input.addEventListener('blur', function(e) {
+		if(__mgFocused == null) {
+			if(formValidator.validateInput(this) == false) {
+				/*this.value = "";*/
+				/*formValidator.validateInput(this);*/
+				__mgFocused = this;
+				setTimeout(function() {
+					__mgFocused.focus();
+					__mgFocused = null;
+				}, 0);
+			} else {
+				mgCloseMessages();
+			}
 		}
 	});
 }
+var __mgFocused = null;
 
 FormValidator.prototype._validate = function()
 {
 	var messages = [];
 	for(var i = 0; i < this.form.elements.length; i++) {
 		var submessages = this._validateInput(this.form.elements[i]);
-		for(var i = 0; i < submessages.length; i++) {
-			messages.push(submessages[i]);
+		for(var j = 0; j < submessages.length; j++) {
+			messages.push(submessages[j]);
 		}
 	}
 	return messages;
@@ -552,22 +597,333 @@ FormValidator.prototype._validate = function()
 FormValidator.prototype._validateInput = function(input)
 {
 	var value = input.value;
-	if(input.required) {
-		if(value == null || value.length <= 0) {
-			removeClass(input, "mg_required_ok");
-			addClass(input, "mg_required_ng");
-		} else {
-			removeClass(input, "mg_required_ng");
-			addClass(input, "mg_required_ok");
+	
+	if(value != null || value.length > 0) {
+		var messages = [];
+		for(var i = 0; i < input.validators.length; i++) {
+			var message = input.validators[i].validate(value, input.alt);
+			if(message != null && message.length > 0) {
+				messages.push(message);
+			}
 		}
 	}
 	
-	var messages = [];
-	for(var i = 0; i < input.validators.length; i++) {
-		var message = input.validators[i].validate(input);
-		if(message == null || message.length <= 0) {
-			messages.push(message);
+	if(input._required) {
+		// 値が空白またはバリデータで無効判定が出ている場合、
+		// 項目をNGとする。
+		if(value == null || value.length <= 0 || messages.length > 0) {
+			mgRemoveClass(input, "mg_required_ok");
+			mgAddClass(input, "mg_required_ng");
+		} else {
+			mgRemoveClass(input, "mg_required_ng");
+			mgAddClass(input, "mg_required_ok");
 		}
 	}
+
 	return messages;
 }
+
+
+function _convertToSampleType(value, sample)
+{
+	if(sample instanceof Number)
+		return Number(value);
+	else if(sample instanceof Date)
+		return Date.parse(value);
+	else 
+		return value;
+}
+
+var ValidationMessagesDefault = {
+	required: ": 値は必須入力です。",
+	number: ": 値は整数でなければいけません。",
+	numberDigits: ": 値は整数部${digits}桁以下の整数でなければいけません。",
+	numberPrecision: ": 値は少数部${precision}桁以内でなければいけません。",
+	numberDigitsPrecision: ": 値は整数部${digits}桁,少数部${precision}桁以内でなければいけません。",
+	yearMonth: ": 値は年月でなければいけません。(yyyy/MM)",
+	date: ": 値は日付でなければいけません。(yyyy/MM/dd)",
+	timeMinute: ": 値は時刻でなければいけません。(HH:mm)",
+	timeSecond: ": 値は時刻でなければいけません。(HH:mm:ss)",
+	dateTimeMinute: ": 値は日時でなければいけません。(yyyy/MM/dd HH:mm)",
+	dateTimeSecond: ": 値は日時でなければいけません。(yyyy/MM/dd HH:mm:ss)",
+	letter: ": 値は英字でなければいけません。",
+	digits: ": 値は数字でなければいけません。",
+	letterOrDigits: ": 値は英数字でなければいけません。",
+	mailAddress: ": 値はメールアドレスでなければいけません。",
+	max: ": 値は${value}以下でなければいけません。",
+	min: ": 値は${value}以上でなければいけません。",
+};
+
+var ValidationMessages = ValidationMessagesDefault;
+
+/*
+ * class Validator;
+ * @brief
+ *   バリデータベースクラス
+ */
+function Validator()
+{
+}
+Validator.prototype.validate = function(value, caption)
+{
+	return null;
+}
+Validator.prototype.layout = function(element)
+{
+}
+Validator.prototype.unlayout = function(element)
+{
+}
+
+/*
+ * class _RegExpValidatorBase
+ * @brief
+ *   正規表現バリデータ
+ */
+function _RegExpValidatorBase(expression, className)
+{
+	this.pattern = new RegExp(expression);
+	this.className = className;
+}
+_RegExpValidatorBase.prototype = new Validator();
+
+_RegExpValidatorBase.prototype.createMessage = function(caption)
+{
+	return caption + ValidationMessages[this.messageId];
+}
+
+_RegExpValidatorBase.prototype.validate = function(value, caption)
+{
+	if(value == null || value.length <= 0)
+		return null;
+		
+	if(!this.pattern.test(value)) {
+		return this.createMessage(caption);
+	}
+	return null;
+}
+
+_RegExpValidatorBase.prototype.layout = function(element)
+{
+	mgAddClass(element, this.className);
+}
+
+_RegExpValidatorBase.prototype.unlayout = function(element)
+{
+	mgRemoveClass(element, this.className);
+}
+
+/*
+ * class NumberValidator;
+ */
+function NumberValidator(digits, precision)
+{
+	if(digits == undefined) {
+		digits = null;
+	}
+	if(precision == undefined || precision == null) {
+		precision = 0;
+	}
+	
+	var pattern = "^";
+	if(digits == null) {
+		pattern += "[+-]?[0-9]+";
+	} else {
+		pattern += "[+-]?[0-9]{1,"+ digits +"}"
+	}
+	
+	if(precision <= 0) {
+	} else {
+		pattern += "([\.][0-9]{1," + precision + "}|)";
+	}
+	
+	pattern += "$";
+	
+	this.digits = digits;
+	this.precision = precision;
+	this.pattern = new RegExp(pattern);
+	this.className = "number_field";
+}
+NumberValidator.prototype = new _RegExpValidatorBase();
+
+NumberValidator.prototype.createMessage = function(caption)
+{
+	var text = null;
+	if(this.digits != null && this.precision > 0) {
+		text = ValidationMessages.numberDigitsPrecision;
+	} else if(this.digits != null && this.precision <= 0) {
+		text = ValidationMessages.numberDigits;
+	} else if(this.digits == null && this.precision > 0) {
+		text = ValidationMessages.numberPrecision;
+	} else {
+		text = ValidationMessages.number;
+	}
+	return caption + 
+	       text.replace("${digits}", this.digits == null ? "null": this.digits.toString())
+	           .replace("${precision}", this.precision.toString());
+}
+
+/*
+ * class LetterValidator;
+ */
+function LetterValidator()
+{
+	this.pattern = new RegExp("^[a-zA-Z]$");
+	this.className = "letter_field";
+	this.messageId = "letter";
+}
+LetterValidator.prototype = new _RegExpValidatorBase();
+
+/*
+ * class DigitValidator;
+ */
+function DigitValidator()
+{
+	this.pattern = new RegExp("^[0-9]$");
+	this.className = "digit_field";
+	this.messageId = "digits";
+}
+DigitValidator.prototype = new _RegExpValidatorBase();
+
+/*
+ * class LetterOrDigitValidator;
+ */
+function LetterOrDigitValidator()
+{
+	this.pattern = new RegExp("^[0-9]+$");
+	this.className = "letter_or_digit_field";
+	this.messageId = "letterOrDigit";
+}
+LetterOrDigitValidator.prototype = new _RegExpValidatorBase();
+
+
+/**
+ * class YearValidator;
+ */
+function YearMonthValidator()
+{
+	this.pattern = new RegExp("^[0-9]{1,4}[-/][0-9]{1,2}$");
+	this.className = "year_month_field";
+	this.messageId = "yearMonth";
+}
+YearMonthValidator.prototype = new _RegExpValidatorBase();
+
+YearMonthValidator.prototype.validate = function(value, caption)
+{
+	if(value == null || value.length <= 0)
+		return null;
+		
+	if(!this.pattern.test(value) || Date.parse(value) == NaN) {
+		return this.createMessage(caption);
+	}
+	return null;
+}
+
+/**
+ * class DateValidator;
+ */
+function DateValidator()
+{
+	this.pattern = new RegExp("^[0-9]{1,4}[-/][0-9]{1,2}[-/][0-9]{1,2}$");
+	this.className = "date_field";
+	this.messageId = "date";
+}
+DateValidator.prototype = new YearMonthValidator();
+
+/**
+ * class TimeValidator;
+ */
+function TimeValidator(type)
+{
+	if(type == undefined || type == null) {
+		type = TimeValidator.SECOND;
+	}
+	
+	if(type == TimeValidator.SECOND) {
+		this.pattern = new RegExp("^[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}$");
+		this.messageId = "timeSecond";
+	} else {
+		this.pattern = new RegExp("^[0-9]{1,2}:[0-9]{1,2}$");
+		this.messageId = "timeMinute";
+	}
+	this.className = "time_field";
+}
+TimeValidator.prototype = new YearMonthValidator();
+
+TimeValidator.MINUTE = "minute";
+TimeValidator.SECOND = "second";
+
+/**
+ * class DateTimeValidator;
+ */
+function DateTimeValidator(type)
+{
+	if(type == undefined || type == null) {
+		type = TimeValidator.SECOND;
+	}
+	
+	if(type == TimeValidator.SECOND) {
+		this.pattern = new RegExp("^[0-9]{1,4}[-/][0-9]{1,2}[-/][0-9]{1,2}([ ]+|T)[0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2}$");
+		this.messageId = "dateTimeSecond";
+	} else {
+		this.pattern = new RegExp("^[0-9]{1,4}[-/][0-9]{1,2}[-/][0-9]{1,2}([ ]+|T)[0-9]{1,2}:[0-9]{1,2}$");
+		this.messageId = "dateTimeMinute";
+	}
+	this.className = "date_time_field";
+}
+DateTimeValidator.prototype = new YearMonthValidator();
+
+/**
+ * class MailAddressValidator;
+ */
+function MailAddressValidator()
+{
+	this.pattern = new RegExp("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$");
+	this.className = "mail_address_field";
+	this.messageId = "mailAddress";
+}
+MailAddressValidator.prototype = new _RegExpValidatorBase();
+
+/**
+ * class MaxValidator;
+ */
+function MaxValidator(value) 
+{
+	this.value = value;
+}
+MaxValidator.prototype = new Validator();
+
+MaxValidator.prototype.validate = function(value, caption)
+{
+	if(value == null || value.length <= 0)
+		return null;
+
+	var converted = _convertToSampleType(value, this.value);
+	if(converted > this.value) {
+		return caption + ValidationMessages.max.replace("${value}", this.value.toString());
+	}
+	return null;
+}
+
+/**
+ * class MinValidator;
+ */
+function MinValidator(value) 
+{
+	this.value = value;
+}
+MinValidator.prototype = new Validator();
+
+MinValidator.prototype.validate = function(value, caption)
+{
+	if(value == null || value.length <= 0)
+		return null;
+
+	var converted = _convertToSampleType(value, this.value);
+	if(converted < this.value) {
+		return caption + ValidationMessages.min.replace("${value}", this.value.toString());
+	}
+	return null;
+}
+
+ActionManager.start();

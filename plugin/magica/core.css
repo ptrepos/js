@@ -26,11 +26,11 @@ body {
 	margin: 0px;
 }
 
-.required_ng {
-	backgroud-color: #ffd1d9;
+.mg_required_ng {
+	background-color: #ffd1d9;
 }
-.required_ok {
-	backgroud-color: #d1ffe0;
+.mg_required_ok {
+	background-color: #d1ffe0;
 }
 
 .number_field {
