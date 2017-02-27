@@ -1,3 +1,6 @@
+/**
+ * Created by t.hada on 2017/02/28
+ */
 function mgAddClass(element, className)
 {
 	if(element.className.length <= 0) {
@@ -29,16 +32,16 @@ function mgToPxStr(value)
 	return value.toString() + "px";
 }
 
-var __mgBox = null;
+var _mgBox = null;
 function mgShowMessages(messages, element)
 {
 	if(element == undefined) {
 		element = null;
 	}
 	
-	if(__mgBox != null) {
-		__mgBox.close();
-		__mgBox = null;
+	if(_mgBox != null) {
+		_mgBox.close();
+		_mgBox = null;
 	}
 
 	var ul = document.createElement("ul");
@@ -48,25 +51,26 @@ function mgShowMessages(messages, element)
 		ul.appendChild(li);
 	}
 	
-	__mgBox = new PopupBox(ul, 10000);
+	_mgBox = new PopupBox(ul, 10000);
 	
 	if(element != null) {
-		__mgBox.element.style.position = "absolute";
+		_mgBox.element.style.position = "absolute";
 		var left1 = element.offsetLeft + element.offsetWidth / 2;
-		__mgBox.element.style.left = mgToPxStr(left1);
-		__mgBox.element.style.top = mgToPxStr(element.offsetTop + element.offsetHeight);
+		_mgBox.element.style.left = mgToPxStr(left1);
+		_mgBox.element.style.top = mgToPxStr(element.offsetTop + element.offsetHeight);
 	} else {
-		__mgBox.element.style.right = "16px";
-		__mgBox.element.style.bottom = "16px";
+		_mgBox.element.style.right = "16px";
+		_mgBox.element.style.bottom = "16px";
 	}
 	
-	__mgBox.show();
+	_mgBox.show();
 }
+
 function mgCloseMessages()
 {
-	if(__mgBox != null) {
-		__mgBox.close();
-		__mgBox = null;
+	if(_mgBox != null) {
+		_mgBox.close();
+		_mgBox = null;
 	}
 }
 
@@ -335,7 +339,7 @@ PopupBox.STATUS_CLOSED = 4;
 PopupBox.prototype.show = function()
 {
 	if(this.status >= PopupBox.STATUS_OPENING) {
-		this.__forceClose();
+		this._forceClose();
 	}
 	
 	this.status = PopupBox.STATUS_OPENING;
@@ -358,7 +362,7 @@ PopupBox.prototype.close = function()
 	}
 }
 
-PopupBox.prototype.__forceClose = function()
+PopupBox.prototype._forceClose = function()
 {
 	this._fadeinAction = null;
 	this._fadeoutAction = null;
@@ -419,7 +423,7 @@ PopupBox.prototype.doAction = function(e)
 		}
 		break;
 	case PopupBox.STATUS_CLOSED:
-		this.__forceClose();
+		this._forceClose();
 		e.exited = true;
 		
 		break;
@@ -586,14 +590,14 @@ FormValidator.prototype._analayzeValidators = function(input, expression)
 	}
 	
 	input.addEventListener('blur', function(e) {
-		if(__mgFocused == null) {
+		if(_mgFocused == null) {
 			if(formValidator.validateInput(this) == false) {
 				/*this.value = "";*/
 				/*formValidator.validateInput(this);*/
-				__mgFocused = this;
+				_mgFocused = this;
 				setTimeout(function() {
-					__mgFocused.focus();
-					__mgFocused = null;
+					_mgFocused.focus();
+					_mgFocused = null;
 				}, 0);
 			} else {
 				mgCloseMessages();
@@ -603,7 +607,7 @@ FormValidator.prototype._analayzeValidators = function(input, expression)
 	
 	input.analyzed = true;
 }
-var __mgFocused = null;
+var _mgFocused = null;
 
 FormValidator.prototype._validate = function()
 {
@@ -746,12 +750,12 @@ _RegExpValidatorBase.prototype.layout = function(element)
 	if(this.allowed != null) {
 		var allowed = this.allowed;
 		element.addEventListener("keypress", function(e) {
-			__mgKeyCheck(e, allowed);
+			_mgKeyCheck(e, allowed);
 		});
 	}
 }
 
-function __mgCreateKeySet(chars)
+function _mgCreateKeySet(chars)
 {
 	var set = new Object();
 	for(var i = 0; i < chars.length; i++) {
@@ -759,12 +763,12 @@ function __mgCreateKeySet(chars)
 	}
 	return set;
 }
-var __MG_CHECK_CHARS_SET = __mgCreateKeySet(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
+var _MG_CHECK_CHARS_SET = _mgCreateKeySet(" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 
-function __mgKeyCheck(e, allowed) {
+function _mgKeyCheck(e, allowed) {
 	if(e.ctrlKey || e.altKey)
 		return;
-	if(__MG_CHECK_CHARS_SET[e.key] == true) {
+	if(_MG_CHECK_CHARS_SET[e.key] == true) {
 		if(allowed[e.key] != true) {
 			e.preventDefault();
 		}
@@ -808,14 +812,14 @@ function NumberValidator(digits, precision)
 	this.className = "number_field";
 	
 	if(precision <= 0) {
-		this.allowed = __MG_INTEGER_CHAR_SET;
+		this.allowed = _MG_INTEGER_CHAR_SET;
 	} else {
-		this.allowed = __MG_DECIMAL_CHAR_SET;
+		this.allowed = _MG_DECIMAL_CHAR_SET;
 	}
 }
 NumberValidator.prototype = new _RegExpValidatorBase();
-__MG_INTEGER_CHAR_SET = __mgCreateKeySet("+-0123456789");
-__MG_DECIMAL_CHAR_SET = __mgCreateKeySet("+-0123456789.");
+_MG_INTEGER_CHAR_SET = _mgCreateKeySet("+-0123456789");
+_MG_DECIMAL_CHAR_SET = _mgCreateKeySet("+-0123456789.");
 
 NumberValidator.prototype.createMessage = function(caption)
 {
@@ -844,7 +848,7 @@ function LetterValidator()
 	this.messageId = "letter";
 }
 LetterValidator.prototype = new _RegExpValidatorBase();
-LetterValidator.prototype.allowed = __mgCreateKeySet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+LetterValidator.prototype.allowed = _mgCreateKeySet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
 
 /*
  * class DigitValidator;
@@ -857,7 +861,7 @@ function DigitValidator()
 	this.allowed = "0123456789";
 }
 DigitValidator.prototype = new _RegExpValidatorBase();
-DigitValidator.prototype.allowed = __mgCreateKeySet("0123456789");
+DigitValidator.prototype.allowed = _mgCreateKeySet("0123456789");
 
 /*
  * class LetterOrDigitValidator;
@@ -870,7 +874,7 @@ function LetterOrDigitValidator()
 	this.allowed = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 }
 LetterOrDigitValidator.prototype = new _RegExpValidatorBase();
-LetterOrDigitValidator.prototype.allowed = __mgCreateKeySet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
+LetterOrDigitValidator.prototype.allowed = _mgCreateKeySet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
 
 /**
  * class YearValidator;
@@ -883,7 +887,7 @@ function YearMonthValidator()
 	this.allowed = "0123456789/-";
 }
 YearMonthValidator.prototype = new _RegExpValidatorBase();
-YearMonthValidator.prototype.allowed = __mgCreateKeySet("0123456789/-");
+YearMonthValidator.prototype.allowed = _mgCreateKeySet("0123456789/-");
 
 YearMonthValidator.prototype.validate = function(value, caption)
 {
@@ -906,7 +910,7 @@ function DateValidator()
 	this.messageId = "date";
 }
 DateValidator.prototype = new YearMonthValidator();
-DateValidator.prototype.allowed = __mgCreateKeySet("0123456789/-");
+DateValidator.prototype.allowed = _mgCreateKeySet("0123456789/-");
 
 /**
  * class TimeValidator;
@@ -928,7 +932,7 @@ function TimeValidator(type)
 	this.allowed = "0123456789:";
 }
 TimeValidator.prototype = new YearMonthValidator();
-TimeValidator.prototype.allowed = __mgCreateKeySet("0123456789:");
+TimeValidator.prototype.allowed = _mgCreateKeySet("0123456789:");
 
 TimeValidator.MINUTE = "minute";
 TimeValidator.SECOND = "second";
@@ -952,7 +956,7 @@ function DateTimeValidator(type)
 	this.className = "date_time_field";
 }
 DateTimeValidator.prototype = new YearMonthValidator();
-DateTimeValidator.prototype.allowed = __mgCreateKeySet("0123456789/-: T");
+DateTimeValidator.prototype.allowed = _mgCreateKeySet("0123456789/-: T");
 
 /**
  * class MailAddressValidator;
@@ -1016,7 +1020,7 @@ var _mgJisCharSet = null;
 function _mgGetJisCharSet() 
 {
 	if(_mgJisCharSet == null) {
-		_mgJisCharSet = __mgCreateKeySet(_MG_JIS_CHARS);
+		_mgJisCharSet = _mgCreateKeySet(_MG_JIS_CHARS);
 	}
 	return _mgJisCharSet;
 }
@@ -1031,7 +1035,7 @@ MgInvalidCharError.prototype = new Error("Invalid char");
  * 文字列長チェックを実装する。
  * UTF-8,UTF-16,Shift_JIS,EUC-JP
  */
-function __mgGetUtf8Length(str)
+function _mgGetUtf8Length(str)
 {
 	var length = 0;
 	for(var i = 0; i < str.length; i++) {
@@ -1065,7 +1069,7 @@ function __mgGetUtf8Length(str)
 	return length;
 }
 
-function __mgGetShiftJisLength(str)
+function _mgGetShiftJisLength(str)
 {
 	var jisCharset = _mgGetJisCharSet();
 	var length = 0;
@@ -1087,7 +1091,7 @@ function __mgGetShiftJisLength(str)
 	return length;
 }
 
-function __mgGetEucJpLength(str)
+function _mgGetEucJpLength(str)
 {
 	var jisCharset = _mgGetJisCharSet();
 	var length = 0;
@@ -1141,7 +1145,7 @@ Utf8Validator.prototype = new Validator();
 Utf8Validator.prototype.validate = function(value, caption)
 {
 	try {
-		var length = __mgGetUtf8Length(value);
+		var length = _mgGetUtf8Length(value);
 		if(length > this.maxLength) {
 			return ValidationMessages.utf8.replace("${caption}", caption)
 			                              .replace("${maxLength}", this.maxLength)
@@ -1168,7 +1172,7 @@ ShiftJisValidator.prototype = new Validator();
 ShiftJisValidator.prototype.validate = function(value, caption)
 {
 	try {
-		var length = __mgGetShiftJisLength(value);
+		var length = _mgGetShiftJisLength(value);
 		if(length > this.maxLength) {
 			return ValidationMessages.shiftJis.replace("${caption}", caption)
 			                                  .replace("${maxLength}", this.maxLength)
@@ -1195,7 +1199,7 @@ EucJpValidator.prototype = new Validator();
 EucJpValidator.prototype.validate = function(value, caption)
 {
 	try {
-		var length = __mgGetEucJpLength(value);
+		var length = _mgGetEucJpLength(value);
 		if(length > this.maxLength) {
 			return ValidationMessages.eucJp.replace("${caption}", caption)
 			                               .replace("${maxLength}", this.maxLength)
