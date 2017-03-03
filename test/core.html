@@ -12,9 +12,9 @@ function showMessage(message)
 	var div = document.createElement("div");
 	div.innerHTML = message;
 	
-	var box = new PopupBox(div);
-	box.element.style.left = mgToPxStr(Math.random() * 1024);
-	box.element.style.top = mgToPxStr(Math.random() * 768);
+	var box = new mg.PopupBox(div);
+	box.element.style.left = mg.toPxStr(Math.random() * 1024);
+	box.element.style.top = mg.toPxStr(Math.random() * 768);
 	box.show();
 }
 
@@ -27,7 +27,7 @@ function showMessages(messages)
 		ul.appendChild(li);
 	}
 	
-	var box = new PopupBox(ul);
+	var box = new mg.PopupBox(ul);
 	box.element.style.right = "16px";
 	box.element.style.bottom = "16px";
 	box.show();
@@ -35,10 +35,8 @@ function showMessages(messages)
 
 function message()
 {
-	showMessages(["FIELD1: 値は必須入力です。", "FIELD1: 値は小数点5桁以内でなければいけません。"]);
+	mg.showMessages(["FIELD1: 値は必須入力です。", "FIELD1: 値は小数点5桁以内でなければいけません。"]);
 }
-
-ActionManager.start();
 
 /*
 window.addEventListener('load', function() {
@@ -48,7 +46,7 @@ window.addEventListener('load', function() {
 });
 */
 
-var showCloseBox = new PopupBox(document.createTextNode("message message message message message message message message message message message message message message message message message message"));;
+var showCloseBox = new mg.PopupBox(document.createTextNode("message message message message message message message message message message message message message message message message message message"));;
 showCloseBox.onclosed = function() {
 	shown = false;
 }
@@ -56,8 +54,8 @@ var shown = false;
 function showClose()
 {
 	if(shown == false) {
-		showCloseBox.element.style.left = mgToPxStr(Math.random() * 640);
-		showCloseBox.element.style.top = mgToPxStr(Math.random() * 480);
+		showCloseBox.element.style.left = mg.toPxStr(Math.random() * 640);
+		showCloseBox.element.style.top = mg.toPxStr(Math.random() * 480);
 		showCloseBox.show();
 		shown = true;
 	} else {
