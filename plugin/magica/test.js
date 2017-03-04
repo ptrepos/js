@@ -216,7 +216,7 @@ if(this.mg == undefined) {
 		
 		this._testCases.push({type: "testCase", name: testCaseName});
 		for(var name in testCase) {
-			if(name.startsWith("test")) {
+			if(name.indexOf("test") == 0) {
 				this._testCases.push({type: "test", name: name, test: testCase[name]});
 			}
 		}
