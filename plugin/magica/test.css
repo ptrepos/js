@@ -1,0 +1,112 @@
+/**
+ * t.hada 2017/03/04
+ *
+ * table grid plugin.
+ */
+.mgTestRunner {
+	font-family: Avenir , "Open Sans" , "Helvetica Neue" , Helvetica , Arial , Verdana , Roboto , "游ゴシック" , "Yu Gothic" , "游ゴシック体" , "YuGothic" , "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro" , "Meiryo UI" , "メイリオ" , Meiryo , "ＭＳ Ｐゴシック" , "MS PGothic" , sans-serif;
+	position: absolute;
+	left: 32px;
+	top: 32px;
+	right: 32px;
+	bottom: 32px;
+	color: #ffffff;
+	background-color: #080816;
+	opacity: 0.8;
+	overflow: scroll;
+}
+
+.mgTestRunner .mgTitle {
+	padding: 8px;
+	font-size: 200%;
+	font-weight: bold;
+}
+
+.mgTestRunner .mgStatusContext {
+	color: #080816;
+	background-color: #ffffff;
+	margin: 8px 8px 8px 8px;
+	padding: 8px 8px 8px 8px;
+	font-style: italic;
+}
+.mgTestRunner .mgStatusContext .mgError {
+	color: #ff0000;
+}
+.mgTestRunner .mgStatusContext .mgOK {
+	color: #0000ff;
+}
+
+.mgTestRunner .mgResultContext .mgTestCaseContext {
+	margin: 8px 8px 8px 8px;
+	padding: 8px 8px 8px 8px;
+	color: #080816;
+	background-color: #ffffff;
+	width: 50%;
+}
+
+.mgTestRunner .mgResultContext .mgTestCaseContext .mgCaption {
+	font-size: 140%;
+	font-weight: bold;
+	font-style: italic;
+}
+
+.mgTestRunner .mgResultContext .mgTestCaseContext .mgBlock {
+	margin: 0px 0px 4px 24px;
+	font-size: 90%;
+}
+
+.mgTestRunner .mgResultContext .mgTestCaseContext .mgBlock .mgHead {
+	font-weight: bold;
+}
+
+.mgTestRunner .mgResultContext .mgTestCaseContext .mgError .mgHead .mgType {
+	color: #ff0000;
+	font-weight: bold;
+}
+
+.mgTestRunner .mgResultContext .mgTestCaseContext .mgOK .mgHead .mgType {
+	color: #0000ff;
+	font-weight: bold;
+}
+
+.mgTestRunner .mgResultContext .mgTestCaseContext .mgBlock .mgHead .mgMessage {
+}
+
+.mgTestRunner .mgResultContext .mgTestCaseContext .mgBlock .mgHead .mgMessage {
+}
+.mgTestRunner .mgResultContext .mgTestCaseContext .mgBlock .mgStack {
+	margin: 0px 0px 0px 24px;
+}
+
+.mgTestRunner .mgResultContext .mgTestCaseContext .mgBlock .mgStack pre {
+	margin: 0px;
+	padding: 0px;
+}
+
+.mgTestRunner .mgConsole {
+	position: absolute;
+	
+	border: solid 1px #f0f0f0;
+	margin: 0px;
+	padding: 8px 8px 8px 8px;
+	
+	background-color: #080816;
+
+	color: #f0f0f0;
+	font-family: Avenir , "Open Sans" , "Helvetica Neue" , Helvetica , Arial , Verdana , Roboto , "游ゴシック" , "Yu Gothic" , "游ゴシック体" , "YuGothic" , "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro" , "Meiryo UI" , "メイリオ" , Meiryo , "ＭＳ Ｐゴシック" , "MS PGothic" , sans-serif;
+
+	left: calc(50% + 32px);
+	top: 106px;
+	right: 16px;
+	overflow: scroll;
+}
+
+.mgTestRunner .mgConsole .mgInfo {
+	color: #808080;
+}
+.mgTestRunner .mgConsole .mgWarn {
+	color: #ffff00;
+}
+.mgTestRunner .mgConsole .mgError {
+	color: #ff0000;
+}

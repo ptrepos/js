@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link type="text/css" href="../plugin/magica/test.css" rel="stylesheet"/>
+<script type="text/javascript" src="../plugin/magica/test.js"></script>
+<script type="text/javascript">
+var TestCase1 = {
+	name: "Test Utility Test Failure Sample",
+	testMessage() {
+		mg.out("Test Utility Test Failure Sampleはテストユーティリティのエラーになるパス");
+		mg.out("むしろエラーでなければダメ");
+		mg.out("");
+		mg.fail();
+	},
+	testAssertEquals1: function() {
+		mg.assertEquals(10, 11);
+	},
+	testAssertEquals2: function() {
+		mg.assertEquals("aaaaaa", "aaaaa");
+	},
+	testAssertNotEquals1: function() {
+		mg.assertNotEquals(10, 10);
+	},
+	testAssertNotEquals2: function() {
+		mg.assertNotEquals("aaaaa", "aaaaa");
+	},
+	testAssertNull1: function() {
+		mg.assertNull({});
+	},
+	testAssertNull2: function() {
+		mg.assertNull("");
+	},
+	testAssertNull3: function() {
+		mg.assertNull(100);
+	},
+	testAssertNotNull1: function() {
+		mg.assertNotNull(null);
+	},
+	testFail1: function() {
+		mg.fail();
+	},
+};
+
+var TestCase2 = {
+	name: "Test Utility Test Suucess",
+	testAssertEquals: function() {
+		mg.assertEquals(10, 10);
+		mg.assertEquals("abc", "abc");
+		mg.assertEquals("aaaaaaa", 'aaaaaaa');
+	},	
+	testAssertNotEquals: function() {
+		mg.assertNotEquals(10, 11);
+		mg.assertNotEquals("abc", "ab");
+		mg.assertNotEquals("aaaaaaa", 'aaaaaaaa');
+	},	
+	testAssertNull: function() {
+		mg.assertNull(null);
+	},	
+	testAssertNotNull: function() {
+		mg.assertNotNull(10);
+		mg.assertNotNull("aaa");
+		mg.assertNotNull(undefined);
+		mg.assertNotNull({});
+		mg.assertNotNull([]);
+	},	
+	testFailSuccess: function() {
+		try {
+			mg.assertFail();
+		} catch(ex) {
+			return;
+		}
+		throw new Error("error");
+	},
+	testOut: function() {
+		mg.out("目視確認用メッセージ等を出力");
+		mg.out("あああああああああああああああああああああああああああああ");
+		mg.info("あああああああああああああああああああああああああああああ");
+		mg.warn("あああああああああああああああああああああああああああああ");
+		mg.error("あああああああああああああああああああああああああああああ");
+	},
+};
+
+mg.testRunner.add(TestCase1);
+mg.testRunner.add(TestCase2);
+</script>
+</head>
+<body>
+</body>
+</html>
