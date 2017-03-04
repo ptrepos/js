@@ -41,6 +41,57 @@ var TestCase1 = {
 	testFail1: function() {
 		mg.fail();
 	},
+	testAssertSame1: function() {
+		mg.assertSame(new Object(), new Object());
+	},
+	testAssertSame2: function() {
+		mg.assertSame(new String("aaaa"), new String("aaaa"));
+	},
+	testAssertNotSame1: function() {
+		var obj = new Object();
+		mg.assertNotSame(obj, obj);
+	},
+	testAssertNotSame2: function() {
+		var obj = new String("aaaa");
+		mg.assertNotSame(obj, obj);
+	},
+	testAssertArrayEquals1: function() {
+		mg.assertArrayEquals([1], []);
+	},
+	testAssertArrayEquals2: function() {
+		mg.assertArrayEquals([1], [1, 2]);
+	},
+	testAssertArrayEquals3: function() {
+		mg.assertArrayEquals([1,2,3], [1, 2]);
+	},
+	testAssertArrayEquals4: function() {
+		mg.assertArrayEquals([1,2,3], [1,2,4]);
+	},
+	testAssertArrayEquals5: function() {
+		mg.assertArrayEquals([5,2,3], [1,2,4]);
+	},
+	testAssertArrayNotEquals1: function() {
+		mg.assertArrayNotEquals([], []);
+	},
+	testAssertArrayNotEquals2: function() {
+		mg.assertArrayNotEquals([1], [1]);
+	},
+	testAssertArrayNotEquals3: function() {
+		mg.assertArrayNotEquals([1,2,3], [1,2,3]);
+	},
+	testAssertTrue1: function() {
+		mg.assertTrue("abc" != "abc");
+	},
+	testAssertTrue2: function() {
+		mg.assertTrue(false);
+	},
+	testAssertFalse1: function() {
+		mg.assertFalse("abc" == "abc");
+	},
+	testAssertFalse2: function() {
+		mg.assertFalse(true);
+	},
+	
 };
 
 var TestCase2 = {
@@ -54,6 +105,7 @@ var TestCase2 = {
 		mg.assertNotEquals(10, 11);
 		mg.assertNotEquals("abc", "ab");
 		mg.assertNotEquals("aaaaaaa", 'aaaaaaaa');
+		mg.assertNotEquals(new String("aaaa"), new String("aaaa"));
 	},	
 	testAssertNull: function() {
 		mg.assertNull(null);
@@ -64,7 +116,47 @@ var TestCase2 = {
 		mg.assertNotNull(undefined);
 		mg.assertNotNull({});
 		mg.assertNotNull([]);
-	},	
+	},
+	testAssertTrue: function() {
+		mg.assertTrue(true);
+		mg.assertTrue("aaa" == "aaa");
+		mg.assertTrue(!false);
+		mg.assertTrue({}.length == {}.length);
+	},
+	testAssertFalse: function() {
+		mg.assertFalse(false);
+		mg.assertFalse("aaa" != "aaa");
+		mg.assertFalse(!true);
+		mg.assertFalse({}.length != {}.length);
+	},
+	testAssertSame: function() {
+		var obj = new Object();
+		mg.assertSame(obj, obj);
+		var obj = new String("aaaaaaa");
+		mg.assertSame(obj, obj);
+		var obj = new Number(1234);
+		mg.assertSame(obj, obj);
+	},
+	testAssertNotSame: function() {
+		var obj = new Object();
+		mg.assertNotSame(obj, new Object());
+		var obj = new String("aaaaaaa");
+		mg.assertNotSame(obj, new String("aaaaaaa"));
+		var obj = new Number(1234);
+		mg.assertNotSame(obj, new Number(1234));
+	},
+	testAssertArrayEquals: function() {
+		mg.assertArrayEquals([], []);
+		mg.assertArrayEquals([1], [1]);
+		mg.assertArrayEquals([1, "a"], [1, "a"]);
+		mg.assertArrayEquals([1, "a", "a"], [1, "a", "a"]);
+	},
+	testAssertArrayNotEquals: function() {
+		mg.assertArrayNotEquals([], [1]);
+		mg.assertArrayNotEquals([1], [2]);
+		mg.assertArrayNotEquals([1, "a"], [1, "b"]);
+		mg.assertArrayNotEquals([1, "a", "b"], [1, "a", "a"]);
+	},
 	testFailSuccess: function() {
 		try {
 			mg.assertFail();

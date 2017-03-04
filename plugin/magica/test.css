@@ -5,7 +5,7 @@
  */
 .mgTestRunner {
 	font-family: Avenir , "Open Sans" , "Helvetica Neue" , Helvetica , Arial , Verdana , Roboto , "游ゴシック" , "Yu Gothic" , "游ゴシック体" , "YuGothic" , "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro" , "Meiryo UI" , "メイリオ" , Meiryo , "ＭＳ Ｐゴシック" , "MS PGothic" , sans-serif;
-	position: absolute;
+	position: fixed;
 	left: 32px;
 	top: 32px;
 	right: 32px;
@@ -14,10 +14,20 @@
 	background-color: #080816;
 	opacity: 0.8;
 	overflow: scroll;
+	/*影を付ける*/
+	-moz-box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+	-webkit-box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+	-o-box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+	-ms-box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+	box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+	/*角を丸める*/
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
 }
 
 .mgTestRunner .mgTitle {
-	padding: 8px;
+	padding: 16px;
 	font-size: 200%;
 	font-weight: bold;
 }
@@ -25,7 +35,7 @@
 .mgTestRunner .mgStatusContext {
 	color: #080816;
 	background-color: #ffffff;
-	margin: 8px 8px 8px 8px;
+	margin: 8px 16px 8px 16px;
 	padding: 8px 8px 8px 8px;
 	font-style: italic;
 }
@@ -36,12 +46,18 @@
 	color: #0000ff;
 }
 
-.mgTestRunner .mgResultContext .mgTestCaseContext {
-	margin: 8px 8px 8px 8px;
+.mgTestRunner .mgResultContext {
+	margin: 8px 16px 8px 16px;
 	padding: 8px 8px 8px 8px;
 	color: #080816;
 	background-color: #ffffff;
 	width: 50%;
+	overflow: scroll;
+}
+
+.mgTestRunner .mgResultContext .mgTestCaseContext {
+	margin: 0px 0px 8px 0px;
+	border-bottom: solid 1px #080816;
 }
 
 .mgTestRunner .mgResultContext .mgTestCaseContext .mgCaption {
@@ -95,8 +111,8 @@
 	color: #f0f0f0;
 	font-family: Avenir , "Open Sans" , "Helvetica Neue" , Helvetica , Arial , Verdana , Roboto , "游ゴシック" , "Yu Gothic" , "游ゴシック体" , "YuGothic" , "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro" , "Meiryo UI" , "メイリオ" , Meiryo , "ＭＳ Ｐゴシック" , "MS PGothic" , sans-serif;
 
-	left: calc(50% + 32px);
-	top: 106px;
+	left: calc(50% + 36px);
+	top: 122px;
 	right: 16px;
 	overflow: scroll;
 }
@@ -109,4 +125,30 @@
 }
 .mgTestRunner .mgConsole .mgError {
 	color: #ff0000;
+}
+
+.mgTestRunnerShowButton {
+	font-family: Avenir , "Open Sans" , "Helvetica Neue" , Helvetica , Arial , Verdana , Roboto , "游ゴシック" , "Yu Gothic" , "游ゴシック体" , "YuGothic" , "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro" , "Meiryo UI" , "メイリオ" , Meiryo , "ＭＳ Ｐゴシック" , "MS PGothic" , sans-serif;
+	color: #ffffff;
+	background-color: #080816;
+	opacity: 0.8;
+	
+	position: fixed;
+	top: 8px;
+	right: 8px;
+	
+	padding: 20px 20px 20px 20px;
+	
+	text-align: center;
+	
+	/*影を付ける*/
+	-moz-box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+	-webkit-box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+	-o-box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+	-ms-box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.8);
+	/*角を丸める*/
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
 }
