@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link type="text/css" href="../plugin/magica/test.css" rel="stylesheet"/>
+<script type="text/javascript" src="../plugin/magica/test.js"></script>
+<link type="text/css" href="../plugin/magica/core.css" rel="stylesheet"/>
+<script type="text/javascript" src="../plugin/magica/core.js"></script>
+<script type="text/javascript">
+
+var NumberValidatorTestCase = {
+	name: "NumberValidatorTestCase",
+	testNoArgs: function() {
+		var o = new mg.NumberValidator();
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("0"));
+		mg.assertNull(o.validate("123"));
+		mg.assertNull(o.validate("456789"));
+		mg.assertNull(o.validate("012345679"));
+		mg.assertNull(o.validate("98765432109876543210987654321098765432109876543210"));
+		mg.assertNull(o.validate("9876543210987654321098765432109876543210987654321012345678998765432109876543210987654321098765432109876543210123456789"));
+		mg.assertNull(o.validate("+0"));
+		mg.assertNull(o.validate("+123"));
+		mg.assertNull(o.validate("+456789"));
+		mg.assertNull(o.validate("+012345679"));
+		mg.assertNull(o.validate("+98765432109876543210987654321098765432109876543210"));
+		mg.assertNull(o.validate("+9876543210987654321098765432109876543210987654321012345678998765432109876543210987654321098765432109876543210123456789"));
+		mg.assertNull(o.validate("-0"));
+		mg.assertNull(o.validate("-123"));
+		mg.assertNull(o.validate("-456789"));
+		mg.assertNull(o.validate("-012345679"));
+		mg.assertNull(o.validate("-98765432109876543210987654321098765432109876543210"));
+		mg.assertNull(o.validate("-9876543210987654321098765432109876543210987654321012345678998765432109876543210987654321098765432109876543210123456789"));
+		
+		mg.assertNotNull(o.validate("a"));
+		mg.assertNotNull(o.validate("0123456789b"));
+		mg.assertNotNull(o.validate("0123456d789b"));
+		mg.assertNotNull(o.validate("--123456798"));
+		mg.assertNotNull(o.validate("++123456798"));
+		
+		mg.out(o.validate("a", "aaa"));
+	},
+	testDigits5: function() {
+		var o = new mg.NumberValidator(5);
+		
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("0"));
+		mg.assertNull(o.validate("12345"));
+		mg.assertNull(o.validate("6789"));
+		mg.assertNull(o.validate("+10"));
+		mg.assertNull(o.validate("+12345"));
+		mg.assertNull(o.validate("+6789"));
+		mg.assertNull(o.validate("-10"));
+		mg.assertNull(o.validate("-12345"));
+		mg.assertNull(o.validate("-6789"));
+		
+		mg.assertNotNull(o.validate("a"));
+		mg.assertNotNull(o.validate("123a"));
+		mg.assertNotNull(o.validate("123a4"));
+		mg.assertNotNull(o.validate("123456"));
+		mg.assertNotNull(o.validate("--123"));
+		mg.assertNotNull(o.validate("++123"));
+		
+		mg.out(o.validate("a", "aaa"));
+	},
+	testPrecision10: function() {
+		var o = new mg.NumberValidator(null, 10);
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("0"));
+		mg.assertNull(o.validate("123"));
+		mg.assertNull(o.validate("456789"));
+		mg.assertNull(o.validate("012345679"));
+		mg.assertNull(o.validate("9876543210987654321098765432109876543210987654321012345678998765432109876543210987654321098765432109876543210123456789"));
+		mg.assertNull(o.validate("+0"));
+		mg.assertNull(o.validate("+123"));
+		mg.assertNull(o.validate("+456789"));
+		mg.assertNull(o.validate("+012345679"));
+		mg.assertNull(o.validate("+9876543210987654321098765432109876543210987654321012345678998765432109876543210987654321098765432109876543210123456789"));
+		mg.assertNull(o.validate("-0"));
+		mg.assertNull(o.validate("-123"));
+		mg.assertNull(o.validate("-456789"));
+		mg.assertNull(o.validate("-012345679"));
+		mg.assertNull(o.validate("-9876543210987654321098765432109876543210987654321012345678998765432109876543210987654321098765432109876543210123456789"));
+		mg.assertNull(o.validate("0.89451"));
+		mg.assertNull(o.validate("0.012345789"));
+		mg.assertNull(o.validate("0.0123457891"));
+		mg.assertNull(o.validate("1234579123456789.0123457891"));
+		mg.assertNull(o.validate("1234579123456789999999999999999.0123457891"));
+
+		mg.assertNotNull(o.validate("a"));
+		mg.assertNotNull(o.validate("0123456789b"));
+		mg.assertNotNull(o.validate("0123456d789b"));
+		mg.assertNotNull(o.validate("--123456798"));
+		mg.assertNotNull(o.validate("++123456798"));
+		mg.assertNotNull(o.validate("0.01234578911"));
+		mg.assertNotNull(o.validate("0.0.01"));
+		mg.assertNotNull(o.validate("1234569489451231.01234578911"));
+		
+		mg.out(o.validate("a", "aaa"));
+	},
+	testDigits3Precision10: function() {
+		var o = new mg.NumberValidator(3, 10);
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("0"));
+		mg.assertNull(o.validate("123"));
+		mg.assertNull(o.validate("-0"));
+		mg.assertNull(o.validate("-123"));
+		mg.assertNull(o.validate("+0"));
+		mg.assertNull(o.validate("+123"));
+		mg.assertNull(o.validate("0.013145647"));
+		mg.assertNull(o.validate("123.0131456471"));
+		mg.assertNull(o.validate("-0.0131"));
+		mg.assertNull(o.validate("-123.0131456479"));
+		mg.assertNull(o.validate("+0.01"));
+		mg.assertNull(o.validate("+123.0131456479"));
+
+		mg.assertNotNull(o.validate("a"));
+		mg.assertNotNull(o.validate("0121"));
+		mg.assertNotNull(o.validate("01a1"));
+		mg.assertNotNull(o.validate("0123456d789b"));
+		mg.assertNotNull(o.validate("--123456798"));
+		mg.assertNotNull(o.validate("++123456798"));
+		mg.assertNotNull(o.validate("0.01234578911"));
+		mg.assertNotNull(o.validate("0.0.01"));
+		mg.assertNotNull(o.validate("1234569489451231.01234578911"));
+		
+		mg.out(o.validate("a", "aaa"));
+	},
+	testDigits10Precision3: function() {
+		var o = new mg.NumberValidator(10, 3);
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("0"));
+		mg.assertNull(o.validate("123"));
+		mg.assertNull(o.validate("1234567890"));
+		mg.assertNull(o.validate("-0"));
+		mg.assertNull(o.validate("-123"));
+		mg.assertNull(o.validate("-1234567890"));
+		mg.assertNull(o.validate("+0"));
+		mg.assertNull(o.validate("+123"));
+		mg.assertNull(o.validate("+1234567890"));
+		mg.assertNull(o.validate("1212.019"));
+		mg.assertNull(o.validate("12312345.011"));
+		mg.assertNull(o.validate("-0.999"));
+		mg.assertNull(o.validate("-1235461.013"));
+		mg.assertNull(o.validate("+311.01"));
+		mg.assertNull(o.validate("+1234567890.013"));
+
+		mg.assertNotNull(o.validate("a"));
+		mg.assertNotNull(o.validate("01234567890"));
+		mg.assertNotNull(o.validate("123456a"));
+		mg.assertNotNull(o.validate("0123456bd789"));
+		mg.assertNotNull(o.validate("--12345"));
+		mg.assertNotNull(o.validate("++12345"));
+		mg.assertNotNull(o.validate("0.01234578911"));
+		mg.assertNotNull(o.validate("0.0.01"));
+		mg.assertNotNull(o.validate("451231.0123"));
+		
+		mg.out(o.validate("a", "aaa"));
+	},
+};
+mg.testRunner.add(NumberValidatorTestCase);
+
+var LetterValidatorTestCase = {
+	name: "LetterValidatorTestCase",
+	test: function() {
+		var o = new mg.LetterValidator();
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("a"));
+		mg.assertNull(o.validate("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+		mg.assertNull(o.validate("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+
+		mg.assertNotNull(o.validate("abcdefghijklmnOPQRSTUVWXY1Z"));
+		mg.assertNotNull(o.validate("abcd.efghijklmnOPQRSTUVWXY1Z"));
+		mg.assertNotNull(o.validate("abcdefghijklmnOPQRSTUVWXY1|"));
+		mg.assertNotNull(o.validate("ab!cdefghijklmnOPQRSTUVWXY1"));
+		mg.assertNotNull(o.validate("+"));
+		mg.assertNotNull(o.validate("0"));
+		mg.assertNotNull(o.validate("99999"));
+		
+		mg.out(o.validate("1", "aaa"));
+	},
+};
+mg.testRunner.add(LetterValidatorTestCase);
+
+var DigitValidatorTestCase = {
+	name: "DigitValidatorTestCase",
+	test: function() {
+		var o = new mg.DigitValidator();
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("1"));
+		mg.assertNull(o.validate("012345789"));
+		mg.assertNull(o.validate("012345789012345789012345789012345789"));
+
+		mg.assertNotNull(o.validate("a"));
+		mg.assertNotNull(o.validate("b"));
+		mg.assertNotNull(o.validate("c"));
+		mg.assertNotNull(o.validate("z"));
+		mg.assertNotNull(o.validate("A"));
+		mg.assertNotNull(o.validate("Z"));
+		mg.assertNotNull(o.validate("+"));
+		mg.assertNotNull(o.validate("-"));
+		
+		mg.out(o.validate("a", "aaa"));
+	},
+};
+mg.testRunner.add(DigitValidatorTestCase);
+
+var LetterOrDigitValidatorTestCase = {
+	name: "LetterOrDigitValidatorTestCase",
+	test: function() {
+		var o = new mg.LetterOrDigitValidator();
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("1"));
+		mg.assertNull(o.validate("012345789"));
+		mg.assertNull(o.validate("012345789012345789012345789012345789"));
+		mg.assertNull(o.validate("012345789012345789012345789012345789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+		mg.assertNull(o.validate("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+
+		mg.assertNotNull(o.validate("+"));
+		mg.assertNotNull(o.validate("-"));
+		mg.assertNotNull(o.validate("!"));
+		mg.assertNotNull(o.validate("#"));
+		mg.assertNotNull(o.validate("$"));
+		mg.assertNotNull(o.validate("%"));
+		mg.assertNotNull(o.validate("&"));
+		mg.assertNotNull(o.validate("'"));
+		mg.assertNotNull(o.validate("あ"));
+		
+		mg.out(o.validate(".", "aaa"));
+	},
+};
+mg.testRunner.add(LetterOrDigitValidatorTestCase);
+
+var YearMonthValidatorTestCase = {
+	name: "YearMonthValidatorTestCase",
+	test: function() {
+		var o = new mg.YearMonthValidator();
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("2017/10"));
+		mg.assertNull(o.validate("2016/1"));
+		mg.assertNull(o.validate("1999/12"));
+		mg.assertNull(o.validate("1/12"));
+		mg.assertNull(o.validate("637/12"));
+		mg.assertNull(o.validate("9999/12"));
+		mg.assertNull(o.validate("1/1"));
+
+		mg.assertNotNull(o.validate("+"));
+		mg.assertNotNull(o.validate("-"));
+		mg.assertNotNull(o.validate("!"));
+		mg.assertNotNull(o.validate("#"));
+		mg.assertNotNull(o.validate("$"));
+		mg.assertNotNull(o.validate("%"));
+		mg.assertNotNull(o.validate("&"));
+		mg.assertNotNull(o.validate("'"));
+		mg.assertNotNull(o.validate("あ"));
+		mg.assertNotNull(o.validate("//"));
+		mg.assertNotNull(o.validate("/"));
+		mg.assertNotNull(o.validate("1/1/"));
+		mg.assertNotNull(o.validate("99999/1"));
+		mg.assertNotNull(o.validate("9999/"));
+		mg.assertNotNull(o.validate("9999"));
+		mg.assertNotNull(o.validate("9999/111"));
+		
+		mg.out(o.validate(".", "aaa"));
+	},
+};
+mg.testRunner.add(YearMonthValidatorTestCase);
+
+var DateValidatorTestCase = {
+	name: "DateValidatorTestCase",
+	test: function() {
+		var o = new mg.DateValidator();
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("2017/10/10"));
+		mg.assertNull(o.validate("2016/1/9"));
+		mg.assertNull(o.validate("1999/12/9"));
+		mg.assertNull(o.validate("1/12/9"));
+		mg.assertNull(o.validate("637/12/9"));
+		mg.assertNull(o.validate("9999/12/9"));
+		mg.assertNull(o.validate("1/1/1"));
+
+		mg.assertNotNull(o.validate("+"));
+		mg.assertNotNull(o.validate("-"));
+		mg.assertNotNull(o.validate("!"));
+		mg.assertNotNull(o.validate("#"));
+		mg.assertNotNull(o.validate("$"));
+		mg.assertNotNull(o.validate("%"));
+		mg.assertNotNull(o.validate("&"));
+		mg.assertNotNull(o.validate("'"));
+		mg.assertNotNull(o.validate("あ"));
+		mg.assertNotNull(o.validate("///"));
+		mg.assertNotNull(o.validate("//"));
+		mg.assertNotNull(o.validate("1/1/1/1"));
+		mg.assertNotNull(o.validate("99999/1/1"));
+		mg.assertNotNull(o.validate("9999//1"));
+		mg.assertNotNull(o.validate("9999/1/"));
+		mg.assertNotNull(o.validate("9999/1/111"));
+		mg.assertNotNull(o.validate("9999/111/1"));
+		
+		mg.out(o.validate(".", "aaa"));
+	},
+};
+mg.testRunner.add(DateValidatorTestCase);
+
+var TimeValidatorTestCase = {
+	name: "TimeValidatorTestCase",
+	testMinute: function() {
+		var o = new mg.TimeValidator(mg.TimeValidator.MINUTE);
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("0:0"));
+		mg.assertNull(o.validate("12:59"));
+		mg.assertNull(o.validate("9:47"));
+		mg.assertNull(o.validate("12:1"));
+		mg.assertNull(o.validate("9:9"));
+		mg.assertNull(o.validate("9:45"));
+
+		mg.assertNotNull(o.validate("0:0:0"));
+		mg.assertNotNull(o.validate("12:59:30"));
+		mg.assertNotNull(o.validate("0:0:0"));
+		mg.assertNotNull(o.validate("12:591"));
+		mg.assertNotNull(o.validate("121:51"));
+		mg.assertNotNull(o.validate("+"));
+		mg.assertNotNull(o.validate("-"));
+		mg.assertNotNull(o.validate("!"));
+		mg.assertNotNull(o.validate("#"));
+		mg.assertNotNull(o.validate("$"));
+		mg.assertNotNull(o.validate("%"));
+		mg.assertNotNull(o.validate("&"));
+		mg.assertNotNull(o.validate("'"));
+		mg.assertNotNull(o.validate("あ"));
+		mg.assertNotNull(o.validate("///"));
+		mg.assertNotNull(o.validate("//"));
+		mg.assertNotNull(o.validate("1/1/1/1"));
+		mg.assertNotNull(o.validate("99999/1/1"));
+		mg.assertNotNull(o.validate("9999//1"));
+		mg.assertNotNull(o.validate("9999/1/"));
+		mg.assertNotNull(o.validate("9999/1/111"));
+		mg.assertNotNull(o.validate("9999/111/1"));
+		
+		mg.out(o.validate(".", "aaa"));
+	},
+	testSecond: function() {
+		var o = new mg.TimeValidator(mg.TimeValidator.SECOND);
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("0:0:0"));
+		mg.assertNull(o.validate("12:59:01"));
+		mg.assertNull(o.validate("9:47:1"));
+		mg.assertNull(o.validate("12:1:0"));
+		mg.assertNull(o.validate("9:9:45"));
+		mg.assertNull(o.validate("9:45:10"));
+
+		mg.assertNotNull(o.validate("0:0:0:0"));
+		mg.assertNotNull(o.validate("12:59"));
+		mg.assertNotNull(o.validate("0:0"));
+		mg.assertNotNull(o.validate("12:591:0"));
+		mg.assertNotNull(o.validate("121:51:01"));
+		mg.assertNotNull(o.validate("12:51:011"));
+		mg.assertNotNull(o.validate("+"));
+		mg.assertNotNull(o.validate("-"));
+		mg.assertNotNull(o.validate("!"));
+		mg.assertNotNull(o.validate("#"));
+		mg.assertNotNull(o.validate("$"));
+		mg.assertNotNull(o.validate("%"));
+		mg.assertNotNull(o.validate("&"));
+		mg.assertNotNull(o.validate("'"));
+		mg.assertNotNull(o.validate("あ"));
+		mg.assertNotNull(o.validate("///"));
+		mg.assertNotNull(o.validate("//"));
+		mg.assertNotNull(o.validate("1/1/1/1"));
+		mg.assertNotNull(o.validate("99999/1/1"));
+		mg.assertNotNull(o.validate("9999//1"));
+		mg.assertNotNull(o.validate("9999/1/"));
+		mg.assertNotNull(o.validate("9999/1/111"));
+		mg.assertNotNull(o.validate("9999/111/1"));
+		
+		mg.out(o.validate(".", "aaa"));
+	},
+};
+mg.testRunner.add(TimeValidatorTestCase);
+
+var DateTimeValidatorTestCase = {
+	name: "DateTimeValidatorTestCase",
+	testMinute: function() {
+		var o = new mg.DateTimeValidator(mg.TimeValidator.MINUTE);
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("2016/12/31 0:0"));
+		mg.assertNull(o.validate("2016/12/3 12:59"));
+		mg.assertNull(o.validate("2017/1/30 9:47"));
+		mg.assertNull(o.validate("1999/01/12 12:1"));
+		mg.assertNull(o.validate("645/1/1 9:9"));
+		mg.assertNull(o.validate("9999/06/01 9:45"));
+
+		mg.assertNotNull(o.validate("20161/12/31 0:0"));
+		mg.assertNotNull(o.validate("2016/121/31 0:0"));
+		mg.assertNotNull(o.validate("2016/12/311 0:0"));
+		mg.assertNotNull(o.validate("2016/12/31 111:0"));
+		mg.assertNotNull(o.validate("2016/12/31 11:111"));
+		mg.assertNotNull(o.validate("0:0:0"));
+		mg.assertNotNull(o.validate("12:59:30"));
+		mg.assertNotNull(o.validate("0:0:0"));
+		mg.assertNotNull(o.validate("12:591"));
+		mg.assertNotNull(o.validate("121:51"));
+		mg.assertNotNull(o.validate("+"));
+		mg.assertNotNull(o.validate("-"));
+		mg.assertNotNull(o.validate("!"));
+		mg.assertNotNull(o.validate("#"));
+		mg.assertNotNull(o.validate("$"));
+		mg.assertNotNull(o.validate("%"));
+		mg.assertNotNull(o.validate("&"));
+		mg.assertNotNull(o.validate("'"));
+		mg.assertNotNull(o.validate("あ"));
+		mg.assertNotNull(o.validate("///"));
+		mg.assertNotNull(o.validate("//"));
+		mg.assertNotNull(o.validate("1/1/1/1"));
+		mg.assertNotNull(o.validate("99999/1/1"));
+		mg.assertNotNull(o.validate("9999//1"));
+		mg.assertNotNull(o.validate("9999/1/"));
+		mg.assertNotNull(o.validate("9999/1/111"));
+		mg.assertNotNull(o.validate("9999/111/1"));
+		
+		mg.out(o.validate(".", "aaa"));
+	},
+	testSecond: function() {
+		var o = new mg.DateTimeValidator(mg.TimeValidator.SECOND);
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("2016/12/31 0:0:0"));
+		mg.assertNull(o.validate("2016/12/3 12:59:01"));
+		mg.assertNull(o.validate("2017/1/30 9:47:9"));
+		mg.assertNull(o.validate("1999/01/12 12:1:24"));
+		mg.assertNull(o.validate("645/1/1 9:9:9"));
+		mg.assertNull(o.validate("9999/06/01 9:45:5"));
+		mg.assertNull(o.validate("2016/12/31 0:0:0"));
+		mg.assertNull(o.validate("2016/12/3  12:59:01"));
+		mg.assertNull(o.validate("2017/1/30  9:47:9"));
+		mg.assertNull(o.validate("1999/01/12   12:1:24"));
+		mg.assertNull(o.validate("645/1/1        9:9:9"));
+		mg.assertNull(o.validate("9999/06/01    9:45:5"));
+
+		mg.assertNotNull(o.validate("20161/12/31 0:0:0"));
+		mg.assertNotNull(o.validate("2016/121/31 0:0:0"));
+		mg.assertNotNull(o.validate("2016/12/311 0:0:0"));
+		mg.assertNotNull(o.validate("2016/12/31 111:0:0"));
+		mg.assertNotNull(o.validate("2016/12/31 11:111:0"));
+		mg.assertNotNull(o.validate("2016/12/31 11:11:111"));
+		mg.assertNotNull(o.validate("0:0:0:0"));
+		mg.assertNotNull(o.validate("12:59"));
+		mg.assertNotNull(o.validate("0:0"));
+		mg.assertNotNull(o.validate("12:591:0"));
+		mg.assertNotNull(o.validate("121:51:01"));
+		mg.assertNotNull(o.validate("12:51:011"));
+		mg.assertNotNull(o.validate("+"));
+		mg.assertNotNull(o.validate("-"));
+		mg.assertNotNull(o.validate("!"));
+		mg.assertNotNull(o.validate("#"));
+		mg.assertNotNull(o.validate("$"));
+		mg.assertNotNull(o.validate("%"));
+		mg.assertNotNull(o.validate("&"));
+		mg.assertNotNull(o.validate("'"));
+		mg.assertNotNull(o.validate("あ"));
+		mg.assertNotNull(o.validate("///"));
+		mg.assertNotNull(o.validate("//"));
+		mg.assertNotNull(o.validate("1/1/1/1"));
+		mg.assertNotNull(o.validate("99999/1/1"));
+		mg.assertNotNull(o.validate("9999//1"));
+		mg.assertNotNull(o.validate("9999/1/"));
+		mg.assertNotNull(o.validate("9999/1/111"));
+		mg.assertNotNull(o.validate("9999/111/1"));
+		
+		mg.out(o.validate(".", "aaa"));
+	},
+};
+mg.testRunner.add(DateTimeValidatorTestCase);
+
+var MailAddressValidatorTestCase = {
+	name: "MailAddressValidatorTestCase",
+	test: function() {
+		var o = new mg.MailAddressValidator();
+		
+		mg.assertNull(o.validate(""));
+		mg.assertNull(o.validate("t@b"));
+		mg.assertNull(o.validate("tbeafdafds._-@btbeafdafds.a"));
+		mg.assertNull(o.validate("tbeafdafds._-@btbeafdafds.012345789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+		mg.assertNull(o.validate("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZtbeafdafds._012345789@btbeafdafds.aaa"));
+		mg.assertNull(o.validate("example@example.co.jp"));
+		mg.assertNull(o.validate("example@example.net"));
+		mg.assertNull(o.validate("hogehoge@hoge.net"));
+		mg.assertNull(o.validate(".!#$%&'*+/=?^_`{|}~-@hoge-hoge.net"));
+		mg.assertNull(o.validate("123456789@-.-"));
+		
+		mg.assertNull(o.validate("abcdefg@ABCDEFG"));
+		
+		mg.assertNotNull(o.validate("abcdefg"));
+		mg.assertNotNull(o.validate("ABCDEFG"));
+		mg.assertNotNull(o.validate("123456789"));
+		mg.assertNotNull(o.validate("123456789@+*"));
+		mg.assertNotNull(o.validate("123456789@-."));
+		
+		mg.out(o.validate(".", "aaa"));
+	},
+};
+mg.testRunner.add(MailAddressValidatorTestCase);
+
+var Utf8ValidatorTestCase = {
+	name: "Utf8ValidatorTestCase",
+	test: function() {
+		var o = new mg.Utf8Validator(10);
+
+		mg.assertNull(o.validate("123456789@"));
+		mg.assertNull(o.validate("1+--/*-132"));
+		mg.assertNull(o.validate("abcefadsdd"));
+		mg.assertNull(o.validate("あああ"));
+		mg.assertNull(o.validate("あaああ"));
+		mg.assertNull(o.validate("ああaあ"));
+		mg.assertNull(o.validate("あああa"));
+		mg.assertNull(o.validate("勖勛勤"));
+		mg.assertNull(o.validate("a勖勛勤"));
+		
+		mg.assertNotNull(o.validate("123456789@a"));
+		mg.assertNotNull(o.validate("1+--/*-132a"));
+		mg.assertNotNull(o.validate("abcefadsdda"));
+		mg.assertNotNull(o.validate("あああaa"));
+		mg.assertNotNull(o.validate("aa勖勛勤"));
+		mg.assertNotNull(o.validate("a勖a勛勤"));
+		
+		mg.assertNull(o.validate("جامة"));
+		mg.assertNull(o.validate("لديةي"));
+		mg.assertNull(o.validate("ية"));
+		mg.assertNull(o.validate("弽彀彅"));
+		mg.assertNull(o.validate("彀彅"));
+		mg.assertNull(o.validate("彅"));
+		mg.assertNull(o.validate("魦魲魵"));
+		mg.assertNull(o.validate("蘒藿蘄"));
+		mg.assertNull(o.validate("藿藿"));
+		mg.assertNull(o.validate("蘄"));
+
+		mg.out(o.validate("1111111111111111111", "aaa"));
+	}
+};
+mg.testRunner.add(Utf8ValidatorTestCase);
+
+var Utf16ValidatorTestCase = {
+	name: "Utf16ValidatorTestCase",
+	test: function() {
+		var o = new mg.Utf16Validator(10);
+
+		mg.assertNull(o.validate("123456789@"));
+		mg.assertNull(o.validate("1+--/*-132"));
+		mg.assertNull(o.validate("abcefadsdd"));
+		mg.assertNull(o.validate("ああああああああああ"));
+		mg.assertNull(o.validate("勖勛勤勖勛勤勖勛勤あ"));
+		mg.assertNull(o.validate("勖勛勤abc勖勛勤勖"));
+		
+		mg.assertNotNull(o.validate("12345L6789@"));
+		mg.assertNotNull(o.validate("1+--P/*-132"));
+		mg.assertNotNull(o.validate("abcSefadsdd"));
+		mg.assertNotNull(o.validate("あDあああああああああ"));
+		mg.assertNotNull(o.validate("勖勛勤z勖勛勤勖勛勤あ"));
+		mg.assertNotNull(o.validate("勖Z勛勤abc勖勛勤勖"));
+		
+		mg.assertNull(o.validate("جامة"));
+		mg.assertNull(o.validate("لديةي"));
+		mg.assertNull(o.validate("ية"));
+		mg.assertNull(o.validate("弽彀彅"));
+		mg.assertNull(o.validate("彀彅"));
+		mg.assertNull(o.validate("彅"));
+		mg.assertNull(o.validate("魦魲魵"));
+		mg.assertNull(o.validate("蘒藿蘄"));
+		mg.assertNull(o.validate("藿藿"));
+		mg.assertNull(o.validate("蘄"));
+		
+		mg.out(o.validate("1111111111111111111", "aaa"));
+	}
+};
+mg.testRunner.add(Utf16ValidatorTestCase);
+
+var ShiftJisValidatorTestCase = {
+	name: "ShiftJisValidatorTestCase",
+	test: function() {
+		var o = new mg.ShiftJisValidator(10);
+
+		mg.assertNull(o.validate("123456789@"));
+		mg.assertNull(o.validate("1+--/*-132"));
+		mg.assertNull(o.validate("abcefadsdd"));
+		mg.assertNull(o.validate("あああああ"));
+		mg.assertNull(o.validate("あaaあああ"));
+		mg.assertNull(o.validate("ああaaああ"));
+		mg.assertNull(o.validate("ああああaa"));
+		mg.assertNull(o.validate("ｱｲｳｴｵｶｷｸｹｺ"));
+		
+		mg.assertNotNull(o.validate("123456789@a"));
+		mg.assertNotNull(o.validate("1+--/*-132a"));
+		mg.assertNotNull(o.validate("abcefadsdda"));
+		mg.assertNotNull(o.validate("aああああaa"));
+		mg.assertNotNull(o.validate("aあああaあaa"));
+		mg.assertNotNull(o.validate("ｱｲｳｴｵｶｷｸｹｺz"));
+		mg.assertNotNull(o.validate("勖勛勤"));
+		mg.assertNotNull(o.validate("a勖勛勤"));
+		
+		mg.assertNotNull(o.validate("جامة"));
+		mg.assertNotNull(o.validate("لديةي"));
+		mg.assertNotNull(o.validate("ية"));
+		mg.assertNotNull(o.validate("弽彀"));
+		mg.assertNotNull(o.validate("彀"));
+		mg.assertNotNull(o.validate("魦"));
+		mg.assertNotNull(o.validate("蘒藿蘄"));
+		mg.assertNotNull(o.validate("藿藿"));
+		mg.assertNotNull(o.validate("蘄"));
+		
+		mg.out(o.validate("1111111111111111111", "aaa"));
+		mg.out(o.validate("勤", "aaa"));
+	},
+	testMessage: function() {
+		var o = new mg.ShiftJisValidator(9999999);
+		
+		mg.assertNull(o.validate(" いざ、これより樂しまむ、仕置を受くる憂なく、遊びたのしむ時ぞ來ぬ、時ぞ來ぬれば、いちはやく、讀本などは投げ捨てて行く。"));
+	},
+};
+mg.testRunner.add(ShiftJisValidatorTestCase);
+
+var EucJpValidatorTestCase = {
+	name: "EucJpValidatorTestCase",
+	test: function() {
+		var o = new mg.EucJpValidator(10);
+
+		mg.assertNull(o.validate("123456789@"));
+		mg.assertNull(o.validate("1+--/*-132"));
+		mg.assertNull(o.validate("abcefadsdd"));
+		mg.assertNull(o.validate("あああああ"));
+		mg.assertNull(o.validate("あaaあああ"));
+		mg.assertNull(o.validate("ああaaああ"));
+		mg.assertNull(o.validate("ああああaa"));
+		mg.assertNull(o.validate("ｱｲｳｴｵ"));
+		
+		mg.assertNotNull(o.validate("123456789@a"));
+		mg.assertNotNull(o.validate("1+--/*-132a"));
+		mg.assertNotNull(o.validate("abcefadsdda"));
+		mg.assertNotNull(o.validate("aああああaa"));
+		mg.assertNotNull(o.validate("aあああaあaa"));
+		mg.assertNotNull(o.validate("ｱｲｳzｴｵ"));
+		mg.assertNotNull(o.validate("勖勛勤"));
+		mg.assertNotNull(o.validate("a勖勛勤"));
+		
+		mg.assertNotNull(o.validate("جامة"));
+		mg.assertNotNull(o.validate("لديةي"));
+		mg.assertNotNull(o.validate("ية"));
+		mg.assertNotNull(o.validate("弽彀"));
+		mg.assertNotNull(o.validate("彀"));
+		mg.assertNotNull(o.validate("魦"));
+		mg.assertNotNull(o.validate("蘒藿蘄"));
+		mg.assertNotNull(o.validate("藿藿"));
+		mg.assertNotNull(o.validate("蘄"));
+
+		mg.out(o.validate("1111111111111111111", "aaa"));
+		mg.out(o.validate("勤", "aaa"));
+	},
+	testMessage: function() {
+		var o = new mg.EucJpValidator(9999999);
+		
+		mg.assertNull(o.validate(" いざ、これより樂しまむ、仕置を受くる憂なく、遊びたのしむ時ぞ來ぬ、時ぞ來ぬれば、いちはやく、讀本などは投げ捨てて行く。"));
+	},
+};
+mg.testRunner.add(EucJpValidatorTestCase);
+
+var FormValidatorTestCase = {
+	name: "FormValidatorTestCase",
+	test: function() {
+		var o = new mg.FormValidator(document.getElementById("test1"));
+		
+		mg.assertFalse(o.validate());
+		mg.assertTrue(o.getRequired(o.form.numberField1));
+		mg.assertTrue(o.getRequired(o.form.numberField2));
+		mg.assertTrue(o.getRequired(o.form.numberField3));
+		mg.assertFalse(o.getRequired(o.form.numberField4));
+	}
+};
+mg.testRunner.add(FormValidatorTestCase);
+</script>
+</head>
+<body>
+	<form id="test1">
+		<input type="text" name="numberField1" validate="required(),number(18,4),min(-10),max(100000000)"/><br/>
+		<input type="text" name="numberField2" validate="required(),number(18)"/><br/>
+		<input type="text" name="numberField3" validate="required(),number(9)"/><br/>
+		<input type="text" name="numberField4" validate="number(4,4)"/><br/>
+	</form>
+</body>
+</html>

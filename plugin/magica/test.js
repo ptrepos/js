@@ -5,16 +5,11 @@ if(this.mg == undefined) {
 (function() {
 	var TEST_RUNNER_TITLE = "Magica TEST RUNNER v0.1.0";
 	
-	mg.isSetted = function(value) {
+	var isSetted = function(value) {
 		return value != null && value != undefined;
-	}
-	var isSetted = mg.isSetted;
+	};
 
-	mg.dom = {};
-	
-	var dom = mg.dom;
-	
-	dom.removeChildren = function(element) 
+	var dom_removeChildren = function(element) 
 	{
 		var parent = element.parentNode;
 		var nextSibling = element.nextSibling;
@@ -25,21 +20,18 @@ if(this.mg == undefined) {
 			element.removeChild(element.lastChild);
 
 		parent.insertBefore(element, nextSibling);
-	}
-	var dom_removeChildren = dom.removeChildren;
-
-	mg.html = {};
+	};
 	
-	var html = mg.html;
+	var _= {};
 
-	html.text = function(message) {
+	var _text = function(message) {
 		if(message instanceof Node) {
 			return message;
 		}
 		if(message instanceof Array) {
 			var f = document.createDocumentFragment();
 			for(var i in message) {
-				f.appendChild(html_text(message[i]));
+				f.appendChild(_text(message[i]));
 			}
 			return f;
 		}
@@ -47,7 +39,7 @@ if(this.mg == undefined) {
 		return document.createTextNode(message.toString());
 	};
 	
-	html.element = function(name, attrs, bodies) {
+	var _element = function(name, attrs, bodies) {
 		var e = document.createElement(name);
 		if(isSetted(attrs)) {
 			if(typeof attrs == "string") {
@@ -59,37 +51,35 @@ if(this.mg == undefined) {
 			}
 		}
 		if(isSetted(bodies)) {
-			e.appendChild(html_text(bodies));
+			e.appendChild(_text(bodies));
 		}
 		
 		return e;
 	};
-	var html_text = html.text;
-	var html_element = html.element;
 	
-	html.span = function(attrs, bodies) {
-		return html_element("span", attrs, bodies);
+	var _span = function(attrs, bodies) {
+		return _element("span", attrs, bodies);
 	};
-	html.div = function(attrs, bodies) {
-		return html_element("div", attrs, bodies);
+	var _div = function(attrs, bodies) {
+		return _element("div", attrs, bodies);
 	};
-	html.a = function(attrs, bodies) {
-		return html_element("a", attrs, bodies);
+	var _a = function(attrs, bodies) {
+		return _element("a", attrs, bodies);
 	};
-	html.br = function(attrs) {
-		return html_element("br", attrs, null);
+	var _br = function(attrs) {
+		return _element("br", attrs, null);
 	};
-	html.pre = function(attrs, bodies) {
-		return html_element("pre", attrs, bodies);
+	var _pre = function(attrs, bodies) {
+		return _element("pre", attrs, bodies);
 	};
-	html.dl = function(attrs, bodies) {
-		return html_element("dl", attrs, bodies);
+	var _dl = function(attrs, bodies) {
+		return _element("dl", attrs, bodies);
 	};
-	html.dt = function(attrs, bodies) {
-		return html_element("dt", attrs, bodies);
+	var _dt = function(attrs, bodies) {
+		return _element("dt", attrs, bodies);
 	};
-	html.dd = function(attrs, bodies) {
-		return html_element("dd", attrs, bodies);
+	var _dd = function(attrs, bodies) {
+		return _element("dd", attrs, bodies);
 	};
 	
 	var _equals = function(a, b) 
@@ -108,60 +98,70 @@ if(this.mg == undefined) {
 
 	mg.assertEquals = function(actual, excepted) 
 	{
+		mg.testRunner._asserts++;
 		if(!(_equals(actual, excepted))) {
 			throw new mg.AssertException("assertEquals [actual: " + actual.toString() + ", excepted: " + excepted.toString() +  "]");
 		}
 	};
 	mg.assertNotEquals = function(actual, excepted) 
 	{
+		mg.testRunner._asserts++;
 		if(!(!_equals(actual, excepted))) {
 			throw new mg.AssertException("assertNotEquals [actual: " + actual.toString() + ", excepted: " + excepted.toString() +  "]");
 		}
 	};
 	mg.assertSame = function(actual, excepted) 
 	{
+		mg.testRunner._asserts++;
 		if(!(actual === excepted)) {
 			throw new mg.AssertException("assertSame [actual: " + actual.toString() + ", excepted: " + excepted.toString() +  "]");
 		}
 	};
 	mg.assertNotSame = function(actual, excepted) 
 	{
+		mg.testRunner._asserts++;
 		if(!(actual !== excepted)) {
 			throw new mg.AssertException("assertNotSame [actual: " + actual.toString() + ", excepted: " + excepted.toString() +  "]");
 		}
 	};
 	mg.assertNull = function(value) 
 	{
+		mg.testRunner._asserts++;
 		if(!(value === null)) {
 			throw new mg.AssertException("assertNull [value:" + value.toString() + "]");
 		}
 	};
 	mg.assertNotNull = function(value) 
 	{
+		mg.testRunner._asserts++;
 		if(!(value !== null)) {
 			throw new mg.AssertException("assertNotNull [value: null]");
 		}
 	};
 	mg.assertTrue = function(value) 
 	{
+		mg.testRunner._asserts++;
 		if(!(value === true)) {
 			throw new mg.AssertException("assertTrue [value:" + value.toString() + "]");
 		}
 	};
 	mg.assertFalse = function(value) 
 	{
+		mg.testRunner._asserts++;
 		if(!(value === false)) {
 			throw new mg.AssertException("assertFalse [value:" + value.toString() + "]");
 		}
 	};
 	mg.assertUndefined = function(value) 
 	{
+		mg.testRunner._asserts++;
 		if(!(value === undefined)) {
 			throw new mg.AssertException("assertUndefined [value:" + value.toString() + "]");
 		}
 	};
 	mg.assertArrayEquals = function(actual, excepted)
 	{
+		mg.testRunner._asserts++;
 		if(actual.length != excepted.length) {
 			throw new mg.AssertException("assertArrayEquals unmatch length [actual: " + actual.toString() + ", excepted: " + excepted.toString() + "]");
 		}
@@ -173,6 +173,7 @@ if(this.mg == undefined) {
 	};
 	mg.assertArrayNotEquals = function(actual, excepted)
 	{
+		mg.testRunner._asserts++;
 		if(actual.length != excepted.length) {
 			return;
 		}
@@ -187,6 +188,7 @@ if(this.mg == undefined) {
 		}
 	};
 	mg.fail = function(message) {
+		mg.testRunner._asserts++;
 		throw new mg.AssertException(isSetted(message) ? message: "fail");
 	};
 	
@@ -194,6 +196,7 @@ if(this.mg == undefined) {
 		this._testCases = [];
 		this._passes = 0;
 		this._errors = 0;
+		this._asserts = 0;
 		this._resultContext = null;
 		this._statusContext = null;
 		this._testCaseContext = null;
@@ -201,14 +204,25 @@ if(this.mg == undefined) {
 		this._showButton = null;
 	};
 	
+	var TestRunner_call = function(thisObj, testCase, name, test)
+	{
+		try {
+			test.call(testCase);
+			
+			TestRunner_ok(thisObj, name);
+		} catch(ex) {
+			TestRunner_error(thisObj, name, ex);
+		}
+	};
+	
 	var TestRunner_ok = function(thisObj, name)
 	{
 		thisObj._passes++;
 		
-		var block = html.dl("mgBlock mgOK", [
-			html.dt("mgHead", [
-				html.span("mgType", "[OK]"), "\t",
-				html.span("mgName", name), " ",
+		var block = _dl("mgBlock mgOK", [
+			_dt("mgHead", [
+				_span("mgType", "[OK]"), "\t",
+				_span("mgName", name), " ",
 			])
 		]);
 		thisObj._testCaseContext.appendChild(block);
@@ -219,13 +233,13 @@ if(this.mg == undefined) {
 	{
 		thisObj._errors++;
 		
-		var block = html.dl("mgBlock mgError", [
-			html.dt("mgHead", [
-				html.span("mgType", "[ERROR]"), "\t",
-				html.span("mgName", name), " :\t",
-				html.span("mgMessage", ex.message),
+		var block = _dl("mgBlock mgError", [
+			_dt("mgHead", [
+				_span("mgType", "[ERROR]"), "\t",
+				_span("mgName", name), " :\t",
+				_span("mgMessage", ex.message),
 			]),
-			html.dd("mgStack", html.pre(null, ex.stack)),
+			_dd("mgStack", _pre(null, ex.stack)),
 		]);
 		thisObj._testCaseContext.appendChild(block);
 		TestRunner_reportStatus(thisObj);
@@ -236,17 +250,18 @@ if(this.mg == undefined) {
 		var status;
 		var error;
 		if(thisObj._errors > 0) {
-			status = html.span("mgError", "FAULURE");
-			error = html.span("mgError", "ERROR: " + thisObj._errors);
+			status = _span("mgError", "FAULURE");
+			error = _span("mgError", "ERROR: " + thisObj._errors);
 		} else {
-			status = html.span("mgOK", "SUCCESS");
-			error = html.span("mgPass", "ERROR: " + thisObj._errors);
+			status = _span("mgOK", "SUCCESS");
+			error = _span("mgPass", "ERROR: " + thisObj._errors);
 		}
 		
-		var block = html.div(null, [
-			html.span("mgStatus", "STATUS: "), " ", status, ", ",
-			html.span("mgPass", "PASS: " + thisObj._passes), ", ",
-			error,
+		var block = _div(null, [
+			_span("mgStatus", "STATUS: "), " ", status, ", ",
+			_span("mgPass", "PASS: " + thisObj._passes), ", ",
+			error, ", ",
+			_span("mgAsserts", "Asserts: " + thisObj._asserts),
 		]);
 		
 		dom_removeChildren(thisObj._statusContext);
@@ -255,7 +270,7 @@ if(this.mg == undefined) {
 
 	var TestRunner_log = function(thisObj, type, message)
 	{
-		thisObj._console.appendChild(html.span(type, message));
+		thisObj._console.appendChild(_span(type, message));
 	};
 
 	mg.out = function(message)
@@ -277,19 +292,19 @@ if(this.mg == undefined) {
 
 	mg.TestRunner.prototype.init = function()
 	{
-		this._resultContext = html.div("mgResultContext");
-		this._statusContext = html.div("mgStatusContext");
-		this._console = html.pre("mgConsole");
+		this._resultContext = _div("mgResultContext");
+		this._statusContext = _div("mgStatusContext");
+		this._console = _pre("mgConsole");
 		
-		var block = html.div("mgTestRunner", [
-			html.div("mgTitle", TEST_RUNNER_TITLE),
+		var block = _div("mgTestRunner", [
+			_div("mgTitle", TEST_RUNNER_TITLE),
 			this._statusContext,
 			this._console,
 			this._resultContext
 		]);
 		this._block = block;
 
-		var showButton = html.div("mgTestRunnerShowButton", "TEST");
+		var showButton = _div("mgTestRunnerShowButton", "TEST");
 		showButton.style.display = "none";
 		this._showButton = showButton;
 		
@@ -316,45 +331,54 @@ if(this.mg == undefined) {
 	
 	mg.TestRunner.prototype.add = function(testCase)
 	{
-		var testCaseName = isSetted(testCase.name) ? testCase.name: "UNDEFINED";
-		
-		this._testCases.push({type: "testCase", name: testCaseName});
-		for(var name in testCase) {
-			if(name.indexOf("test") == 0) {
-				this._testCases.push({type: "test", name: name, test: testCase[name]});
-			}
-		}
+		this._testCases.push(testCase);
 	};
 	
 	mg.TestRunner.prototype.run = function()
 	{
 		var index = 0;
 		var thisObj = this;
-		var testCases = thisObj._testCases;
 		var loop = function() {
-			for(var i = 0; i < 8; i++) {
-				if(index >= testCases.length) {
-					return;
-				}
-				if(testCases[index].type == "testCase") {
-					thisObj._testCaseContext = html.div("mgTestCaseContext", 
-						html.div("mgCaption", testCases[index].name));
-					thisObj._resultContext.appendChild(thisObj._testCaseContext);
-				} else {
-					var name = testCases[index].name;
-					var test = testCases[index].test;
-					
-					try {
-						test();
-						
-						TestRunner_ok(thisObj, name);
-					} catch(ex) {
-						TestRunner_error(thisObj, name, ex);
-					}
-				}
+			if(index >= thisObj._testCases.length)
+				return;
 
-				index++;
+			var testCase = thisObj._testCases[index];
+			var testCaseName = isSetted(testCase.name) ? testCase.name: "UNDEFINED";
+
+			thisObj._testCaseContext = _div("mgTestCaseContext", 
+				_div("mgCaption", testCaseName));
+			thisObj._resultContext.appendChild(thisObj._testCaseContext);
+
+			var setUp = isSetted(testCase.setUp) ? testCase.setUp: null;
+			var tearDown = isSetted(testCase.tearDown) ? testCase.tearDown: null;
+			var cases = [];
+			for(var i in testCase) {
+				if(i.indexOf("test") == 0) {
+					cases.push({name: i, test: testCase[i]});
+				}
 			}
+			
+			try {
+				if(setUp != null) {
+					TestRunner_call(thisObj, testCase, "setUp", setUp);
+				}
+			
+				for(var i = 0; i < cases.length; i++) {
+					var name = cases[i].name;
+					var test = cases[i].test;
+					
+					TestRunner_call(thisObj, testCase, name, test);
+				}
+			
+				if(tearDown != null) {
+					TestRunner_call(thisObj, testCase, "tearDown", tearDown);
+				}
+			} catch(ex) {
+				console.error(ex);
+				TestRunner_error(thisObj, testCaseName, ex);
+			}
+
+			index++;
 			setTimeout(loop, 0);
 		};
 		setTimeout(loop, 0);

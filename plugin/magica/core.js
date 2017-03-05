@@ -1,7 +1,9 @@
 /**
  * Created by t.hada on 2017/02/28
  */
-var mg = {};
+if(this.mg == undefined) {
+	mg = {};
+}
 
 (function () {
 	mg.addClass = function(element, className)
@@ -854,7 +856,7 @@ var mg = {};
 	 */
 	mg.LetterValidator = function()
 	{
-		this.pattern = new RegExp("^[a-zA-Z]$");
+		this.pattern = new RegExp("^[a-zA-Z]*$");
 		this.className = "letter_field";
 		this.messageId = "letter";
 	}
@@ -866,7 +868,7 @@ var mg = {};
 	 */
 	mg.DigitValidator = function()
 	{
-		this.pattern = new RegExp("^[0-9]$");
+		this.pattern = new RegExp("^[0-9]*$");
 		this.className = "digit_field";
 		this.messageId = "digits";
 		this.allowed = "0123456789";
@@ -879,9 +881,9 @@ var mg = {};
 	 */
 	mg.LetterOrDigitValidator = function()
 	{
-		this.pattern = new RegExp("^[0-9]+$");
+		this.pattern = new RegExp("^[0-9a-zA-Z]*$");
 		this.className = "letter_or_digit_field";
-		this.messageId = "letterOrDigit";
+		this.messageId = "letterOrDigits";
 		this.allowed = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	}
 	mg.LetterOrDigitValidator.prototype = new _RegExpValidatorBase();
