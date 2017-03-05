@@ -664,25 +664,58 @@ mg.testRunner.add(EucJpValidatorTestCase);
 
 var FormValidatorTestCase = {
 	name: "FormValidatorTestCase",
-	test: function() {
-		var o = new mg.FormValidator(document.getElementById("test1"));
+	setUp: function() {
+		this.formValidator = new mg.FormValidator(document.getElementById("test1"));
+	},
+	testRequired: function() {
+		var o = this.formValidator;
 		
 		mg.assertFalse(o.validate());
 		mg.assertTrue(o.getRequired(o.form.numberField1));
 		mg.assertTrue(o.getRequired(o.form.numberField2));
 		mg.assertTrue(o.getRequired(o.form.numberField3));
 		mg.assertFalse(o.getRequired(o.form.numberField4));
-	}
+		mg.assertTrue(o.getRequired(o.form.numberField5));
+		mg.assertFalse(o.getRequired(o.form.dateField1));
+		mg.assertTrue(o.getRequired(o.form.dateField2));
+		mg.assertTrue(o.getRequired(o.form.dateTimeField1));
+		mg.assertFalse(o.getRequired(o.form.strField1));
+		mg.assertFalse(o.getRequired(o.form.strField2));
+		mg.assertFalse(o.getRequired(o.form.strField3));
+		mg.assertTrue(o.getRequired(o.form.strField4));
+	},
+	testNumberField1: function() {
+		var o = this.formValidator;
+		
+		o.form.numberField1.value = "10.5";
+		mg.assertTrue(o.validateInput(o.form.numberField1));
+		o.form.numberField1.value = "99999999.0001";
+		mg.assertTrue(o.validateInput(o.form.numberField1));
+		o.form.numberField1.value = "100000000.0000";
+		mg.assertTrue(o.validateInput(o.form.numberField1));
+		o.form.numberField1.value = "99999999.9999";
+		mg.assertTrue(o.validateInput(o.form.numberField1));
+		o.form.numberField1.value = "-10";
+		mg.assertTrue(o.validateInput(o.form.numberField1));
+	},
 };
 mg.testRunner.add(FormValidatorTestCase);
 </script>
 </head>
 <body>
 	<form id="test1">
-		<input type="text" name="numberField1" validate="required(),number(18,4),min(-10),max(100000000)"/><br/>
-		<input type="text" name="numberField2" validate="required(),number(18)"/><br/>
-		<input type="text" name="numberField3" validate="required(),number(9)"/><br/>
-		<input type="text" name="numberField4" validate="number(4,4)"/><br/>
+		数値項目1: <input type="text" alt="数値項目1" name="numberField1" validate="required(),number(18,4),min(-10),max(100000000)"/><br/>
+		数値項目2: <input type="text" alt="数値項目2" name="numberField2" validate="required(),number(18)"/><br/>
+		数値項目3: <input type="text" alt="数値項目3" name="numberField3" validate="required(),number(9)"/><br/>
+		数値項目4: <input type="text" alt="数値項目4" name="numberField4" validate="number(4,4)"/><br/>
+		数値項目5: <textarea alt="数値項目5" name="numberField5" validate="required(),number(99,99)" cols="80" rows="8"></textarea><br/>
+		日付項目1: <input type="text" alt="日付項目1" name="dateField1" validate="date()"/><br/>
+		日付項目2: <input type="text" alt="日付項目2" name="dateField2" validate="required(),date()"/><br/>
+		日時項目1: <input type="text" alt="日時項目1" name="dateTimeField1" validate="required(),dateTime()" style="width: 240px;"/><br/>
+		文字列項目1(UTF-8): <input type="text" alt="文字列項目1(UTF-8)" name="strField1" validate="UTF8(16)"/><br/>
+		文字列項目2(Shift_JIS): <input type="text" alt="文字列項目2(Shift_JIS)" name="strField2" validate="Shift_JIS(16)"/><br/>
+		文字列項目3(EUC-JP): <input type="text" alt="文字列項目3(EUC-JP)" name="strField3" validate="EUC_JP(16)"/><br/>
+		文字列項目4(UTF-16): <input type="text" alt="文字列項目4(UTF-16)" name="strField4" validate="UTF16(16),required()"/><br/>
 	</form>
 </body>
 </html>
