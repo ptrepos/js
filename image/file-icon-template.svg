@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   viewBox="0 0 33.866667 33.866667"
+   id="svg4601"
+   version="1.1"
+   sodipodi:docname="file-icon-template.svg"
+   inkscape:version="0.92.1 r15371">
+  <metadata
+     id="metadata4512">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs4510" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     id="namedview4508"
+     showgrid="false"
+     inkscape:zoom="6.3125"
+     inkscape:cx="64"
+     inkscape:cy="64"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4601" />
+  <style
+     id="style4485">.c { fill:#000000; stroke: #ffffff; stroke-width: 0.125px; stroke-linecap:square; stroke-linejoin:round; } .f { stroke: #000000; stroke-width: 1.7727083px; stroke-linejoin:round; } .b { fill: #000000; }</style>
+  <path
+     id="path5179"
+     d="m 10.834,2.17 v 29.908 l 20.69,-0.142 V 8.83 L 24.89,2.195 Z"
+     class="f"
+     inkscape:connector-curvature="0"
+     style="fill:#ffffff;stroke:#000000;stroke-width:1.7727083px;stroke-linejoin:round" />
+  <path
+     d="M 24.89,2.195 V 8.83 h 6.634"
+     id="path5181"
+     class="f"
+     inkscape:connector-curvature="0"
+     style="fill:none;stroke:#000000;stroke-width:1.7727083px;stroke-linejoin:round" />
+  <path
+     class="f"
+     id="rect871"
+     d="m 3.046,20.928 h 20.38 v 8.085 H 3.045 Z"
+     inkscape:connector-curvature="0"
+     style="fill:#ffffff;stroke:#000000;stroke-width:1.7727083px;stroke-linejoin:round" />
+  <path
+     class="b"
+     id="rect923"
+     d="m 15.545,10.715 h 2.646 v 2.032 h -2.645 z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+  <path
+     class="b"
+     id="rect923-8"
+     d="m 18.53,10.718 h 2.645 V 12.75 H 18.53 Z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+  <path
+     class="b"
+     id="rect923-8-5"
+     d="m 21.585,10.718 h 2.646 v 2.032 h -2.645 z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+  <path
+     class="b"
+     id="rect923-8-8"
+     d="m 24.592,10.75 h 2.646 v 2.033 h -2.646 z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+  <path
+     class="b"
+     id="rect923-1"
+     d="m 15.558,13.105 h 2.646 v 2.032 h -2.646 z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+  <path
+     class="b"
+     id="rect923-8-4"
+     d="m 18.542,13.108 h 2.646 v 2.032 h -2.646 z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+  <path
+     class="b"
+     id="rect923-8-5-6"
+     d="m 21.6,13.108 h 2.645 V 15.14 H 21.6 Z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+  <path
+     class="b"
+     id="rect923-8-8-4"
+     d="m 24.606,13.14 h 2.646 v 2.033 h -2.646 z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+  <path
+     class="b"
+     id="rect923-2"
+     d="m 15.558,15.477 h 2.646 v 2.032 h -2.646 z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+  <path
+     class="b"
+     id="rect923-8-88"
+     d="m 18.542,15.48 h 2.646 v 2.032 h -2.646 z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+  <path
+     class="b"
+     id="rect923-8-5-2"
+     d="m 21.6,15.48 h 2.645 v 2.032 H 21.6 Z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+  <path
+     class="b"
+     id="rect923-8-8-5"
+     d="m 24.606,15.513 h 2.646 v 2.032 h -2.646 z"
+     inkscape:connector-curvature="0"
+     style="fill:#000000" />
+</svg>
