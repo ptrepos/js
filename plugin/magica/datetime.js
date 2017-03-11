@@ -12,6 +12,46 @@ if(this.mg == undefined) {
 		}
 		return parseInt(str);
 	}
+
+	// ‰[”N”»’è
+	var isLeap = function(year) 
+	{
+		if(year % 400 == 0)
+			return true;
+		if(year % 100 == 0)
+			return false;
+		return year % 4 == 0;
+	};
+	
+	var DAY_OF_MONTH_TABLE = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	
+	var checkDate = function(year, month, day, hour, minute, second) 
+	{
+		if(!(1 <= month && month <= 12)) {
+			throw new Error(INVALID_MESSAGE);
+		}
+		if(!(0 <= hour && hour <= 23)) {
+			throw new Error(INVALID_MESSAGE);
+		}
+		if(!(0 <= minute && minute <= 59)) {
+			throw new Error(INVALID_MESSAGE);
+		}
+		if(!(0 <= second && second < 60)) {
+			throw new Error(INVALID_MESSAGE);
+		}
+		
+		if(!(1 <= day && day <= 31)) {
+			throw new Error(INVALID_MESSAGE);
+		}
+		if(day > DAY_OF_MONTH_TABLE[month - 1]) {
+			throw new Error(INVALID_MESSAGE);
+		}
+		if(month == 2 && !isLeap(year)) {
+			if(day > 28) {
+				throw new Error(INVALID_MESSAGE);
+			}
+		}
+	}
 	
 	var W3CDTF_parse = function(str) {
 	
@@ -19,6 +59,10 @@ if(this.mg == undefined) {
 	var W3CDTF_format = function(value) {
 	
 	};
+	
+	var DATE_SEPARATOR = ["/", "-"];
+	var TIME_SEPARATOR = [":"];
+	var DATE_TIME_SEPARATOR = [" ", "T"];
 	
 	var SimpleDateTime_parse = function(str) 
 	{
@@ -57,17 +101,17 @@ if(this.mg == undefined) {
 		var minute = 0;
 		var second = 0;
 		
-		year = readDigit(["/", "-"]);
+		year = readDigit(DATE_SEPARATOR);
 		if(index < str.length) {
-			month = readDigit(["/", "-"]);
+			month = readDigit(DATE_SEPARATOR);
 			if(index < str.length) {
-				day = readDigit([" ", "T"]);
+				day = readDigit(DATE_TIME_SEPARATOR);
 				skipSpace();
 				
 				if(index < str.length) {
-					hour = readDigit([":"]);
+					hour = readDigit(TIME_SEPARATOR);
 					if(index < str.length) {
-						minute = readDigit([":"]);
+						minute = readDigit(TIME_SEPARATOR);
 						if(index < str.length) {
 							second = checkDigit(str.substr(index));
 						}
@@ -76,30 +120,9 @@ if(this.mg == undefined) {
 			}
 		}
 		
-		//console.log(year, month, day, hour, minute, second);
+		checkDate(year, month, day, hour, minute, second);
 		
-		if(!(1 <= month && month <= 12)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		if(!(1 <= day && day <= 31)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		if(!(0 <= hour && hour <= 23)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		if(!(0 <= minute && minute <= 59)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		if(!(0 <= second && second < 60)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		
-		var date = new Date(year, month - 1, day);
-		if(date.getDate() != day) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		
-		return new Date(year, month - 1, day, hour, minute, second);
+		return {year: year, month: month, day: day, hour: hour, minute: minute, second: second};
 	};
 	
 	mg.SimpleDateFormat = {
