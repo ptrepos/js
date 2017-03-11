@@ -3,7 +3,116 @@
  *
  * table grid plugin.
  */
- 
+.mgTestLuncher {
+	font-family: Avenir , "Open Sans" , "Helvetica Neue" , Helvetica , Arial , Verdana , Roboto , "游ゴシック" , "Yu Gothic" , "游ゴシック体" , "YuGothic" , "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro" , "Meiryo UI" , "メイリオ" , Meiryo , "ＭＳ Ｐゴシック" , "MS PGothic" , sans-serif;
+
+	color: #ffffff;
+	background-color: #080816;
+	opacity: 0.9;
+	
+	position: absolute;
+	top: 8px;
+	left: 8px;
+	width: calc(100% - 16px);
+	height: calc(100% - 16px);
+	
+	/*影を付ける*/
+	-moz-box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+	-webkit-box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+	-o-box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+	-ms-box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+	box-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+	/*角を丸める*/
+	border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+}
+
+.mgTestLuncher h1 {
+	margin: 16px;
+}
+
+.mgTestLuncher .mgStatus {
+	color: #080816;
+	background-color: #ffffff;
+	font-size: 90%;
+	margin: 8px;
+	padding: 4px;
+	height: 36px;
+}
+
+.mgTestLuncher .mgStatus .mgError {
+	color: #ff0000;
+}
+.mgTestLuncher .mgStatus .mgOK {
+	color: #0000ff;
+}
+
+.mgTestLuncher .mgStatus .mgPass {
+	color: #0000ff;
+}
+
+.mgTestLuncher .mgTestResult {
+	color: #080816;
+	background-color: #ffffff;
+	
+	position: absolute;
+	top: 124px;
+	left: 8px;
+	width: 232px;
+	height:calc(100% - 132px);
+
+	scroll: overflow;
+}
+
+.mgTestLuncher .mgTestResult h2 {
+	color: #ffffff;
+	background-color: #080816;
+	
+	margin: 4px;
+	padding: 4px;
+	font-size: 100%;
+}
+
+.mgTestLuncher .mgTestResult .mgResultItem {
+	font-size: 90%;
+	margin: 2px 8px 2px 8px;
+	padding: 2px 2px 2xp 2px;
+}
+
+.mgTestLuncher .mgTestResult .mgResultItem .mgError {
+	color: #ff0000;
+}
+
+.mgTestLuncher .mgTestResult .mgResultItem .mgOK {
+	color: #0000ff;
+}
+
+.mgTestLuncher .mgTestResult .mgResultItem a {
+	color: #080816;
+}
+
+.mgTestLuncher .mgTestCase {
+	position: absolute;
+	top: 124px;
+	left: 248px;
+	width: calc(100% - 256px);
+	height: calc(100% - 132px);
+
+	background-color: #ffffff;
+	opacity: 1.0;
+}
+
+.mgTestLuncher .mgResultDetail {
+	position: absolute;
+	top: 124px;
+	left: 248px;
+	width: calc(100% - 256px);
+	height: calc(100% - 132px);
+
+	background-color: #ffffff;
+}
+
 .mgTestRunner {
 	font-family: Avenir , "Open Sans" , "Helvetica Neue" , Helvetica , Arial , Verdana , Roboto , "游ゴシック" , "Yu Gothic" , "游ゴシック体" , "YuGothic" , "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro" , "Meiryo UI" , "メイリオ" , Meiryo , "ＭＳ Ｐゴシック" , "MS PGothic" , sans-serif;
 	position: fixed;

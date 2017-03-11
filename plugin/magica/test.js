@@ -3,6 +3,7 @@ if(this.mg == undefined) {
 }
 
 (function() {
+	var TEST_LUNCHER_TITLE = "Magica TEST LUNCHER v0.1.0";
 	var TEST_RUNNER_TITLE = "Magica TEST RUNNER v0.1.0";
 	
 	var isSetted = function(value)
@@ -29,6 +30,16 @@ if(this.mg == undefined) {
 			element.removeChild(element.lastChild);
 
 		parent.insertBefore(element, nextSibling);
+	};
+
+	var dom_replace = function(currentElement, newElement) 
+	{
+		var parent = currentElement.parentNode;
+		var nextSibling = currentElement.nextSibling;
+	
+		parent.removeChild(currentElement);
+
+		parent.insertBefore(newElement, nextSibling);
 	};
 	
 	var _= {};
@@ -89,6 +100,15 @@ if(this.mg == undefined) {
 	};
 	var _dd = function(attrs, bodies) {
 		return _element("dd", attrs, bodies);
+	};
+	var _iframe = function(attrs, bodies) {
+		return _element("iframe", attrs, bodies);
+	};
+	var _h1 = function(attrs, bodies) {
+		return _element("h1", attrs, bodies);
+	};
+	var _h2 = function(attrs, bodies) {
+		return _element("h2", attrs, bodies);
 	};
 	
 	var _equals = function(a, b) 
@@ -203,7 +223,7 @@ if(this.mg == undefined) {
 	
 	mg.TestRunner = function() {
 		this._testCases = [];
-		this._result = {pass: 0, error: 0, assert: 0, details: []};
+		this._result = {pass: 0, error: 0, assert: 0, userAgent: window.navigator.userAgent, details: []};
 		this._resultContext = null;
 		this._statusContext = null;
 		this._testCaseContext = null;
@@ -274,7 +294,7 @@ if(this.mg == undefined) {
 			_span("mgPass", "PASS: " + thisObj._result.pass), ", ",
 			error, ", ",
 			_span("mgAsserts", "Asserts: " + thisObj._result.assert), _br(),
-			_span("mgUserAgent", "User Agent: " + window.navigator.userAgent)
+			_span("mgUserAgent", "User Agent: " + thisObj._result.userAgent)
 		]);
 		
 		dom_removeChildren(thisObj._statusContext);
@@ -347,14 +367,26 @@ if(this.mg == undefined) {
 		this._testCases.push(testCase);
 	};
 	
+	var TestRunner_processOnTestEnd = function(thisObj)
+	{
+		try {
+			if(thisObj.onTestEnd != null)
+				thisObj.onTestEnd({ result: thisObj._result, });
+		} catch(ex) {
+			console.log(ex);
+			alert(ex.message);
+		}
+		
+		TestLuncher_notifyEndToParent(thisObj._result);
+	};
+	
 	mg.TestRunner.prototype.run = function()
 	{
 		var index = 0;
 		var thisObj = this;
 		var loop = function() {
 			if(index >= thisObj._testCases.length) {
-				if(thisObj.onTestEnd != null)
-					thisObj.onTestEnd({ result: thisObj._result, });
+				TestRunner_processOnTestEnd(thisObj);
 				return;
 			}
 
@@ -458,8 +490,174 @@ if(this.mg == undefined) {
 	
 	mg.testRunner = new mg.TestRunner();
 	
+	var TestLuncher_hasTestCase;
+	var TestLuncher_run;
+	var TestLuncher_notifyEndToParent;
+	(function() {
+		var bodyGenerated = false;
+		var statusBody = null;
+		var resultBody = null;
+		var testCaseFrame = null;
+		var index = 0;
+		var testCases = [];
+		var results = {};
+		var target = null;
+		
+		TestLuncher_hasTestCase = function()
+		{
+			return testCases.length > 0;
+		};
+	
+		var TestLuncher_add = function(testCase)
+		{
+			testCases.push(testCase);
+		};
+		
+		TestLuncher_run = function()
+		{
+			TestLuncher_generate();
+			
+			index = 0;
+			TestLuncher_runNext();
+		};
+
+		var TestLuncher_notifyEnd = function(result)
+		{
+			var r = {testCase: target, result: result};
+			results[target] = r;
+			
+			TestLuncher_showResult(r);
+			TestLuncher_showStatus();
+			
+			TestLuncher_runNext();
+		};
+		
+		TestLuncher_notifyEndToParent = function(result)
+		{
+			if(!isSetted(window.parent))
+				return;
+			window.parent.mg.TestLuncher._notifyEnd_(result);
+		};
+
+		var TestLuncher_generate = function()
+		{
+			if(bodyGenerated)
+				return;
+			
+			statusBody = _div("mgStatus");
+			resultBody = _div("mgTestResult", [
+					_h2(null, "TEST RESULTS"),
+				]);
+			testCaseFrame = _iframe({class: "mgTestCase", name: "testCase"});
+			
+			var body = _div("mgTestLuncher", [
+					_h1(null, TEST_LUNCHER_TITLE),
+					statusBody,
+					resultBody,
+					testCaseFrame
+				]);
+			
+			document.body.appendChild(body);
+			
+			bodyGenerated = true;
+		};
+
+		var TestLuncher_showResult = function(result)
+		{
+			var id = "__mg_id_" + result.testCase;
+			var status;
+			if(result.result.error > 0) {
+				status = _span("mgError", "[ERROR]");
+			} else {
+				status = _span("mgOK", "[OK]");
+			}
+			
+			var a = _a({href: "javascript:void(0)"}, result.testCase);
+			a.addEventListener("click", function() {
+				TestLuncher_runTarget(result.testCase);
+			});
+			
+			var resultItem = _div({id: id, class: "mgResultItem"}, [
+					status, " ", a,
+				]);
+			
+			var current = document.getElementById(id);
+			if(current == null) {
+				resultBody.appendChild(resultItem);
+			} else {
+				dom_replace(current, resultItem);
+			}
+		};
+		
+		var TestLuncher_showStatus = function()
+		{
+			var passCount = 0;
+			var errorCount = 0;
+			var assertCount = 0;
+			
+			for(var i in results) {
+				var o = results[i];
+				
+				passCount += o.result.pass;
+				errorCount += o.result.error;
+				assertCount += o.result.assert;
+			}
+			
+			var status;
+			var error;
+			if(errorCount > 0) {
+				status = _span("mgError", "FAULURE");
+				error = _span("mgError", "ERROR: " + errorCount);
+			} else {
+				status = _span("mgOK", "SUCCESS");
+				error = _span("mgPass", "ERROR: " + errorCount);
+			}
+			
+			var block = _div(null, [
+				"STATUS: ", status, ", ",
+				"PASS: " + passCount, ", ",
+				error, ", ",
+				"Asserts: " + assertCount, ", ",
+				"Date Time: " + new Date().toString(), _br(),
+				"User Agent: " + window.navigator.userAgent
+			]);
+			dom_removeChildren(statusBody);
+			statusBody.appendChild(block);
+		};
+
+		var TestLuncher_runNext = function()
+		{
+			if(index >= testCases.length)
+				return false;
+
+			TestLuncher_runTarget(testCases[index++]);
+			
+			return true;
+		};
+
+		var TestLuncher_runTarget = function(testCase)
+		{
+			setTimeout(function() {
+				target = testCase;
+				testCaseFrame.src = testCase;
+			}, 0);
+		};
+		
+		mg.TestLuncher = {
+			add: TestLuncher_add, 
+			_notifyEnd_: TestLuncher_notifyEnd, 
+		};
+	})();
+	
 	window.addEventListener("load", function() {
-		mg.testRunner.init();
-		mg.testRunner.run();
+		if(mg.testRunner._testCases.length > 0) {
+			mg.testRunner.init();
+			mg.testRunner.run();
+			return;
+		}
+		if(TestLuncher_hasTestCase()) {
+			TestLuncher_run();
+			return;
+		}
 	});
 })();
