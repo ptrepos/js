@@ -97,13 +97,6 @@ if(this.mg == undefined) {
 		}
 	}
 	
-	var W3CDTF_parse = function(str) {
-	
-	};
-	var W3CDTF_format = function(value) {
-	
-	};
-	
 	var SimpleDateTime_parse = function(str) 
 	{
 		var index = 0;
@@ -145,53 +138,56 @@ if(this.mg == undefined) {
 		
 		var obj = new CalendarDateTime();
 		
-		obj.year = readDigit(/[\/\-]/g);
-		if(index < str.length) {
-			obj.month = readDigit(/[\/\-]/g);
+		var m = /[\/\-:]/.exec(str);
+		if(m == null || m[0] != ":") {
+			obj.year = readDigit(/[\/\-]/g);
 			if(index < str.length) {
-				obj.day = readDigit(/[ T]/g);
-				skipSpace();
-				
+				obj.month = readDigit(/[\/\-]/g);
 				if(index < str.length) {
-					obj.hour = readDigit(/:/g);
-					if(matched == null)
-						throw new Error(INVALID_MESSAGE);
-					if(index < str.length) {
-						obj.minute = readDigit(/[:+\-Z]/g);
+					obj.day = readDigit(/[ T]/g);
+					skipSpace();
+				}
+			}
+		}
+		
+		if(index < str.length) {
+			obj.hour = readDigit(/:/g);
+			if(matched == null)
+				throw new Error(INVALID_MESSAGE);
+			if(index < str.length) {
+				obj.minute = readDigit(/[:+\-Z]/g);
+				if(index < str.length) {
+					if(matched == ":") {
+						// •b
+						obj.second = readDigit(/[.+\-Z]/g);
 						if(index < str.length) {
-							if(matched == ":") {
-								// •b
-								obj.second = readDigit(/[.+\-Z]/g);
-								if(index < str.length) {
-									// ¬”“_ˆÈ‰º
-									if(matched == ".") {
-										var ticksStr = readStr(/[+\-Z]/g);
-										// Å‘å¸“xnano•b‚Ü‚ÅŽc‚·
-										if(ticksStr.length > 9) {
-											ticksStr = ticksStr.substr(0, 9);
-										}
-										var ticks = checkDigit(ticksStr);
-										for(var i = 9; i > ticksStr.length; i--) {
-											ticks *= 10;
-										}
-										obj.milliSecond = Math.floor(ticks / 1000000);
-										obj.microSecond = Math.floor(ticks / 1000) % 1000;
-										obj.nanoSecond = ticks % 1000;
-									}
+							// ¬”“_ˆÈ‰º
+							if(matched == ".") {
+								var ticksStr = readStr(/[+\-Z]/g);
+								// Å‘å¸“xnano•b‚Ü‚ÅŽc‚·
+								if(ticksStr.length > 9) {
+									ticksStr = ticksStr.substr(0, 9);
 								}
-							}
-							
-							// TimeZone
-							if(matched == "+" || matched == "-" || matched == "Z") {
-								if(matched == "Z" && index >= str.length) {
-									obj.timeZone = 0;
-								} else {
-									var tzFlag = matched == "-" ? -1: 1;
-									var tzHour = readDigit(/:/g);
-									var tzMinute = checkDigit(str.substr(index));
-									obj.timeZone = tzFlag * (tzHour * 60 + tzMinute);
+								var ticks = checkDigit(ticksStr);
+								for(var i = 9; i > ticksStr.length; i--) {
+									ticks *= 10;
 								}
+								obj.milliSecond = Math.floor(ticks / 1000000);
+								obj.microSecond = Math.floor(ticks / 1000) % 1000;
+								obj.nanoSecond = ticks % 1000;
 							}
+						}
+					}
+					
+					// TimeZone
+					if(matched == "+" || matched == "-" || matched == "Z") {
+						if(matched == "Z" && index >= str.length) {
+							obj.timeZone = 0;
+						} else {
+							var tzFlag = matched == "-" ? -1: 1;
+							var tzHour = readDigit(/:/g);
+							var tzMinute = checkDigit(str.substr(index));
+							obj.timeZone = tzFlag * (tzHour * 60 + tzMinute);
 						}
 					}
 				}
