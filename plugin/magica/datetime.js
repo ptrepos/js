@@ -25,11 +25,57 @@ if(this.mg == undefined) {
 	
 	var DAY_OF_MONTH_TABLE = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	
-	var checkDate = function(year, month, day, hour, minute, second) 
+	var CalendarDateTime = function()
 	{
+	};
+
+	CalendarDateTime.prototype =
+	{
+		year: 0,
+		month: 1,
+		day: 1,
+		hour: 0,
+		minute: 0,
+		second: 0,
+		milliSecond: 0,
+		microSecond: 0,
+		nanoSecond: 0,
+		timeZone: 0,
+
+		toString: function()
+		{
+			return "object CalendarDateTime";
+		},
+	};
+	
+	var checkDate = function(dateTime) 
+	{
+		var year = dateTime.year;
+		var month = dateTime.month;
+		var day = dateTime.day;
+		var hour = dateTime.hour;
+		var minute = dateTime.minute;
+		var second = dateTime.second;
+		var milliSecond = dateTime.milliSecond;
+		var microSecond = dateTime.microSecond;
+		var nanoSecond = dateTime.nanoSecond;
+		
 		if(!(1 <= month && month <= 12)) {
 			throw new Error(INVALID_MESSAGE);
 		}
+
+		if(!(1 <= day && day <= 31)) {
+			throw new Error(INVALID_MESSAGE);
+		}
+		if(day > DAY_OF_MONTH_TABLE[dateTime.month - 1]) {
+			throw new Error(INVALID_MESSAGE);
+		}
+		if(month == 2 && !isLeap(year)) {
+			if(day > 28) {
+				throw new Error(INVALID_MESSAGE);
+			}
+		}
+		
 		if(!(0 <= hour && hour <= 23)) {
 			throw new Error(INVALID_MESSAGE);
 		}
@@ -40,16 +86,14 @@ if(this.mg == undefined) {
 			throw new Error(INVALID_MESSAGE);
 		}
 		
-		if(!(1 <= day && day <= 31)) {
+		if(!(0 <= milliSecond && milliSecond < 1000)) {
 			throw new Error(INVALID_MESSAGE);
 		}
-		if(day > DAY_OF_MONTH_TABLE[month - 1]) {
+		if(!(0 <= milliSecond && milliSecond < 1000)) {
 			throw new Error(INVALID_MESSAGE);
 		}
-		if(month == 2 && !isLeap(year)) {
-			if(day > 28) {
-				throw new Error(INVALID_MESSAGE);
-			}
+		if(!(0 <= nanoSecond && nanoSecond < 1000)) {
+			throw new Error(INVALID_MESSAGE);
 		}
 	}
 	
@@ -60,30 +104,35 @@ if(this.mg == undefined) {
 	
 	};
 	
-	var DATE_SEPARATOR = ["/", "-"];
-	var TIME_SEPARATOR = [":"];
-	var DATE_TIME_SEPARATOR = [" ", "T"];
-	
 	var SimpleDateTime_parse = function(str) 
 	{
 		var index = 0;
+		var matched = null;
 		
 		str = str.trim();
 		
-		var readDigit = function(patterns) 
+		var readStr = function(pattern) 
 		{
-			for(var field in patterns) {
-				var pattern = patterns[field];
-				var i = str.indexOf(pattern, index);
-				if(i >= 0) {
-					var c = str.substr(index, i - index);
-					index = i + pattern.length;
-					return checkDigit(c);
-				}
+			pattern.lastIndex = index;
+			
+			var m = pattern.exec(str);
+			if(m == null) {
+				var s = str.substr(index);
+				matched = null;
+				index = str.length;
+				
+				return s;
 			}
-			var s = checkDigit(str.substr(index));
-			index = str.length;
+
+			var s = str.substr(index, m.index - index);
+			matched = m[0];
+			index = pattern.lastIndex;
+			
 			return s;
+		};
+		var readDigit = function(pattern) 
+		{
+			return checkDigit(readStr(pattern));
 		};
 		var skipSpace = function() 
 		{
@@ -94,38 +143,76 @@ if(this.mg == undefined) {
 			}
 		};
 		
-		var year = 0;
-		var month = 1;
-		var day = 1;
-		var hour = 0;
-		var minute = 0;
-		var second = 0;
+		var obj = new CalendarDateTime();
 		
-		year = readDigit(DATE_SEPARATOR);
+		obj.year = readDigit(/[\/\-]/g);
 		if(index < str.length) {
-			month = readDigit(DATE_SEPARATOR);
+			obj.month = readDigit(/[\/\-]/g);
 			if(index < str.length) {
-				day = readDigit(DATE_TIME_SEPARATOR);
+				obj.day = readDigit(/[ T]/g);
 				skipSpace();
 				
 				if(index < str.length) {
-					hour = readDigit(TIME_SEPARATOR);
+					obj.hour = readDigit(/:/g);
+					if(matched == null)
+						throw new Error(INVALID_MESSAGE);
 					if(index < str.length) {
-						minute = readDigit(TIME_SEPARATOR);
+						obj.minute = readDigit(/[:+\-Z]/g);
 						if(index < str.length) {
-							second = checkDigit(str.substr(index));
+							if(matched == ":") {
+								// •b
+								obj.second = readDigit(/[.+\-Z]/g);
+								if(index < str.length) {
+									// ¬”“_ˆÈ‰º
+									if(matched == ".") {
+										var ticksStr = readStr(/[+\-Z]/g);
+										// Å‘å¸“xnano•b‚Ü‚ÅŽc‚·
+										if(ticksStr.length > 9) {
+											ticksStr = ticksStr.substr(0, 9);
+										}
+										var ticks = checkDigit(ticksStr);
+										for(var i = 9; i > ticksStr.length; i--) {
+											ticks *= 10;
+										}
+										obj.milliSecond = Math.floor(ticks / 1000000);
+										obj.microSecond = Math.floor(ticks / 1000) % 1000;
+										obj.nanoSecond = ticks % 1000;
+									}
+								}
+							}
+							
+							// TimeZone
+							if(matched == "+" || matched == "-" || matched == "Z") {
+								if(matched == "Z" && index >= str.length) {
+									obj.timeZone = 0;
+								} else {
+									var tzFlag = matched == "-" ? -1: 1;
+									var tzHour = readDigit(/:/g);
+									var tzMinute = checkDigit(str.substr(index));
+									obj.timeZone = tzFlag * (tzHour * 60 + tzMinute);
+								}
+							}
 						}
 					}
 				}
 			}
 		}
 		
-		checkDate(year, month, day, hour, minute, second);
+		checkDate(obj);
 		
-		return {year: year, month: month, day: day, hour: hour, minute: minute, second: second};
+		return obj;
 	};
 	
-	mg.SimpleDateFormat = {
+	var DateFormat_format = function(format, date) 
+	{
+		checkDate(date);
+		
+		
+		
+		return obj;
+	};
+	
+	mg.DateFormat = {
 		parse: SimpleDateTime_parse,
 	};
 })();

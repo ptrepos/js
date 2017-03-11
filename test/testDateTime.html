@@ -7,47 +7,843 @@
 <script type="text/javascript" src="../plugin/magica/test.js"></script>
 <script type="text/javascript" src="../plugin/magica/datetime.js"></script>
 <script type="text/javascript">
-var SimpleDateTimeTestCase = {
-	name: "SimpleDateTimeTestCase",
-	testParsable: function() {
-		mg.SimpleDateFormat.parse("2016-10-10");
-		mg.ok();
-		mg.SimpleDateFormat.parse("0-1-1");
-		mg.ok();
-		mg.SimpleDateFormat.parse("99999-1-1");
-		mg.ok();
-		mg.SimpleDateFormat.parse("9999-12-31");
-		mg.ok();
-		mg.SimpleDateFormat.parse("9999-2-28");
-		mg.ok();
-		mg.SimpleDateFormat.parse("9999-02-28");
-		mg.ok();
-		mg.SimpleDateFormat.parse("9999-01-28");
-		mg.ok();
-		mg.SimpleDateFormat.parse("9999-02-28");
-		mg.ok();
-		mg.SimpleDateFormat.parse("9999-03-28");
-		mg.ok();
-		mg.SimpleDateFormat.parse("9999-04-28");
-		mg.ok();
-		mg.SimpleDateFormat.parse("9999-05-28");
-		mg.ok();
-		mg.SimpleDateFormat.parse("1970-12-28");
-		mg.ok();
-		mg.SimpleDateFormat.parse("1970/12/28");
-		mg.ok();
-		mg.SimpleDateFormat.parse("2016-02-29");
-		mg.ok();
-		mg.SimpleDateFormat.parse("2016-02-29 10:11:12");
-		mg.ok();
-		mg.SimpleDateFormat.parse("2016-02-29T10:11:12");
-		mg.ok();
-		mg.SimpleDateFormat.parse("2016-02-29    10:11:12");
-		mg.ok();
+var DateFormatTestCase = {
+	name: "DateFormatTestCase",
+	testParsableHyphen: function() {
+		var v;
+		v = mg.DateFormat.parse("2016-10-10");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 10);
+		mg.assertEquals(v.day, 10);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("0-1-1");
+		mg.assertEquals(v.year, 0);
+		mg.assertEquals(v.month, 1);
+		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("99999-1-1");
+		mg.assertEquals(v.year, 99999);
+		mg.assertEquals(v.month, 1);
+		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+
+		v = mg.DateFormat.parse("9999-12-31")
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 12);
+		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999-2-28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999-02-28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999-01-28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 1);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999-02-28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999-03-28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 3);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999-04-28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 4);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999-05-28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 5);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("1970-12-28");
+		mg.assertEquals(v.year, 1970);
+		mg.assertEquals(v.month, 12);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:12");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 12);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+				
+		v = mg.DateFormat.parse("2016-02-29T10:11:12");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 12);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29    10:11:12");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 12);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.001");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 1);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.1001");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 100);
+		mg.assertEquals(v.microSecond, 100);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.111111111");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.1111111111111111");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.1111111111111111Z");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.111111111Z");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10Z");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11Z");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.1111111111111111+09:00");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 9*60);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.111111111+09:00");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 9*60);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10+09:00");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 9*60);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11+09:00");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 9*60);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.1111111111111111-12:30");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, -12*60-30);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.111111111-12:30");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, -12*60-30);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11:10-12:30");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, -12*60-30);
+		
+		v = mg.DateFormat.parse("2016-02-29 10:11-12:30");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, -12*60-30);
+	},
+	testParsableSlash: function() {
+		var v;
+		v = mg.DateFormat.parse("2016/10/10");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 10);
+		mg.assertEquals(v.day, 10);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("0/1/1");
+		mg.assertEquals(v.year, 0);
+		mg.assertEquals(v.month, 1);
+		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("99999/1/1");
+		mg.assertEquals(v.year, 99999);
+		mg.assertEquals(v.month, 1);
+		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+
+		v = mg.DateFormat.parse("9999/12/31")
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 12);
+		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999/2/28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999/02/28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999/01/28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 1);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999/02/28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999/03/28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 3);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999/04/28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 4);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("9999/05/28");
+		mg.assertEquals(v.year, 9999);
+		mg.assertEquals(v.month, 5);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("1970/12/28");
+		mg.assertEquals(v.year, 1970);
+		mg.assertEquals(v.month, 12);
+		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 0);
+		mg.assertEquals(v.minute, 0);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:12");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 12);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+				
+		v = mg.DateFormat.parse("2016/02/29T10:11:12");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 12);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29    10:11:12");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 12);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.001");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 1);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.1001");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 100);
+		mg.assertEquals(v.microSecond, 100);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.111111111");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.1111111111111111");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.1111111111111111Z");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.111111111Z");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10Z");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.1111111111111111Z");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.111111111Z");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10Z");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11Z");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 0);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.1111111111111111+09:00");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 9*60);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.111111111+09:00");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, 9*60);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10+09:00");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 9*60);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11+09:00");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, 9*60);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.1111111111111111-12:30");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, -12*60-30);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.111111111-12:30");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 111);
+		mg.assertEquals(v.microSecond, 111);
+		mg.assertEquals(v.nanoSecond, 111);
+		mg.assertEquals(v.timeZone, -12*60-30);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11:10-12:30");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 10);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, -12*60-30);
+		
+		v = mg.DateFormat.parse("2016/02/29 10:11-12:30");
+		mg.assertEquals(v.year, 2016);
+		mg.assertEquals(v.month, 2);
+		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.hour, 10);
+		mg.assertEquals(v.minute, 11);
+		mg.assertEquals(v.second, 0);
+		mg.assertEquals(v.milliSecond, 0);
+		mg.assertEquals(v.microSecond, 0);
+		mg.assertEquals(v.nanoSecond, 0);
+		mg.assertEquals(v.timeZone, -12*60-30);
 	},
 	testUnparsable1: function() {
 		try {
-			mg.SimpleDateFormat.parse("2016-13-10");
+			mg.DateFormat.parse("2016-13-10");
 		} catch(ex) {
 			mg.ok();
 			return;
@@ -56,7 +852,7 @@ var SimpleDateTimeTestCase = {
 	},
 	testUnparsable2: function() {
 		try {
-			mg.SimpleDateFormat.parse("2016-0-10");
+			mg.DateFormat.parse("2016-0-10");
 		} catch(ex) {
 			mg.ok();
 			return;
@@ -65,7 +861,7 @@ var SimpleDateTimeTestCase = {
 	},
 	testUnparsable3: function() {
 		try {
-			mg.SimpleDateFormat.parse("2016-1-0");
+			mg.DateFormat.parse("2016-1-0");
 		} catch(ex) {
 			mg.ok();
 			return;
@@ -74,7 +870,7 @@ var SimpleDateTimeTestCase = {
 	},
 	testUnparsable4: function() {
 		try {
-			mg.SimpleDateFormat.parse("2016-1-32");
+			mg.DateFormat.parse("2016-1-32");
 		} catch(ex) {
 			mg.ok();
 			return;
@@ -83,7 +879,7 @@ var SimpleDateTimeTestCase = {
 	},
 	testUnparsable5: function() {
 		try {
-			mg.SimpleDateFormat.parse("2016-2-30");
+			mg.DateFormat.parse("2016-2-30");
 		} catch(ex) {
 			mg.ok();
 			return;
@@ -92,7 +888,7 @@ var SimpleDateTimeTestCase = {
 	},
 	testUnparsable6: function() {
 		try {
-			mg.SimpleDateFormat.parse("2017-2-29");
+			mg.DateFormat.parse("2017-2-29");
 		} catch(ex) {
 			mg.ok();
 			return;
@@ -100,20 +896,20 @@ var SimpleDateTimeTestCase = {
 		mg.fail();
 	},
 	testLeap: function() {
-		mg.SimpleDateFormat.parse("2000-2-29");
-		mg.SimpleDateFormat.parse("2004-2-29");
-		mg.SimpleDateFormat.parse("2008-2-29");
-		mg.SimpleDateFormat.parse("2012-2-29");
-		mg.SimpleDateFormat.parse("2016-2-29");
-		mg.SimpleDateFormat.parse("1904-2-29");
-		mg.SimpleDateFormat.parse("2400-2-29");
-		mg.SimpleDateFormat.parse("1600-2-29");
-		mg.SimpleDateFormat.parse("1604-2-29");
-		mg.SimpleDateFormat.parse("1704-2-29");
+		mg.DateFormat.parse("2000-2-29");
+		mg.DateFormat.parse("2004-2-29");
+		mg.DateFormat.parse("2008-2-29");
+		mg.DateFormat.parse("2012-2-29");
+		mg.DateFormat.parse("2016-2-29");
+		mg.DateFormat.parse("1904-2-29");
+		mg.DateFormat.parse("2400-2-29");
+		mg.DateFormat.parse("1600-2-29");
+		mg.DateFormat.parse("1604-2-29");
+		mg.DateFormat.parse("1704-2-29");
 	},
 	testNotLeap1: function() {
 		try {
-			mg.SimpleDateFormat.parse("2017-2-29");
+			mg.DateFormat.parse("2017-2-29");
 		} catch(ex) {
 			mg.ok();
 			return;
@@ -122,7 +918,7 @@ var SimpleDateTimeTestCase = {
 	},
 	testNotLeap2: function() {
 		try {
-			mg.SimpleDateFormat.parse("2100-2-29");
+			mg.DateFormat.parse("2100-2-29");
 		} catch(ex) {
 			mg.ok();
 			return;
@@ -131,7 +927,7 @@ var SimpleDateTimeTestCase = {
 	},
 	testNotLeap3: function() {
 		try {
-			mg.SimpleDateFormat.parse("1900-2-29");
+			mg.DateFormat.parse("1900-2-29");
 		} catch(ex) {
 			mg.ok();
 			return;
@@ -140,7 +936,7 @@ var SimpleDateTimeTestCase = {
 	},
 };
 
-mg.testRunner.add(SimpleDateTimeTestCase);
+mg.testRunner.add(DateFormatTestCase);
 </script>
 </head>
 <body>
