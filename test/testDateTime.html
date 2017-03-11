@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<link type="text/css" href="../plugin/magica/test.css" rel="stylesheet"/>
+<script type="text/javascript" src="../plugin/magica/test.js"></script>
+<script type="text/javascript" src="../plugin/magica/datetime.js"></script>
+<script type="text/javascript">
+var SimpleDateTimeTestCase = {
+	name: "SimpleDateTimeTestCase",
+	testParsable: function() {
+		mg.SimpleDateFormat.parse("2016-10-10");
+		mg.ok();
+		mg.SimpleDateFormat.parse("0-1-1");
+		mg.ok();
+		mg.SimpleDateFormat.parse("99999-1-1");
+		mg.ok();
+		mg.SimpleDateFormat.parse("9999-12-31");
+		mg.ok();
+		mg.SimpleDateFormat.parse("9999-2-28");
+		mg.ok();
+		mg.SimpleDateFormat.parse("9999-02-28");
+		mg.ok();
+		mg.SimpleDateFormat.parse("9999-01-28");
+		mg.ok();
+		mg.SimpleDateFormat.parse("9999-02-28");
+		mg.ok();
+		mg.SimpleDateFormat.parse("9999-03-28");
+		mg.ok();
+		mg.SimpleDateFormat.parse("9999-04-28");
+		mg.ok();
+		mg.SimpleDateFormat.parse("9999-05-28");
+		mg.ok();
+		mg.SimpleDateFormat.parse("1970-12-28");
+		mg.ok();
+		mg.SimpleDateFormat.parse("2016-02-29");
+		mg.ok();
+	},
+	testUnparsable1: function() {
+		try {
+			mg.SimpleDateFormat.parse("2016-13-10");
+		} catch(ex) {
+			mg.ok();
+			return;
+		}
+		mg.fail();
+	},
+	testUnparsable2: function() {
+		try {
+			mg.SimpleDateFormat.parse("2016-0-10");
+		} catch(ex) {
+			mg.ok();
+			return;
+		}
+		mg.fail();
+	},
+	testUnparsable3: function() {
+		try {
+			mg.SimpleDateFormat.parse("2016-1-0");
+		} catch(ex) {
+			mg.ok();
+			return;
+		}
+		mg.fail();
+	},
+	testUnparsable4: function() {
+		try {
+			mg.SimpleDateFormat.parse("2016-1-32");
+		} catch(ex) {
+			mg.ok();
+			return;
+		}
+		mg.fail();
+	},
+	testUnparsable5: function() {
+		try {
+			mg.SimpleDateFormat.parse("2016-2-30");
+		} catch(ex) {
+			mg.ok();
+			return;
+		}
+		mg.fail();
+	},
+	testUnparsable6: function() {
+		try {
+			mg.SimpleDateFormat.parse("2017-2-29");
+		} catch(ex) {
+			mg.ok();
+			return;
+		}
+		mg.fail();
+	},
+};
+
+mg.testRunner.add(SimpleDateTimeTestCase);
+</script>
+</head>
+<body>
+</body>
+</html>

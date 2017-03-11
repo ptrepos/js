@@ -220,6 +220,9 @@ if(this.mg == undefined) {
 		mg.testRunner._result.assert++;
 		throw new mg.AssertException(getOrDefault(message, "fail"));
 	};
+	mg.ok = function() {
+		mg.testRunner._result.assert++;
+	};
 	
 	mg.TestRunner = function() {
 		this._testCases = [];
@@ -534,8 +537,9 @@ if(this.mg == undefined) {
 		
 		TestLuncher_notifyEndToParent = function(result)
 		{
-			if(!isSetted(window.parent))
+			if(window.parent == undefined || window.parent == null || window.parent == window)
 				return;
+
 			window.parent.mg.TestLuncher._notifyEnd_(result);
 		};
 
