@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <link type="text/css" href="../plugin/magica/test.css" rel="stylesheet"/>
 <script type="text/javascript" src="../plugin/magica/test.js"></script>
-<script type="text/javascript" src="../plugin/magica/datetime.js"></script>
+<script type="text/javascript" src="../plugin/magica/core.js"></script>
 <script type="text/javascript">
 var DateFormatParseTestCase = {
 	name: "DateFormatParseTestCase",
@@ -1580,7 +1580,52 @@ var DateFormatParseTestCase = {
 	},
 };
 
+
+var DateFormatFormatTestCase = {
+	name: "DateFormatFormatTestCase",
+	testFormat_basic: function() {
+		mg.assertEquals(mg.DateFormat.format("yyyy/MM/dd HH:mm:ss.fff", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023/08/10 09:10:11.123");
+		mg.assertEquals(mg.DateFormat.format("yyyy/MM/dd HH:mm:ss.ffff", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023/08/10 09:10:11.1234");
+		mg.assertEquals(mg.DateFormat.format("yyyy/MM/dd HH:mm:ss.fffff", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023/08/10 09:10:11.12345");
+		mg.assertEquals(mg.DateFormat.format("yyyy/MM/dd HH:mm:ss.ffffff", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023/08/10 09:10:11.123456");
+		mg.assertEquals(mg.DateFormat.format("yyyy/MM/dd HH:mm:ss.fffffff", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023/08/10 09:10:11.1234567");
+		mg.assertEquals(mg.DateFormat.format("yyyy/MM/dd HH:mm:ss.ffffffff", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023/08/10 09:10:11.12345679");
+		mg.assertEquals(mg.DateFormat.format("yyyy/MM/dd HH:mm:ss.fffffffff", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023/08/10 09:10:11.123456790");
+		mg.assertEquals(mg.DateFormat.format("yyyy/MM/dd HH:mm:ss.ffffffffffffffzzz", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023/08/10 09:10:11.12345679000000Z");
+		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.fff", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023-08-10 09:10:11.123");
+		
+		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.fff", mg.DateFormat.parse("2017-03-11T22:40:53+09:00")), "2017-03-11 22:40:53.000");
+		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.ffffz", mg.DateFormat.parse("2017-03-11T22:40:53+09:00")), "2017-03-11 22:40:53.0000+9");
+		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.fffffzz", mg.DateFormat.parse("2017-03-11T22:40:53+09:00")), "2017-03-11 22:40:53.00000+09");
+		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.ffffffzzz", mg.DateFormat.parse("2017-03-11T22:40:53+09:00")), "2017-03-11 22:40:53.000000+09:00");
+		
+		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.ffffffz", mg.DateFormat.parse("2017-03-11T22:40:53-11:05")), "2017-03-11 22:40:53.000000-11");
+		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.ffffffzz", mg.DateFormat.parse("2017-03-11T22:40:53-11:05")), "2017-03-11 22:40:53.000000-11");
+		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.ffffffzzz", mg.DateFormat.parse("2017-03-11T22:40:53-11:05")), "2017-03-11 22:40:53.000000-11:05");
+	},
+	testFormat_yyyy: function() {
+		mg.assertEquals(mg.DateFormat.format("yyyy", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023");
+		mg.assertEquals(mg.DateFormat.format("yyyy", mg.DateFormat.parse("3-08-10T09:10:11.12345679")), "0003");
+		mg.assertEquals(mg.DateFormat.format("yyyy", mg.DateFormat.parse("13-08-10T09:10:11.12345679")), "0013");
+		mg.assertEquals(mg.DateFormat.format("yyyy", mg.DateFormat.parse("913-08-10T09:10:11.12345679")), "0913");
+		mg.assertEquals(mg.DateFormat.format("yyyy", mg.DateFormat.parse("9913-08-10T09:10:11.12345679")), "9913");
+	},
+	testFormat_yyy: function() {
+		mg.assertEquals(mg.DateFormat.format("yyy", mg.DateFormat.parse("3-08-10T09:10:11.12345679")), "0003");
+		mg.assertEquals(mg.DateFormat.format("yyy", mg.DateFormat.parse("13-08-10T09:10:11.12345679")), "0013");
+		mg.assertEquals(mg.DateFormat.format("yyy", mg.DateFormat.parse("913-08-10T09:10:11.12345679")), "0913");
+		mg.assertEquals(mg.DateFormat.format("yyy", mg.DateFormat.parse("9913-08-10T09:10:11.12345679")), "9913");
+	},
+	testFormat_yy: function() {
+		mg.assertEquals(mg.DateFormat.format("yy", mg.DateFormat.parse("3-08-10T09:10:11.12345679")), "3");
+		mg.assertEquals(mg.DateFormat.format("yy", mg.DateFormat.parse("13-08-10T09:10:11.12345679")), "13");
+		mg.assertEquals(mg.DateFormat.format("yy", mg.DateFormat.parse("913-08-10T09:10:11.12345679")), "13");
+		mg.assertEquals(mg.DateFormat.format("yy", mg.DateFormat.parse("9913-08-10T09:10:11.12345679")), "13");
+	},
+};
+
 mg.testRunner.add(DateFormatParseTestCase);
+mg.testRunner.add(DateFormatFormatTestCase);
 </script>
 </head>
 <body>

@@ -97,7 +97,7 @@ if(this.mg == undefined) {
 		}
 	}
 	
-	var SimpleDateTime_parse = function(str) 
+	var DateFormat_parse = function(str) 
 	{
 		var index = 0;
 		var matched = null;
@@ -199,16 +199,189 @@ if(this.mg == undefined) {
 		return obj;
 	};
 	
-	var DateFormat_format = function(format, date) 
+	var formatDigit = function(outbuf, value, digits)
 	{
-		checkDate(date);
+		if(value < 0) {
+			outbuf.push("-");
+			value = -value;
+		}
 		
+		var str = value.toString();
 		
+		console.log(value, str);
 		
-		return obj;
+		if(str.length < digits) {
+			switch(digits - str.length) {
+			case 1:
+				outbuf.push("0");
+				break;
+			case 2:
+				outbuf.push("00");
+				break;
+			case 3:
+				outbuf.push("000");
+				break;
+			case 4:
+				outbuf.push("0000");
+				break;
+			default:
+				for(var i = str.length; i < digits; i++) {
+					outbuf.push("0");
+				}
+				break;
+			}
+		}
+		outbuf.push(str);
+	};
+	
+	var appendPadRight = function(outbuf, str, length, appendChar)
+	{
+		if(str.length >= length)
+			return str;
+		
+		outbuf.push(str);
+		
+		for(var i = str.length; i < length; i++) {
+			outbuf.push(appendChar);
+		}
+	};
+	
+	var formatSecondDegimal = function(outbuf, date, precision)
+	{
+		var buf = [];
+		var length;
+		
+		if(date.nanoSecond == 0) {
+			if(date.microSecond == 0) {
+				if(date.milliSecond == 0) {
+					formatDigit(outbuf, 0, precision);
+					return;
+				} else {
+					formatDigit(buf, date.milliSecond, 3);
+				}
+			} else {
+				formatDigit(buf, date.milliSecond * 1000 + date.microSecond, 6);
+			}
+		} else {
+			formatDigit(buf, date.milliSecond * 1000000 + date.microSecond * 1000 + date.nanoSecond, 9);
+		}
+		
+		var str = buf.join("");
+		
+		if(str.length == precision) {
+			outbuf.push(str);
+		} else if(str.length > precision) {
+			outbuf.push(str.substr(0, precision));
+		} else {
+			appendPadRight(outbuf, str, precision, "0");
+		}
+	};
+	
+	var formatTimeZone = function(outbuf, tz, tzType)
+	{
+		if(tz == 0) {
+			outbuf.push("Z");
+			return;
+		} else if(tz > 0) {
+			outbuf.push("+");
+		} else {
+			outbuf.push("-");
+			tz = -tz;
+		}
+		
+		switch(tzType) {
+		case "z":
+			formatDigit(outbuf, Math.floor(tz / 60), 1);
+			break;
+		case "zz":
+			formatDigit(outbuf, Math.floor(tz / 60), 2);
+			break;
+		case "zzz":
+			formatDigit(outbuf, Math.floor(tz / 60), 2);
+			outbuf.push(":");
+			formatDigit(outbuf, tz % 60, 2);
+			break;
+		}
+	};
+	
+	var DateFormat_format = function(formatString, date)
+	{
+		var text = formatString;
+		
+		var buf = [];
+		
+		var regexp = /(y{1,4}|M{1,2}|d{1,2}|H{1,2}|m{1,2}|s{1,2}|f+|z{1,3})/g;
+		var index = 0;
+		for(;;) {
+			var m = regexp.exec(formatString);
+			if(m == null) {
+				buf.push(formatString.substr(index));
+				break;
+			}
+			buf.push(formatString.substr(index, m.index - index));
+			
+			var pattern = m[0];
+			switch(pattern) {
+			case "y":
+				buf.push(date.year % 10);
+				break;
+			case "yy":
+				buf.push(date.year % 100);
+				break;
+			case "yyy":
+			case "yyyy":
+				formatDigit(buf, date.year, 4);
+				break;
+			case "M":
+				buf.push(date.month);
+				break;
+			case "MM":
+				formatDigit(buf, date.month, 2);
+				break;
+			case "d":
+				buf.push(date.day);
+				break;
+			case "dd":
+				formatDigit(buf, date.day, 2);
+				break;
+			case "H":
+				buf.push(date.hour);
+				break;
+			case "HH":
+				formatDigit(buf, date.hour, 2);
+				break;
+			case "m":
+				buf.push(date.minute.toString());
+				break;
+			case "mm":
+				formatDigit(buf, date.minute, 2);
+				break;
+			case "s":
+				buf.push(date.second.toString());
+				break;
+			case "ss":
+				formatDigit(buf, date.second, 2);
+				break;
+			case "z":
+			case "zz":
+			case "zzz":
+				formatTimeZone(buf, date.timeZone, pattern);
+				break;
+			default:
+				if(pattern.charAt(0) == "f") {
+					formatSecondDegimal(buf, date, pattern.length);
+				} else {
+					throw new Error("INVALID PATTERN");
+				}
+				break;
+			}
+			index = regexp.lastIndex;
+		}
+		return buf.join("");
 	};
 	
 	mg.DateFormat = {
-		parse: SimpleDateTime_parse,
+		parse: DateFormat_parse,
+		format: DateFormat_format,
 	};
 })();
