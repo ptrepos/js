@@ -1696,32 +1696,26 @@ mg.testRunner.add(DateFormatFormatTestCase);
 var date = mg.DateFormat.parse("2017-03-11T22:40:53.123456789123456789+09:00");
 
 var COUNT = 100000;
-/*
+
 console.time("DateFormat.format");
 for(var i = 0; i < COUNT; i++) {
 	mg.DateFormat.format("yyyy-MM-dd HH:mm:ss", date);
 }
 console.timeEnd("DateFormat.format");
 
-console.time("DateFormat.format2");
-for(var i = 0; i < COUNT; i++) {
-	mg.DateFormat.format2("yyyy-MM-dd HH:mm:ss", date);
-}
-console.timeEnd("DateFormat.format2");
-
-console.time("DateFormat.compileFormat");
-var dateFormat1 = mg.DateFormat.compileFormat("yyyy-MM-dd HH:mm:ss");
+console.time("DateFormat.compile");
+var dateFormat1 = mg.DateFormat.compile("yyyy-MM-dd HH:mm:ss");
 for(var i = 0; i < COUNT; i++) {
 	dateFormat1.format(date);
 }
-console.timeEnd("DateFormat.compileFormat");
+console.timeEnd("DateFormat.compile");
 
-console.time("DateFormat.compileFormat each");
+console.time("DateFormat.compile each");
 for(var i = 0; i < COUNT; i++) {
-	mg.DateFormat.compileFormat("yyyy-MM-dd HH:mm:ss").format(date);
+	mg.DateFormat.compile("yyyy-MM-dd HH:mm:ss").format(date);
 }
-console.timeEnd("DateFormat.compileFormat each");
-*/
+console.timeEnd("DateFormat.compile each");
+
 </script>
 </head>
 <body>

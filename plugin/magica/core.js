@@ -1265,11 +1265,11 @@ if(this.mg == undefined) {
 (function() {
 	var INVALID_MESSAGE = "Invalid Date Format";
 	
-	var CalendarDateTime = function()
+	var CalendarDate = function()
 	{
 	};
 
-	CalendarDateTime.prototype =
+	CalendarDate.prototype =
 	{
 		year: 0,
 		month: 1,
@@ -1287,7 +1287,7 @@ if(this.mg == undefined) {
 			return DateFormat_format("yyyy-MM-ddTHH:mm:ss.fffffffffzzz", this);
 		},
 	};
-
+	
 	// 閏年判定
 	var isLeap = function(year) 
 	{
@@ -1298,7 +1298,7 @@ if(this.mg == undefined) {
 		return year % 4 == 0;
 	};
 	
-	var DAY_OF_MONTH_TABLE = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	var DAYS_OF_MONTH_TABLE = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 	
 	var checkDate = function(year, month, date) 
 	{
@@ -1310,7 +1310,7 @@ if(this.mg == undefined) {
 				throw new Error(INVALID_MESSAGE);
 			}
 		} else {
-			if(date < 1 || date > DAY_OF_MONTH_TABLE[month - 1]) {
+			if(date < 1 || date > DAYS_OF_MONTH_TABLE[month - 1]) {
 				throw new Error(INVALID_MESSAGE);
 			}
 		}
@@ -1330,7 +1330,7 @@ if(this.mg == undefined) {
 			throw new Error(INVALID_MESSAGE);
 		}
 
-		var obj = new CalendarDateTime();
+		var obj = new CalendarDate();
 		
 		var value = m[1];
 		if(value !== undefined) {
@@ -1428,134 +1428,6 @@ if(this.mg == undefined) {
 		return obj;
 	};
 	
-	var ZERO_TABLE = ["", "0", "00", "000", "0000", "00000", "000000", "0000000", "00000000"];
-
-	var formatDigit = function fd(str, value, digits)
-	{
-		if(value < 0) {
-			str = str + "-";
-			value = -value;
-		}
-		var tmp = value.toString();
-		
-		if(tmp.length < digits) {
-			str = str + ZERO_TABLE[digits - tmp.length];
-		}
-		str = str + tmp;
-		
-		return str;
-	};
-	
-	var PRECISION_TABLE = [];
-	var calc = 1;
-	for(var i = 0; i <= 9; i++) {
-		PRECISION_TABLE.push(calc);
-		calc *= 10;
-	}
-	PRECISION_TABLE.reverse();
-	
-	var formatSecondFragment = function fsd(str, date, precision, padZero)
-	{
-		var value = null;
-		if(date.nanoSecond == 0) {
-			if(date.microSecond == 0) {
-				if(date.milliSecond == 0) {
-					value = 0;
-				} else {
-					value = date.milliSecond * 1000000;
-				}
-			} else {
-				value = date.milliSecond * 1000000 + date.microSecond * 1000;
-			}
-		} else {
-			value = date.milliSecond * 1000000 + date.microSecond * 1000 + date.nanoSecond;
-		}
-		
-		if(padZero) {
-			if(precision <= 9) {
-				value = Math.floor(value / PRECISION_TABLE[precision]);
-				str = formatDigit(str, value, precision);
-			} else {
-				str = formatDigit(str, value, 9);
-				for(var i = 9; i < precision; i++) {
-					str = str + "0";
-				}
-			}
-		} else {
-			if(precision >= 9) {
-				precision = 9;
-			}
-			value = Math.floor(value / PRECISION_TABLE[precision]);
-			if(value == 0) {
-				str = str + "0";
-			} else {
-				while(precision > 0) {
-					var f = value % 10;
-					if(f != 0) {
-						break;
-					}
-					value /= 10;
-					precision--;
-				}
-				str = formatDigit(str, value, precision);
-			}
-		}
-		return str;
-	};
-	
-	var formatTimeZone1 = function ftz1(str, tz)
-	{
-		if(tz == 0) {
-			str = str + "Z";
-			return str;
-		} else if(tz > 0) {
-			str = str + "+";
-		} else {
-			str = str + "-";
-			tz = -tz;
-		}
-		
-		str = str + Math.floor(tz / 60);
-		
-		return str;
-	};
-	
-	var formatTimeZone2 = function ftz2(str, tz)
-	{
-		if(tz == 0) {
-			str = str + "Z";
-			return str;
-		} else if(tz > 0) {
-			str = str + "+";
-		} else {
-			str = str + "-";
-			tz = -tz;
-		}
-		
-		str = formatDigit(str, Math.floor(tz / 60), 2);
-		
-		return str;
-	};
-	
-	var formatTimeZone3 = function ftz3(str, tz)
-	{
-		if(tz == 0) {
-			str = str + "Z";
-			return str;
-		} else if(tz > 0) {
-			str = str + "+";
-		} else {
-			str = str + "-";
-			tz = -tz;
-		}
-		
-		str = formatDigit(str, Math.floor(tz / 60), 2);
-		str = str + ":";
-		str = formatDigit(str, tz % 60, 2);
-		
-		return str;
-	};
-	
 	/**
 	 * DateFormat_compile
 	 * 書式文字列を解析して実行しやすい形式にする。
@@ -1573,23 +1445,13 @@ if(this.mg == undefined) {
 			if(m == null) {
 				if(index < formatString.length) {
 					var s = formatString.substr(index);
-					var i = STR_INDEX[s];
-					if(i !== undefined) {
-						formatFields.push(FORMAT_TABLE[i]);
-					} else {
-						formatFields.push(createStringAppend(s));
-					}
+					formatFields.push(getAppendString(s));
 				}
 				break;
 			}
 			if(index < m.index) {
 				var s = formatString.substr(index, m.index - index);
-				var i = STR_INDEX[s];
-				if(i !== undefined) {
-					formatFields.push(FORMAT_TABLE[i]);
-				} else {
-					formatFields.push(createStringAppend(s));
-				}
+				formatFields.push(getAppendString(s));
 			}
 			
 			var pattern = m[0];
@@ -1601,26 +1463,19 @@ if(this.mg == undefined) {
 				var formatIndex = field[0];
 				var fieldIndex = field[1];
 				
-				formatFields.push(FORMAT_TABLE[formatIndex]);
+				formatFields.push(DATE_FORMATTERS[formatIndex]);
 				
 				if(checkTable[fieldIndex] !== true) {
-					dateFields.push(DATE_FIELD_GETTER[fieldIndex]);
+					dateFields.push(DATE_FIELD_GETTERS[fieldIndex]);
 					checkTable[fieldIndex] = true;
 				}
 			} else {
 				var c = pattern.charAt(0);
-				if(c == "f") {
-					formatFields.push(createFormatSecondFragment(pattern.length, true));
+				if(c === "f" || c === "F") {
+					formatFields.push(getFormatSecondFragment(pattern.length, c === "f"));
 					
 					if(checkTable[DATE_FIELD_SECOND_FRAGMENT] !== true) {
-						dateFields.push(DATE_FIELD_GETTER[DATE_FIELD_SECOND_FRAGMENT]);
-						checkTable[DATE_FIELD_SECOND_FRAGMENT] = true;
-					}
-				} else if(c == "F") {
-					formatFields.push(createFormatSecondFragment(pattern.length, false));
-					
-					if(checkTable[DATE_FIELD_SECOND_FRAGMENT] !== true) {
-						dateFields.push(DATE_FIELD_GETTER[DATE_FIELD_SECOND_FRAGMENT]);
+						dateFields.push(DATE_FIELD_GETTERS[DATE_FIELD_SECOND_FRAGMENT]);
 						checkTable[DATE_FIELD_SECOND_FRAGMENT] = true;
 					}
 				} else {
@@ -1636,7 +1491,7 @@ if(this.mg == undefined) {
 
 			format: function(date) {
 				if(date instanceof Date) {
-					var obj = new CalendarDateTime();
+					var obj = new CalendarDate();
 					var f = this._dateFields;
 					for(var i = 0; i < f.length; i++) {
 						f[i](obj, date);
@@ -1676,12 +1531,13 @@ if(this.mg == undefined) {
 			CACHE[formatString] = v;
 		}
 		return v.format(date);
-	}
+	};
 
 	i = 0;
 	var DATE_FIELD_YEAR = i++;
 	var DATE_FIELD_MONTH = i++;
 	var DATE_FIELD_DATE = i++;
+	var DATE_FIELD_DAY_OF_WEEK = i++;
 	var DATE_FIELD_HOUR = i++;
 	var DATE_FIELD_MINUTE = i++;
 	var DATE_FIELD_SECOND = i++;
@@ -1689,10 +1545,11 @@ if(this.mg == undefined) {
 	var DATE_FIELD_TIMEZONE = i++;
 	var DATE_FIELD_COUNT = i;
 	
-	var DATE_FIELD_GETTER = [
+	var DATE_FIELD_GETTERS = [
 		function(o, d) { o.year = d.getYear() + 1900; },
 		function(o, d) { o.month = d.getMonth() + 1; },
 		function(o, d) { o.date = d.getDate() + 1; },
+		function(o, d) { o.dayOfWeek = d.getDay(); },
 		function(o, d) { o.hour = d.getHours(); },
 		function(o, d) { o.minute = d.getMinutes(); },
 		function(o, d) { o.second = d.getSeconds(); },
@@ -1700,36 +1557,36 @@ if(this.mg == undefined) {
 		function(o, d) { o.timeZone = -d.getTimezoneOffset(); },
 	];
 	
-	var FORMAT_TABLE = [
+	var DATE_FORMATTERS = [
 		function(s, o) { return s + (o.year < 0 ? "B.C.": "A.D."); },
 		function(s, o) { return s + o.year % 10; },
 		function(s, o) { return s + o.year % 100; },
-		function(s, o) { return formatDigit(s, o.year, 4); },
+		function(s, o) { return formatDigit4(s, o.year); },
 		function(s, o) { return s + o.month; },
-		function(s, o) { return formatDigit(s, o.month, 2); },
+		function(s, o) { return formatDigit2(s, o.month); },
 		function(s, o) { return s + o.date; },
-		function(s, o) { return formatDigit(s, o.date, 2); },
+		function(s, o) { return formatDigit2(s, o.date); },
 		function(s, o) { return s + o.hour; },
-		function(s, o) { return formatDigit(s, o.hour, 2); },
+		function(s, o) { return formatDigit2(s, o.hour); },
 		function(s, o) { return s + o.hour >= 12 ? "P": "A"; },
 		function(s, o) { return s + o.hour >= 12 ? "PM": "AM"; },
 		function(s, o) { return s + o.hour % 12; },
-		function(s, o) { return formatDigit(s, o.hour % 12, 2); },
+		function(s, o) { return formatDigit2(s, o.hour % 12); },
 		function(s, o) { return s + o.minute; },
-		function(s, o) { return formatDigit(s, o.minute, 2); },
+		function(s, o) { return formatDigit2(s, o.minute); },
 		function(s, o) { return s + o.second; },
-		function(s, o) { return formatDigit(s, o.second, 2); },
+		function(s, o) { return formatDigit2(s, o.second); },
 		function(s, o) { return formatTimeZone1(s, o.timeZone); },
 		function(s, o) { return formatTimeZone2(s, o.timeZone); },
 		function(s, o) { return formatTimeZone3(s, o.timeZone); },
-		function(s, o) { return formatSecondFragment(s, o, 1, true); },
-		function(s, o) { return formatSecondFragment(s, o, 2, true); },
-		function(s, o) { return formatSecondFragment(s, o, 3, true); },
-		function(s, o) { return formatSecondFragment(s, o, 4, true); },
-		function(s, o) { return formatSecondFragment(s, o, 1, false); },
-		function(s, o) { return formatSecondFragment(s, o, 2, false); },
-		function(s, o) { return formatSecondFragment(s, o, 3, false); },
-		function(s, o) { return formatSecondFragment(s, o, 4, false); },
+		function(s, o) { return formatSecondFragmentPadZero(s, o, 1); },
+		function(s, o) { return formatSecondFragmentPadZero(s, o, 2); },
+		function(s, o) { return formatSecondFragmentPadZero(s, o, 3); },
+		function(s, o) { return formatSecondFragmentPadZero(s, o, 4); },
+		function(s, o) { return formatSecondFragment(s, o, 1); },
+		function(s, o) { return formatSecondFragment(s, o, 2); },
+		function(s, o) { return formatSecondFragment(s, o, 3); },
+		function(s, o) { return formatSecondFragment(s, o, 4); },
 		function(s, o) { return s + "/"; },
 		function(s, o) { return s + "-"; },
 		function(s, o) { return s + "T"; },
@@ -1783,16 +1640,166 @@ if(this.mg == undefined) {
 		".":	i++,
 	};
 	
-	var createFormatSecondFragment = function(precision, padZero)
+	var ZERO_TABLE = ["", "0", "00", "000", "0000", "00000", "000000", "0000000", "00000000"];
+
+	var formatDigit = function(str, value, digits)
 	{
-		return function(s, o) {
-			return formatSecondFragment(s, o, precision, padZero);
-		};
+		if(value < 0) {
+			str = str + "-";
+			value = -value;
+		}
+
+		var tmp = value.toString();
+		
+		if(tmp.length < digits) {
+			str = str + ZERO_TABLE[digits - tmp.length];
+		}
+		str = str + tmp;
+		
+		return str;
 	};
-	var createStringAppend = function(str)
+	
+	var formatDigit4 = function(str, value)
 	{
+		if(value < 0) {
+			str = str + "-";
+			value = -value;
+		}
+		if(value >= 1000) {
+			str = str + value;
+		} else if(value >= 100) {
+			str = str + "0" + value;
+		} else if(value >= 10) {
+			str = str + "00" + value;
+		} else {
+			str = str + "000" + value;
+		}
+		return str;
+	};
+	
+	var formatDigit2 = function(str, value)
+	{
+		if(value < 10) {
+			str = str + "0" + value;
+		} else {
+			str = str + value;
+		}
+		return str;
+	};
+
+	var PRECISION_TABLE = [1000000000, 100000000, 10000000, 1000000, 100000, 10000, 1000, 100, 10, 1];
+	
+	var formatSecondFragmentPadZero = function(str, date, precision)
+	{
+		var value = date.milliSecond * 1000000 + date.microSecond * 1000 + date.nanoSecond;
+		
+		if(precision <= 9) {
+			value = Math.floor(value / PRECISION_TABLE[precision]);
+			str = formatDigit(str, value, precision);
+		} else {
+			str = formatDigit(str, value, 9);
+			for(var i = 9; i < precision; i++) {
+				str = str + "0";
+			}
+		}
+		return str;
+	};
+	var formatSecondFragment = function(str, date, precision)
+	{
+		var value = date.milliSecond * 1000000 + date.microSecond * 1000 + date.nanoSecond;
+		
+		if(precision >= 9) {
+			precision = 9;
+		}
+		value = Math.floor(value / PRECISION_TABLE[precision]);
+		if(value == 0) {
+			str = str + "0";
+		} else {
+			while(precision > 1) {
+				if(value % 10 != 0) {
+					break;
+				}
+				value /= 10;
+				precision--;
+			}
+			str = formatDigit(str, value, precision);
+		}
+		return str;
+	};
+	
+	var getFormatSecondFragment = function(precision, padZero)
+	{
+		if(padZero) {
+			return function(s, o) {
+				return formatSecondFragmentPadZero(s, o, precision);
+			};
+		} else {
+			return function(s, o) {
+				return formatSecondFragment(s, o, precision);
+			};
+		}
+	};
+	
+	var formatTimeZone1 = function(str, tz)
+	{
+		if(tz == 0) {
+			str = str + "Z";
+			return str;
+		} else if(tz > 0) {
+			str = str + "+";
+		} else {
+			str = str + "-";
+			tz = -tz;
+		}
+		
+		str = str + Math.floor(tz / 60);
+		
+		return str;
+	};
+	
+	var formatTimeZone2 = function(str, tz)
+	{
+		if(tz == 0) {
+			str = str + "Z";
+			return str;
+		} else if(tz > 0) {
+			str = str + "+";
+		} else {
+			str = str + "-";
+			tz = -tz;
+		}
+		str = formatDigit2(str, Math.floor(tz / 60));
+		
+		return str;
+	};
+	
+	var formatTimeZone3 = function(str, tz)
+	{
+		if(tz == 0) {
+			str = str + "Z";
+			return str;
+		} else if(tz > 0) {
+			str = str + "+";
+		} else {
+			str = str + "-";
+			tz = -tz;
+		}
+		
+		str = formatDigit2(str, Math.floor(tz / 60));
+		str = str + ":";
+		str = formatDigit2(str, tz % 60);
+		
+		return str;
+	};
+
+	var getAppendString = function(str)
+	{
+		var i = STR_INDEX[str];
+		if(i !== undefined)
+			return DATE_FORMATTERS[i];
+
 		return function(s, o) {
-			return formatSecondFragment(s, o, str);
+			return s + str;
 		};
 	};
 	
