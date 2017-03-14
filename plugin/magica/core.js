@@ -1277,11 +1277,20 @@ if(this.mg == undefined) {
 		hour: 0,
 		minute: 0,
 		second: 0,
-		milliSecond: 0,
-		microSecond: 0,
-		nanoSecond: 0,
+		fragment: 0,
+		get milliSecond() {
+			return Math.floor(this.fragment / 1000000);
+		},
+		get microSecond() {
+			return Math.floor(this.fragment / 1000) % 1000;
+		},
+		get nanoSecond() {
+			return this.fragment % 1000;
+		},
 		timeZone: 0,
-
+		get dayOfWeek() {
+			return new Date(this.year, this.month, this.date).getDay();
+		},
 		toString: function()
 		{
 			return DateFormat_format("yyyy-MM-ddTHH:mm:ss.fffffffffzzz", this);
@@ -1370,31 +1379,15 @@ if(this.mg == undefined) {
 				if(value !== undefined) {
 					// 最大精度nano秒まで残す
 					var ticksStr = value;
-					if(ticksStr.length <= 3) {
-						var ticks = parseInt(ticksStr);
-						for(var i = 3; i > ticksStr.length; i--) {
-							ticks *= 10;
-						}
-						obj.milliSecond = ticks;
-					} else if(ticksStr.length <= 6) {
-						var ticks = parseInt(ticksStr);
-						for(var i = 6; i > ticksStr.length; i--) {
-							ticks *= 10;
-						}
-						obj.milliSecond = Math.floor(ticks / 1000);
-						obj.microSecond = ticks % 1000;
-					} else {
-						if(ticksStr.length > 9) {
-							ticksStr = ticksStr.substr(0, 9);
-						}
-						var ticks = parseInt(ticksStr);
-						for(var i = 9; i > ticksStr.length; i--) {
-							ticks *= 10;
-						}
-						obj.milliSecond = Math.floor(ticks / 1000000);
-						obj.microSecond = Math.floor(ticks / 1000) % 1000;
-						obj.nanoSecond = ticks % 1000;
+					
+					if(ticksStr.length > 9) {
+						ticksStr = ticksStr.substr(0, 9);
 					}
+					var ticks = parseInt(ticksStr);
+					for(var i = 9; i > ticksStr.length; i--) {
+						ticks *= 10;
+					}
+					obj.fragment = ticks;
 				}
 				
 				value = m[11];
@@ -1434,11 +1427,9 @@ if(this.mg == undefined) {
 	 */
 	var DateFormat_compile = function(formatString)
 	{
-		var checkTable = new Array(DATE_FIELD_COUNT);
-		var dateFields = [];
 		var formatFields = [];
 		
-		var regexp = /(g{1,4}|y{1,4}|M{1,2}|d{1,2}|H{1,2}|t{1,2}|h{1,2}|m{1,2}|s{1,2}|f+|F+|z{1,3})/g;
+		var regexp = /(g+|y{1,4}|M{1,2}|d{1,2}|H{1,2}|t{1,2}|h{1,2}|m{1,2}|s{1,2}|f+|F+|z{1,3})/g;
 		var index = 0;
 		for(;;) {
 			var m = regexp.exec(formatString);
@@ -1456,28 +1447,17 @@ if(this.mg == undefined) {
 			
 			var pattern = m[0];
 			if(pattern.length <= 4) {
-				var field = FORMAT_INDEX[pattern];
-				if(field == undefined) {
+				var formatterIndex = FORMAT_INDEX[pattern];
+				if(formatterIndex == undefined) {
 					throw new Error(INVALID_MESSAGE);
 				}
-				var formatIndex = field[0];
-				var fieldIndex = field[1];
-				
-				formatFields.push(DATE_FORMATTERS[formatIndex]);
-				
-				if(checkTable[fieldIndex] !== true) {
-					dateFields.push(DATE_FIELD_GETTERS[fieldIndex]);
-					checkTable[fieldIndex] = true;
-				}
+				formatFields.push(DATE_FORMATTERS[formatterIndex]);
 			} else {
 				var c = pattern.charAt(0);
 				if(c === "f" || c === "F") {
 					formatFields.push(getFormatSecondFragment(pattern.length, c === "f"));
-					
-					if(checkTable[DATE_FIELD_SECOND_FRAGMENT] !== true) {
-						dateFields.push(DATE_FIELD_GETTERS[DATE_FIELD_SECOND_FRAGMENT]);
-						checkTable[DATE_FIELD_SECOND_FRAGMENT] = true;
-					}
+				} else if(c === "g") {
+					formatFields.push(DATE_FORMATTERS[0]);
 				} else {
 					throw new Error(INVALID_MESSAGE);
 				}
@@ -1485,28 +1465,7 @@ if(this.mg == undefined) {
 			
 			index = regexp.lastIndex;
 		}
-		return {
-			_formatFields: formatFields,
-			_dateFields: dateFields,
-
-			format: function(date) {
-				if(date instanceof Date) {
-					var obj = new CalendarDate();
-					var f = this._dateFields;
-					for(var i = 0; i < f.length; i++) {
-						f[i](obj, date);
-					}
-					date = obj;
-				}
-
-				var f = this._formatFields;
-				var s = "";
-				for(var i = 0; i < f.length; i++) {
-					s = f[i](s, date);
-				}
-				return s;
-			},
-		};
+		return new CompiledDateFormat(formatFields);
 	};
 	
 	var CACHE = {};
@@ -1532,36 +1491,87 @@ if(this.mg == undefined) {
 		}
 		return v.format(date);
 	};
-
-	i = 0;
-	var DATE_FIELD_YEAR = i++;
-	var DATE_FIELD_MONTH = i++;
-	var DATE_FIELD_DATE = i++;
-	var DATE_FIELD_DAY_OF_WEEK = i++;
-	var DATE_FIELD_HOUR = i++;
-	var DATE_FIELD_MINUTE = i++;
-	var DATE_FIELD_SECOND = i++;
-	var DATE_FIELD_SECOND_FRAGMENT = i++;
-	var DATE_FIELD_TIMEZONE = i++;
-	var DATE_FIELD_COUNT = i;
 	
-	var DATE_FIELD_GETTERS = [
-		function(o, d) { o.year = d.getYear() + 1900; },
-		function(o, d) { o.month = d.getMonth() + 1; },
-		function(o, d) { o.date = d.getDate() + 1; },
-		function(o, d) { o.dayOfWeek = d.getDay(); },
-		function(o, d) { o.hour = d.getHours(); },
-		function(o, d) { o.minute = d.getMinutes(); },
-		function(o, d) { o.second = d.getSeconds(); },
-		function(o, d) { o.milliSecond = d.getMilliseconds(); },
-		function(o, d) { o.timeZone = -d.getTimezoneOffset(); },
-	];
+	var CompiledDateFormat = function(formatFields)
+	{
+		this._formatFields = formatFields;
+	}
+	CompiledDateFormat.prototype = {
+		format: function(date)
+		{
+			if(date instanceof Date) {
+				date = new DateField(date);
+			}
+
+			var f = this._formatFields;
+			var s = "";
+			for(var i = 0; i < f.length; i++) {
+				s = f[i](s, date);
+			}
+			return s;
+		},
+	};
+	
+	var DateField = function(date)
+	{
+		this._d = date;
+	};
+	DateField.prototype = {
+		get year() {
+			if(this._year == undefined) {
+				this._year = this._d.getYear() + 1900;
+			}
+			return this._year;
+		},
+		get month() {
+			if(this._month == undefined) {
+				this._month = this._d.getMonth() + 1;
+			}
+			return this._month;
+		},
+		get date() {
+			if(this._date == undefined) {
+				this._date = this._d.getDate() + 1;
+			}
+			return this._date;
+		},
+		get hour() {
+			if(this._hour == undefined) {
+				this._hour = this._d.getHours();
+			}
+			return this._hour;
+		},
+		get minute() {
+			if(this._minute == undefined) {
+				this._minute = this._d.getMinutes();
+			}
+			return this._minute;
+		},
+		get second() {
+			if(this._second == undefined) {
+				this._second = this._d.getSeconds();
+			}
+			return this._second;
+		},
+		get fragment() {
+			if(this._fragment == undefined) {
+				this._fragment = this._d.getMilliseconds() * 1000000;
+			}
+			return this._fragment;
+		},
+		get timeZone() {
+			if(this._timeZone == undefined) {
+				this._timeZone = -this._d.getTimezoneOffset();
+			}
+			return this._timeZone;
+		},
+	};
 	
 	var DATE_FORMATTERS = [
 		function(s, o) { return s + (o.year < 0 ? "B.C.": "A.D."); },
 		function(s, o) { return s + o.year % 10; },
 		function(s, o) { return s + o.year % 100; },
-		function(s, o) { return formatDigit4(s, o.year); },
+		function(s, o) { return formatYear(s, o.year); },
 		function(s, o) { return s + o.month; },
 		function(s, o) { return formatDigit2(s, o.month); },
 		function(s, o) { return s + o.date; },
@@ -1579,14 +1589,14 @@ if(this.mg == undefined) {
 		function(s, o) { return formatTimeZone1(s, o.timeZone); },
 		function(s, o) { return formatTimeZone2(s, o.timeZone); },
 		function(s, o) { return formatTimeZone3(s, o.timeZone); },
-		function(s, o) { return formatSecondFragmentPadZero(s, o, 1); },
-		function(s, o) { return formatSecondFragmentPadZero(s, o, 2); },
-		function(s, o) { return formatSecondFragmentPadZero(s, o, 3); },
-		function(s, o) { return formatSecondFragmentPadZero(s, o, 4); },
-		function(s, o) { return formatSecondFragment(s, o, 1); },
-		function(s, o) { return formatSecondFragment(s, o, 2); },
-		function(s, o) { return formatSecondFragment(s, o, 3); },
-		function(s, o) { return formatSecondFragment(s, o, 4); },
+		function(s, o) { return formatSecondFragmentPadZero(s, o.fragment, 1); },
+		function(s, o) { return formatSecondFragmentPadZero(s, o.fragment, 2); },
+		function(s, o) { return formatSecondFragmentPadZero(s, o.fragment, 3); },
+		function(s, o) { return formatSecondFragmentPadZero(s, o.fragment, 4); },
+		function(s, o) { return formatSecondFragment(s, o.fragment, 1); },
+		function(s, o) { return formatSecondFragment(s, o.fragment, 2); },
+		function(s, o) { return formatSecondFragment(s, o.fragment, 3); },
+		function(s, o) { return formatSecondFragment(s, o.fragment, 4); },
 		function(s, o) { return s + "/"; },
 		function(s, o) { return s + "-"; },
 		function(s, o) { return s + "T"; },
@@ -1597,39 +1607,39 @@ if(this.mg == undefined) {
 	
 	var i = 0;
 	var FORMAT_INDEX = {
-		"g":	[i,		DATE_FIELD_YEAR],
-		"gg":	[i,		DATE_FIELD_YEAR],
-		"ggg":	[i,		DATE_FIELD_YEAR],
-		"gggg":	[i++,	DATE_FIELD_YEAR],
-		"y":	[i++,	DATE_FIELD_YEAR],
-		"yy":	[i++,	DATE_FIELD_YEAR],
-		"yyy":	[i,		DATE_FIELD_YEAR],
-		"yyyy":	[i++,	DATE_FIELD_YEAR],
-		"M":	[i++,	DATE_FIELD_MONTH],
-		"MM":	[i++,	DATE_FIELD_MONTH],
-		"d":	[i++,	DATE_FIELD_DATE],
-		"dd":	[i++,	DATE_FIELD_DATE],
-		"H":	[i++,	DATE_FIELD_HOUR],
-		"HH":	[i++,	DATE_FIELD_HOUR],
-		"t":	[i++,	DATE_FIELD_HOUR],
-		"tt":	[i++,	DATE_FIELD_HOUR],
-		"h":	[i++,	DATE_FIELD_HOUR],
-		"hh":	[i++,	DATE_FIELD_HOUR],
-		"m":	[i++,	DATE_FIELD_MINUTE],
-		"mm":	[i++,	DATE_FIELD_MINUTE],
-		"s":	[i++,	DATE_FIELD_SECOND],
-		"ss":	[i++,	DATE_FIELD_SECOND],
-		"z":	[i++,	DATE_FIELD_TIMEZONE],
-		"zz":	[i++,	DATE_FIELD_TIMEZONE],
-		"zzz":	[i++,	DATE_FIELD_TIMEZONE],
-		"f":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
-		"ff":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
-		"fff":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
-		"ffff":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
-		"F":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
-		"FF":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
-		"FFF":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
-		"FFFF":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
+		"g":	i,
+		"gg":	i,
+		"ggg":	i,
+		"gggg":	i++,
+		"y":	i++,
+		"yy":	i++,
+		"yyy":	i,
+		"yyyy":	i++,
+		"M":	i++,
+		"MM":	i++,
+		"d":	i++,
+		"dd":	i++,
+		"H":	i++,
+		"HH":	i++,
+		"t":	i++,
+		"tt":	i++,
+		"h":	i++,
+		"hh":	i++,
+		"m":	i++,
+		"mm":	i++,
+		"s":	i++,
+		"ss":	i++,
+		"z":	i++,
+		"zz":	i++,
+		"zzz":	i++,
+		"f":	i++,
+		"ff":	i++,
+		"fff":	i++,
+		"ffff":	i++,
+		"F":	i++,
+		"FF":	i++,
+		"FFF":	i++,
+		"FFFF":	i++,
 	};
 	var STR_INDEX = {
 		"/":	i++,
@@ -1648,7 +1658,6 @@ if(this.mg == undefined) {
 			str = str + "-";
 			value = -value;
 		}
-
 		var tmp = value.toString();
 		
 		if(tmp.length < digits) {
@@ -1659,7 +1668,7 @@ if(this.mg == undefined) {
 		return str;
 	};
 	
-	var formatDigit4 = function(str, value)
+	var formatYear = function(str, value)
 	{
 		if(value < 0) {
 			str = str + "-";
@@ -1689,9 +1698,9 @@ if(this.mg == undefined) {
 
 	var PRECISION_TABLE = [1000000000, 100000000, 10000000, 1000000, 100000, 10000, 1000, 100, 10, 1];
 	
-	var formatSecondFragmentPadZero = function(str, date, precision)
+	var formatSecondFragmentPadZero = function(str, fragment, precision)
 	{
-		var value = date.milliSecond * 1000000 + date.microSecond * 1000 + date.nanoSecond;
+		var value = fragment;
 		
 		if(precision <= 9) {
 			value = Math.floor(value / PRECISION_TABLE[precision]);
@@ -1704,9 +1713,9 @@ if(this.mg == undefined) {
 		}
 		return str;
 	};
-	var formatSecondFragment = function(str, date, precision)
+	var formatSecondFragment = function(str, fragment, precision)
 	{
-		var value = date.milliSecond * 1000000 + date.microSecond * 1000 + date.nanoSecond;
+		var value = fragment;
 		
 		if(precision >= 9) {
 			precision = 9;
@@ -1731,11 +1740,11 @@ if(this.mg == undefined) {
 	{
 		if(padZero) {
 			return function(s, o) {
-				return formatSecondFragmentPadZero(s, o, precision);
+				return formatSecondFragmentPadZero(s, o.fragment, precision);
 			};
 		} else {
 			return function(s, o) {
-				return formatSecondFragment(s, o, precision);
+				return formatSecondFragment(s, o.fragment, precision);
 			};
 		}
 	};
@@ -1797,7 +1806,6 @@ if(this.mg == undefined) {
 		var i = STR_INDEX[str];
 		if(i !== undefined)
 			return DATE_FORMATTERS[i];
-
 		return function(s, o) {
 			return s + str;
 		};

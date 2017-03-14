@@ -1678,6 +1678,7 @@ var DateFormatFormatTestCase = {
 		mg.assertEquals(mg.DateFormat.format("gggg", mg.DateFormat.parse("1024-08-10T09:10:11.12345679")), "A.D.");
 		mg.assertEquals(mg.DateFormat.format("gggg", mg.DateFormat.parse("9999-08-10T09:10:11.12345679")), "A.D.");
 		mg.assertEquals(mg.DateFormat.format("gggg", mg.DateFormat.parse("-1-08-10T09:10:11.12345679")), "B.C.");
+		mg.assertEquals(mg.DateFormat.format("ggggggggggggggggggggggg", mg.DateFormat.parse("-1-08-10T09:10:11.12345679")), "B.C.");
 	},
 	testFormat_tthh: function() {
 		mg.assertEquals(mg.DateFormat.format("tthh", mg.DateFormat.parse("3-08-10T09:10:11.12345679")), "AM09");
