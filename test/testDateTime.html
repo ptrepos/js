@@ -14,7 +14,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-10-10");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 10);
-		mg.assertEquals(v.day, 10);
+		mg.assertEquals(v.date, 10);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -28,7 +28,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("0-1-1");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -42,7 +42,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("99999-1-1");
 		mg.assertEquals(v.year, 99999);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -56,7 +56,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999-12-31")
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -70,7 +70,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999-2-28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -84,7 +84,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999-02-28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -98,7 +98,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999-01-28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -112,7 +112,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999-02-28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -126,7 +126,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999-03-28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 3);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -140,7 +140,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999-04-28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 4);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -154,7 +154,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999-05-28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 5);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -168,7 +168,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1970-12-28");
 		mg.assertEquals(v.year, 1970);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -182,7 +182,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -196,7 +196,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11:12");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 12);
@@ -210,7 +210,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29T10:11:12");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 12);
@@ -224,7 +224,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29    10:11:12");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 12);
@@ -238,7 +238,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 0);
@@ -252,7 +252,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11:10.001");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -266,7 +266,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11:10.1001");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -280,7 +280,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11:10.111111111");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -294,7 +294,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11:10.1111111111111111");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -308,7 +308,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11:10.1111111111111111Z");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -322,7 +322,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11:10.111111111Z");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -336,7 +336,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11:10Z");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -350,7 +350,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11Z");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 0);
@@ -364,7 +364,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11:10.1111111111111111+09:00");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -378,7 +378,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11:10.111111111+09:00");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -392,7 +392,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11:10+09:00");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -406,7 +406,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016-02-29 10:11+09:00");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 0);
@@ -417,66 +417,66 @@ var DateFormatParseTestCase = {
 	},
 	testParsableHyphenTimeZone9: function() {
 		var v;
-		v = mg.DateFormat.parse("2016-02-29 10:11:10.1111111111111111-12:30");
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.1111111111111111-07:30");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
 		mg.assertEquals(v.milliSecond, 111);
 		mg.assertEquals(v.microSecond, 111);
 		mg.assertEquals(v.nanoSecond, 111);
-		mg.assertEquals(v.timeZone, -12*60-30);
+		mg.assertEquals(v.timeZone, -7*60-30);
 	},
 	testParsableHyphenTimeZone10: function() {
 		var v;
-		v = mg.DateFormat.parse("2016-02-29 10:11:10.111111111-12:30");
+		v = mg.DateFormat.parse("2016-02-29 10:11:10.111111111-07:30");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
 		mg.assertEquals(v.milliSecond, 111);
 		mg.assertEquals(v.microSecond, 111);
 		mg.assertEquals(v.nanoSecond, 111);
-		mg.assertEquals(v.timeZone, -12*60-30);
+		mg.assertEquals(v.timeZone, -7*60-30);
 	},
 	testParsableHyphenTimeZone11: function() {
 		var v;
-		v = mg.DateFormat.parse("2016-02-29 10:11:10-12:30");
+		v = mg.DateFormat.parse("2016-02-29 10:11:10-07:30");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
 		mg.assertEquals(v.milliSecond, 0);
 		mg.assertEquals(v.microSecond, 0);
 		mg.assertEquals(v.nanoSecond, 0);
-		mg.assertEquals(v.timeZone, -12*60-30);
+		mg.assertEquals(v.timeZone, -7*60-30);
 	},
 	testParsableHyphenTimeZone12: function() {
 		var v;
-		v = mg.DateFormat.parse("2016-02-29 10:11-12:30");
+		v = mg.DateFormat.parse("2016-02-29 10:11-07:30");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 0);
 		mg.assertEquals(v.milliSecond, 0);
 		mg.assertEquals(v.microSecond, 0);
 		mg.assertEquals(v.nanoSecond, 0);
-		mg.assertEquals(v.timeZone, -12*60-30);
+		mg.assertEquals(v.timeZone, -7*60-30);
 	},
 	testParsableSlash1: function() {
 		var v;
 		v = mg.DateFormat.parse("2016/10/10");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 10);
-		mg.assertEquals(v.day, 10);
+		mg.assertEquals(v.date, 10);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -490,7 +490,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("0/1/1");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -504,7 +504,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("99999/1/1");
 		mg.assertEquals(v.year, 99999);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -518,7 +518,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999/12/31")
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -532,7 +532,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999/2/28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -546,7 +546,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999/02/28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -560,7 +560,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999/01/28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -574,7 +574,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999/02/28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -588,7 +588,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999/03/28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 3);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -602,7 +602,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999/04/28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 4);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -616,7 +616,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999/05/28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 5);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -630,7 +630,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1970/12/28");
 		mg.assertEquals(v.year, 1970);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -644,7 +644,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -658,7 +658,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11:12");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 12);
@@ -672,7 +672,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29T10:11:12");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 12);
@@ -686,7 +686,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29    10:11:12");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 12);
@@ -700,7 +700,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 0);
@@ -714,7 +714,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11:10.001");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -728,7 +728,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11:10.1001");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -742,7 +742,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11:10.111111111");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -756,7 +756,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11:10.1111111111111111");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -770,7 +770,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11:10.1111111111111111Z");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -784,7 +784,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11:10.111111111Z");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -798,7 +798,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11:10Z");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -812,7 +812,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11Z");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 0);
@@ -826,7 +826,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11:10.1111111111111111+09:00");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -840,7 +840,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11:10.111111111+09:00");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -854,7 +854,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11:10+09:00");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
@@ -868,7 +868,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2016/02/29 10:11+09:00");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 0);
@@ -879,66 +879,66 @@ var DateFormatParseTestCase = {
 	},
 	testParsableSlashTimeZone9: function() {
 		var v;
-		v = mg.DateFormat.parse("2016/02/29 10:11:10.1111111111111111-12:30");
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.1111111111111111-08:30");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
 		mg.assertEquals(v.milliSecond, 111);
 		mg.assertEquals(v.microSecond, 111);
 		mg.assertEquals(v.nanoSecond, 111);
-		mg.assertEquals(v.timeZone, -12*60-30);
+		mg.assertEquals(v.timeZone, -8*60-30);
 	},
 	testParsableSlashTimeZone10: function() {
 		var v;
-		v = mg.DateFormat.parse("2016/02/29 10:11:10.111111111-12:30");
+		v = mg.DateFormat.parse("2016/02/29 10:11:10.111111111-08:30");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
 		mg.assertEquals(v.milliSecond, 111);
 		mg.assertEquals(v.microSecond, 111);
 		mg.assertEquals(v.nanoSecond, 111);
-		mg.assertEquals(v.timeZone, -12*60-30);
+		mg.assertEquals(v.timeZone, -8*60-30);
 	},
 	testParsableSlashTimeZone11: function() {
 		var v;
-		v = mg.DateFormat.parse("2016/02/29 10:11:10-12:30");
+		v = mg.DateFormat.parse("2016/02/29 10:11:10-08:30");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 10);
 		mg.assertEquals(v.milliSecond, 0);
 		mg.assertEquals(v.microSecond, 0);
 		mg.assertEquals(v.nanoSecond, 0);
-		mg.assertEquals(v.timeZone, -12*60-30);
+		mg.assertEquals(v.timeZone, -8*60-30);
 	},
 	testParsableSlashTimeZone12: function() {
 		var v;
-		v = mg.DateFormat.parse("2016/02/29 10:11-12:30");
+		v = mg.DateFormat.parse("2016/02/29 10:11-08:30");
 		mg.assertEquals(v.year, 2016);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		mg.assertEquals(v.hour, 10);
 		mg.assertEquals(v.minute, 11);
 		mg.assertEquals(v.second, 0);
 		mg.assertEquals(v.milliSecond, 0);
 		mg.assertEquals(v.microSecond, 0);
 		mg.assertEquals(v.nanoSecond, 0);
-		mg.assertEquals(v.timeZone, -12*60-30);
+		mg.assertEquals(v.timeZone, -8*60-30);
 	},
 	testParsableTime1: function() {
 		var v;
 		v = mg.DateFormat.parse("2000/10/8 1:3-7:30");
 		mg.assertEquals(v.year, 2000);
 		mg.assertEquals(v.month, 10);
-		mg.assertEquals(v.day, 8);
+		mg.assertEquals(v.date, 8);
 		mg.assertEquals(v.hour, 1);
 		mg.assertEquals(v.minute, 3);
 		mg.assertEquals(v.second, 0);
@@ -952,7 +952,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1923/6/28 19:59:9+5:30");
 		mg.assertEquals(v.year, 1923);
 		mg.assertEquals(v.month, 6);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		mg.assertEquals(v.hour, 19);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 9);
@@ -966,7 +966,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1813/12/31 23:59:59.12");
 		mg.assertEquals(v.year, 1813);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -980,7 +980,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1813/12/31 23:59:59.12Z");
 		mg.assertEquals(v.year, 1813);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -994,7 +994,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1813/12/31 23:59:59.3Z");
 		mg.assertEquals(v.year, 1813);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1008,7 +1008,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1813/12/31 23:59:59.456Z");
 		mg.assertEquals(v.year, 1813);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1022,7 +1022,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1813/12/31 23:59:59.0012+10:30");
 		mg.assertEquals(v.year, 1813);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1036,7 +1036,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1813/12/31 23:59:59.05678+10:30");
 		mg.assertEquals(v.year, 1813);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1050,7 +1050,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1813/12/31 23:59:59.090123-10:30");
 		mg.assertEquals(v.year, 1813);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1064,7 +1064,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1813/12/31 23:59:59.0000012-10:30");
 		mg.assertEquals(v.year, 1813);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1078,7 +1078,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1813/12/31 23:59:59.00100023-10:30");
 		mg.assertEquals(v.year, 1813);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1092,7 +1092,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("1813/12/31 23:59:59.001000234-10:30");
 		mg.assertEquals(v.year, 1813);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1106,7 +1106,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -1120,7 +1120,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2000");
 		mg.assertEquals(v.year, 2000);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -1134,7 +1134,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("652");
 		mg.assertEquals(v.year, 652);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -1148,7 +1148,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("652/1");
 		mg.assertEquals(v.year, 652);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -1162,7 +1162,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2000/10");
 		mg.assertEquals(v.year, 2000);
 		mg.assertEquals(v.month, 10);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -1176,7 +1176,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999/12");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 0);
 		mg.assertEquals(v.minute, 0);
 		mg.assertEquals(v.second, 0);
@@ -1190,7 +1190,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("23:59:59.001000234-10:30");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1204,7 +1204,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("23:59:59.001022-10:30");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1218,7 +1218,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("23:59:59.01-10:30");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1232,7 +1232,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("23:59:59-10:30");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1246,7 +1246,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("23:59-10:30");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 0);
@@ -1260,7 +1260,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("23:59:59.001000234");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1274,7 +1274,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("23:59:59.001022");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1288,7 +1288,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("23:59:59.01");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1302,7 +1302,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("23:59:59");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 59);
@@ -1316,7 +1316,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("23:59");
 		mg.assertEquals(v.year, 0);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 1);
+		mg.assertEquals(v.date, 1);
 		mg.assertEquals(v.hour, 23);
 		mg.assertEquals(v.minute, 59);
 		mg.assertEquals(v.second, 0);
@@ -1383,7 +1383,7 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("2017-03-11T22:40:53+09:00");
 		mg.assertEquals(v.year, 2017);
 		mg.assertEquals(v.month, 3);
-		mg.assertEquals(v.day, 11);
+		mg.assertEquals(v.date, 11);
 		mg.assertEquals(v.hour, 22);
 		mg.assertEquals(v.minute, 40);
 		mg.assertEquals(v.second, 53);
@@ -1397,55 +1397,55 @@ var DateFormatParseTestCase = {
 		v = mg.DateFormat.parse("9999-1-31");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 1);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		v = mg.DateFormat.parse("9999-2-28");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 28);
+		mg.assertEquals(v.date, 28);
 		v = mg.DateFormat.parse("8004-2-29");
 		mg.assertEquals(v.year, 8004);
 		mg.assertEquals(v.month, 2);
-		mg.assertEquals(v.day, 29);
+		mg.assertEquals(v.date, 29);
 		v = mg.DateFormat.parse("9999-3-31");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 3);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		v = mg.DateFormat.parse("9999-4-30");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 4);
-		mg.assertEquals(v.day, 30);
+		mg.assertEquals(v.date, 30);
 		v = mg.DateFormat.parse("9999-5-31");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 5);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		v = mg.DateFormat.parse("9999-6-30");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 6);
-		mg.assertEquals(v.day, 30);
+		mg.assertEquals(v.date, 30);
 		v = mg.DateFormat.parse("9999-7-31");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 7);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		v = mg.DateFormat.parse("9999-8-31");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 8);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		v = mg.DateFormat.parse("9999-9-30");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 9);
-		mg.assertEquals(v.day, 30);
+		mg.assertEquals(v.date, 30);
 		v = mg.DateFormat.parse("9999-10-31");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 10);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 		v = mg.DateFormat.parse("9999-11-30");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 11);
-		mg.assertEquals(v.day, 30);
+		mg.assertEquals(v.date, 30);
 		v = mg.DateFormat.parse("9999-12-31");
 		mg.assertEquals(v.year, 9999);
 		mg.assertEquals(v.month, 12);
-		mg.assertEquals(v.day, 31);
+		mg.assertEquals(v.date, 31);
 	},
 	testUnparsable1: function() {
 		try {
@@ -1537,6 +1537,50 @@ var DateFormatParseTestCase = {
 		}
 		mg.fail();
 	},
+	testUnparsableN: function() {
+		var array = [
+			"2017Z",
+			"2017/10Z",
+			"2017/10/11Z",
+			"2017//11/12Z",
+			"2017-10-10 10",
+			"2017-10-10T10",
+			"2017-10-10T 10:10",
+			"2017-10-10T10:10X",
+			"2017-10-10 T10:10",
+			"T10:10",
+			"T 10:10",
+			"2017-10-10Z",
+			"2017-10-10+09",
+			"2017-10-10+09:30",
+			"2017-10+09:30",
+			"2017-10 10:10",
+			"2017-10T10:10",
+			"2017/10:10",
+			"2017/10/10T11/12",
+			"2017/10/10T11:00:00:09:00",
+			"s10:11",
+			"z",
+			"Z",
+			"+",
+			"-",
+			"A",
+			"2016-10-10-10",
+			"1-1-1 0:0:0.0+99:00",
+			"1-1-1 0:0:0.0+00:99",
+			"1-0-1 0:0:0.0+00:00",
+			"1-1-0 0:0:0.123456789799999+00:00",
+		];
+		for(var i = 0; i < array.length; i++) {
+			try {
+				mg.DateFormat.parse(array[i]);
+			} catch(ex) {
+				mg.ok();
+				continue;
+			}
+			mg.fail(array[i]);
+		}
+	},
 	testLeap: function() {
 		mg.DateFormat.parse("2000-2-29");
 		mg.DateFormat.parse("4000-2-29");
@@ -1594,6 +1638,10 @@ var DateFormatFormatTestCase = {
 		mg.assertEquals(mg.DateFormat.format("yyyy/MM/dd HH:mm:ss.ffffffffffffffzzz", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023/08/10 09:10:11.12345679000000Z");
 		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.fff", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023-08-10 09:10:11.123");
 		
+		mg.assertEquals(mg.DateFormat.format("yyyy-M-d H:m:s.FFF", mg.DateFormat.parse("9632-07-09T09:10:11.12")), "9632-7-9 9:10:11.12");
+		mg.assertEquals(mg.DateFormat.format("yyyy-M-d H:m:s.FFFFFFFFF", mg.DateFormat.parse("9632-07-09T09:10:11.12345")), "9632-7-9 9:10:11.12345");
+		mg.assertEquals(mg.DateFormat.format("yyyy-M-d H:m:s.FFFFFFFFFFFFFFFFFFFFFFFFFF", mg.DateFormat.parse("9632-07-09T09:10:11.12345")), "9632-7-9 9:10:11.12345");
+		
 		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.fff", mg.DateFormat.parse("2017-03-11T22:40:53+09:00")), "2017-03-11 22:40:53.000");
 		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.ffffz", mg.DateFormat.parse("2017-03-11T22:40:53+09:00")), "2017-03-11 22:40:53.0000+9");
 		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.fffffzz", mg.DateFormat.parse("2017-03-11T22:40:53+09:00")), "2017-03-11 22:40:53.00000+09");
@@ -1602,6 +1650,9 @@ var DateFormatFormatTestCase = {
 		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.ffffffz", mg.DateFormat.parse("2017-03-11T22:40:53-11:05")), "2017-03-11 22:40:53.000000-11");
 		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.ffffffzz", mg.DateFormat.parse("2017-03-11T22:40:53-11:05")), "2017-03-11 22:40:53.000000-11");
 		mg.assertEquals(mg.DateFormat.format("yyyy-MM-dd HH:mm:ss.ffffffzzz", mg.DateFormat.parse("2017-03-11T22:40:53-11:05")), "2017-03-11 22:40:53.000000-11:05");
+	},
+	testFormat_date: function() {
+		mg.out(mg.DateFormat.format("yyyy-MM-ddTHH:mm:ss.ffffffzzz", new Date()));
 	},
 	testFormat_yyyy: function() {
 		mg.assertEquals(mg.DateFormat.format("yyyy", mg.DateFormat.parse("2023-08-10T09:10:11.12345679")), "2023");
@@ -1622,10 +1673,55 @@ var DateFormatFormatTestCase = {
 		mg.assertEquals(mg.DateFormat.format("yy", mg.DateFormat.parse("913-08-10T09:10:11.12345679")), "13");
 		mg.assertEquals(mg.DateFormat.format("yy", mg.DateFormat.parse("9913-08-10T09:10:11.12345679")), "13");
 	},
+	testFormat_g: function() {
+		mg.assertEquals(mg.DateFormat.format("gggg", mg.DateFormat.parse("3-08-10T09:10:11.12345679")), "A.D.");
+		mg.assertEquals(mg.DateFormat.format("gggg", mg.DateFormat.parse("1024-08-10T09:10:11.12345679")), "A.D.");
+		mg.assertEquals(mg.DateFormat.format("gggg", mg.DateFormat.parse("9999-08-10T09:10:11.12345679")), "A.D.");
+		mg.assertEquals(mg.DateFormat.format("gggg", mg.DateFormat.parse("-1-08-10T09:10:11.12345679")), "B.C.");
+	},
+	testFormat_tthh: function() {
+		mg.assertEquals(mg.DateFormat.format("tthh", mg.DateFormat.parse("3-08-10T09:10:11.12345679")), "AM09");
+		mg.assertEquals(mg.DateFormat.format("tthh", mg.DateFormat.parse("3-08-10T16:10:11.12345679")), "PM04");
+		mg.assertEquals(mg.DateFormat.format("th", mg.DateFormat.parse("3-08-10T16:10:11.12345679")), "P4");
+		mg.assertEquals(mg.DateFormat.format("th", mg.DateFormat.parse("3-08-10T23:10:11.12345679")), "P11");
+		mg.assertEquals(mg.DateFormat.format("tt/h", mg.DateFormat.parse("3-08-10T23:10:11.12345679")), "PM/11");
+		mg.assertEquals(mg.DateFormat.format("tt/h", mg.DateFormat.parse("3-08-10T08:10:11.12345679")), "AM/8");
+		mg.assertEquals(mg.DateFormat.format("tt/h", mg.DateFormat.parse("3-08-10T11:10:11.12345679")), "AM/11");
+	},
 };
 
 mg.testRunner.add(DateFormatParseTestCase);
 mg.testRunner.add(DateFormatFormatTestCase);
+
+var date = mg.DateFormat.parse("2017-03-11T22:40:53.123456789123456789+09:00");
+
+var COUNT = 100000;
+/*
+console.time("DateFormat.format");
+for(var i = 0; i < COUNT; i++) {
+	mg.DateFormat.format("yyyy-MM-dd HH:mm:ss", date);
+}
+console.timeEnd("DateFormat.format");
+
+console.time("DateFormat.format2");
+for(var i = 0; i < COUNT; i++) {
+	mg.DateFormat.format2("yyyy-MM-dd HH:mm:ss", date);
+}
+console.timeEnd("DateFormat.format2");
+
+console.time("DateFormat.compileFormat");
+var dateFormat1 = mg.DateFormat.compileFormat("yyyy-MM-dd HH:mm:ss");
+for(var i = 0; i < COUNT; i++) {
+	dateFormat1.format(date);
+}
+console.timeEnd("DateFormat.compileFormat");
+
+console.time("DateFormat.compileFormat each");
+for(var i = 0; i < COUNT; i++) {
+	mg.DateFormat.compileFormat("yyyy-MM-dd HH:mm:ss").format(date);
+}
+console.timeEnd("DateFormat.compileFormat each");
+*/
 </script>
 </head>
 <body>

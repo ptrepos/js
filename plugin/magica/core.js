@@ -1265,26 +1265,6 @@ if(this.mg == undefined) {
 (function() {
 	var INVALID_MESSAGE = "Invalid Date Format";
 	
-	var checkDigit = function(str)
-	{
-		if(!/^[0-9]+$/.test(str)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		return parseInt(str);
-	}
-
-	// 閏年判定
-	var isLeap = function(year) 
-	{
-		if(year % 400 == 0)
-			return true;
-		if(year % 100 == 0)
-			return false;
-		return year % 4 == 0;
-	};
-	
-	var DAY_OF_MONTH_TABLE = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-	
 	var CalendarDateTime = function()
 	{
 	};
@@ -1293,7 +1273,7 @@ if(this.mg == undefined) {
 	{
 		year: 0,
 		month: 1,
-		day: 1,
+		date: 1,
 		hour: 0,
 		minute: 0,
 		second: 0,
@@ -1307,246 +1287,374 @@ if(this.mg == undefined) {
 			return DateFormat_format("yyyy-MM-ddTHH:mm:ss.fffffffffzzz", this);
 		},
 	};
-	
-	var checkDate = function(dateTime) 
+
+	// 閏年判定
+	var isLeap = function(year) 
 	{
-		var year = dateTime.year;
-		var month = dateTime.month;
-		var day = dateTime.day;
-		var hour = dateTime.hour;
-		var minute = dateTime.minute;
-		var second = dateTime.second;
-		var milliSecond = dateTime.milliSecond;
-		var microSecond = dateTime.microSecond;
-		var nanoSecond = dateTime.nanoSecond;
-		
+		if(year % 400 == 0)
+			return true;
+		if(year % 100 == 0)
+			return false;
+		return year % 4 == 0;
+	};
+	
+	var DAY_OF_MONTH_TABLE = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	
+	var checkDate = function(year, month, date) 
+	{
 		if(!(1 <= month && month <= 12)) {
 			throw new Error(INVALID_MESSAGE);
 		}
-
-		if(!(1 <= day && day <= 31)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		if(day > DAY_OF_MONTH_TABLE[dateTime.month - 1]) {
-			throw new Error(INVALID_MESSAGE);
-		}
 		if(month == 2 && !isLeap(year)) {
-			if(day > 28) {
+			if(date < 1 || date > 28) {
+				throw new Error(INVALID_MESSAGE);
+			}
+		} else {
+			if(date < 1 || date > DAY_OF_MONTH_TABLE[month - 1]) {
 				throw new Error(INVALID_MESSAGE);
 			}
 		}
-		
-		if(!(0 <= hour && hour <= 23)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		if(!(0 <= minute && minute <= 59)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		if(!(0 <= second && second < 60)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		
-		if(!(0 <= milliSecond && milliSecond < 1000)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		if(!(0 <= milliSecond && milliSecond < 1000)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-		if(!(0 <= nanoSecond && nanoSecond < 1000)) {
-			throw new Error(INVALID_MESSAGE);
-		}
-	}
+	};
+	
+	var DATETIME_REGEXP = /^\s*(?:([+-]?\d+)(?:[\/\-](\d{1,2})(?:[\/\-](\d{1,2}))?)?(?:T|\s+|\s*$))?(?:(\d{1,2}):(\d{1,2})(?::(\d{1,2})(?:[\.](\d+))?)?(?:([+-])(\d{1,2})(?::(\d{1,2}))?|(Z))?)?\s*$/;
 	
 	/**
 	 * DateFormat_parse
 	 * 日時形式の文字列をパースする。
 	 * パース後、日時データの整合性をチェックする。
 	 */
-	var DateFormat_parse = function(str) 
+	var DateFormat_parse = function(str)
 	{
-		var index = 0;
-		var matched = null;
-		
-		str = str.trim();
-		
-		var readStr = function(pattern) 
-		{
-			pattern.lastIndex = index;
-			
-			var m = pattern.exec(str);
-			if(m == null) {
-				var s = str.substr(index);
-				matched = null;
-				index = str.length;
-				
-				return s;
-			}
+		var m = DATETIME_REGEXP.exec(str);
+		if(m == null) {
+			throw new Error(INVALID_MESSAGE);
+		}
 
-			var s = str.substr(index, m.index - index);
-			matched = m[0];
-			index = pattern.lastIndex;
-			
-			return s;
-		};
-		var readDigit = function(pattern) 
-		{
-			return checkDigit(readStr(pattern));
-		};
-		var skipSpace = function() 
-		{
-			while(index < str.length) {
-				if(str.charAt(index) != " ")
-					return;
-				index++;
-			}
-		};
-		
 		var obj = new CalendarDateTime();
 		
-		var m = /[\/\-:]/.exec(str);
-		if(m == null || m[0] != ":") {
-			obj.year = readDigit(/[\/\-]/g);
-			if(index < str.length) {
-				obj.month = readDigit(/[\/\-]/g);
-				if(index < str.length) {
-					obj.day = readDigit(/[ T]/g);
-					skipSpace();
+		var value = m[1];
+		if(value !== undefined) {
+			obj.year = parseInt(value);
+			value = m[2];
+			if(value !== undefined) {
+				obj.month = parseInt(value);
+				value = m[3];
+				if(value !== undefined) {
+					obj.date = parseInt(value);
 				}
 			}
+			checkDate(obj.year, obj.month, obj.date);
 		}
 		
-		if(index < str.length) {
-			obj.hour = readDigit(/:/g);
-			if(matched == null)
+		value = m[4];
+		if(value !== undefined) {
+			// 日付が入力されている場合、年月日が完全である必要がある。
+			if(m[1] != undefined && (m[2] == undefined || m[3] == undefined)) {
 				throw new Error(INVALID_MESSAGE);
-			if(index < str.length) {
-				obj.minute = readDigit(/[:+\-Z]/g);
-				if(index < str.length) {
-					if(matched == ":") {
-						// 秒
-						obj.second = readDigit(/[.+\-Z]/g);
-						if(index < str.length) {
-							// 小数点以下
-							if(matched == ".") {
-								var ticksStr = readStr(/[+\-Z]/g);
-								// 最大精度nano秒まで残す
-								if(ticksStr.length > 9) {
-									ticksStr = ticksStr.substr(0, 9);
-								}
-								var ticks = checkDigit(ticksStr);
-								for(var i = 9; i > ticksStr.length; i--) {
-									ticks *= 10;
-								}
-								obj.milliSecond = Math.floor(ticks / 1000000);
-								obj.microSecond = Math.floor(ticks / 1000) % 1000;
-								obj.nanoSecond = ticks % 1000;
-							}
+			}
+			obj.hour = parseInt(value);
+			if(!(0 <= obj.hour))
+				throw new Error(INVALID_MESSAGE);
+			value = m[5];
+			if(value !== undefined) {
+				obj.minute = parseInt(value);
+				if(!(0 <= obj.minute && obj.minute <= 59))
+					throw new Error(INVALID_MESSAGE);
+				value = m[6];
+				if(value !== undefined) {
+					obj.second = parseInt(value);
+					if(!(0 <= obj.second && obj.second <= 59))
+						throw new Error(INVALID_MESSAGE);
+				}
+				value = m[7];
+				if(value !== undefined) {
+					// 最大精度nano秒まで残す
+					var ticksStr = value;
+					if(ticksStr.length <= 3) {
+						var ticks = parseInt(ticksStr);
+						for(var i = 3; i > ticksStr.length; i--) {
+							ticks *= 10;
 						}
-					}
-					
-					// TimeZone
-					if(matched == "+" || matched == "-" || matched == "Z") {
-						if(matched == "Z" && index >= str.length) {
-							obj.timeZone = 0;
-						} else {
-							var tzFlag = matched == "-" ? -1: 1;
-							var tzHour = readDigit(/:/g);
-							var tzMinute = checkDigit(str.substr(index));
-							obj.timeZone = tzFlag * (tzHour * 60 + tzMinute);
+						obj.milliSecond = ticks;
+					} else if(ticksStr.length <= 6) {
+						var ticks = parseInt(ticksStr);
+						for(var i = 6; i > ticksStr.length; i--) {
+							ticks *= 10;
 						}
+						obj.milliSecond = Math.floor(ticks / 1000);
+						obj.microSecond = ticks % 1000;
+					} else {
+						if(ticksStr.length > 9) {
+							ticksStr = ticksStr.substr(0, 9);
+						}
+						var ticks = parseInt(ticksStr);
+						for(var i = 9; i > ticksStr.length; i--) {
+							ticks *= 10;
+						}
+						obj.milliSecond = Math.floor(ticks / 1000000);
+						obj.microSecond = Math.floor(ticks / 1000) % 1000;
+						obj.nanoSecond = ticks % 1000;
 					}
+				}
+				
+				value = m[11];
+				if(value === "Z") {
+					obj.timeZone = 0;
+				} else {
+					value = m[8];
+					var tzFlag = 1;
+					if(value == "-") {
+						tzFlag = -1;
+					}
+					var tzHour = 0;
+					value = m[9];
+					if(value !== undefined) {
+						tzHour = parseInt(value);
+						if(!(0 <= tzHour && tzHour <= 11))
+							throw new Error(INVALID_MESSAGE);
+					}
+					var tzMinute = 0;
+					value = m[10];
+					if(value !== undefined) {
+						tzMinute = parseInt(value);
+						if(!(0 <= tzMinute && tzMinute <= 59))
+							throw new Error(INVALID_MESSAGE);
+					}
+					obj.timeZone = tzFlag * (tzHour * 60 + tzMinute);
 				}
 			}
 		}
-		
-		checkDate(obj);
-		
+
 		return obj;
 	};
 	
-	var formatDigit = function(outbuf, value, digits)
+	var ZERO_TABLE = ["", "0", "00", "000", "0000", "00000", "000000", "0000000", "00000000"];
+
+	var formatDigit = function fd(str, value, digits)
 	{
 		if(value < 0) {
-			outbuf.push("-");
+			str = str + "-";
 			value = -value;
 		}
-		var str = value.toString();
+		var tmp = value.toString();
 		
-		for(var i = str.length; i < digits; i++) {
-			outbuf.push("0");
+		if(tmp.length < digits) {
+			str = str + ZERO_TABLE[digits - tmp.length];
 		}
-		outbuf.push(str);
+		str = str + tmp;
+		
+		return str;
 	};
 	
-	var appendPadRight = function(outbuf, str, length, appendChar)
-	{
-		if(str.length >= length)
-			return str;
-		
-		outbuf.push(str);
-		
-		for(var i = str.length; i < length; i++) {
-			outbuf.push(appendChar);
-		}
-	};
+	var PRECISION_TABLE = [];
+	var calc = 1;
+	for(var i = 0; i <= 9; i++) {
+		PRECISION_TABLE.push(calc);
+		calc *= 10;
+	}
+	PRECISION_TABLE.reverse();
 	
-	var formatSecondDegimal = function(outbuf, date, precision)
+	var formatSecondFragment = function fsd(str, date, precision, padZero)
 	{
-		var buf = [];
-		var length;
-		
+		var value = null;
 		if(date.nanoSecond == 0) {
 			if(date.microSecond == 0) {
 				if(date.milliSecond == 0) {
-					formatDigit(outbuf, 0, precision);
-					return;
+					value = 0;
 				} else {
-					formatDigit(buf, date.milliSecond, 3);
+					value = date.milliSecond * 1000000;
 				}
 			} else {
-				formatDigit(buf, date.milliSecond * 1000 + date.microSecond, 6);
+				value = date.milliSecond * 1000000 + date.microSecond * 1000;
 			}
 		} else {
-			formatDigit(buf, date.milliSecond * 1000000 + date.microSecond * 1000 + date.nanoSecond, 9);
+			value = date.milliSecond * 1000000 + date.microSecond * 1000 + date.nanoSecond;
 		}
 		
-		var str = buf.join("");
-		
-		if(str.length == precision) {
-			outbuf.push(str);
-		} else if(str.length > precision) {
-			outbuf.push(str.substr(0, precision));
+		if(padZero) {
+			if(precision <= 9) {
+				value = Math.floor(value / PRECISION_TABLE[precision]);
+				str = formatDigit(str, value, precision);
+			} else {
+				str = formatDigit(str, value, 9);
+				for(var i = 9; i < precision; i++) {
+					str = str + "0";
+				}
+			}
 		} else {
-			appendPadRight(outbuf, str, precision, "0");
+			if(precision >= 9) {
+				precision = 9;
+			}
+			value = Math.floor(value / PRECISION_TABLE[precision]);
+			if(value == 0) {
+				str = str + "0";
+			} else {
+				while(precision > 0) {
+					var f = value % 10;
+					if(f != 0) {
+						break;
+					}
+					value /= 10;
+					precision--;
+				}
+				str = formatDigit(str, value, precision);
+			}
 		}
+		return str;
 	};
 	
-	var formatTimeZone = function(outbuf, tz, tzType)
+	var formatTimeZone1 = function ftz1(str, tz)
 	{
 		if(tz == 0) {
-			outbuf.push("Z");
-			return;
+			str = str + "Z";
+			return str;
 		} else if(tz > 0) {
-			outbuf.push("+");
+			str = str + "+";
 		} else {
-			outbuf.push("-");
+			str = str + "-";
 			tz = -tz;
 		}
 		
-		switch(tzType) {
-		case "z":
-			formatDigit(outbuf, Math.floor(tz / 60), 1);
-			break;
-		case "zz":
-			formatDigit(outbuf, Math.floor(tz / 60), 2);
-			break;
-		case "zzz":
-			formatDigit(outbuf, Math.floor(tz / 60), 2);
-			outbuf.push(":");
-			formatDigit(outbuf, tz % 60, 2);
-			break;
-		}
+		str = str + Math.floor(tz / 60);
+		
+		return str;
 	};
+	
+	var formatTimeZone2 = function ftz2(str, tz)
+	{
+		if(tz == 0) {
+			str = str + "Z";
+			return str;
+		} else if(tz > 0) {
+			str = str + "+";
+		} else {
+			str = str + "-";
+			tz = -tz;
+		}
+		
+		str = formatDigit(str, Math.floor(tz / 60), 2);
+		
+		return str;
+	};
+	
+	var formatTimeZone3 = function ftz3(str, tz)
+	{
+		if(tz == 0) {
+			str = str + "Z";
+			return str;
+		} else if(tz > 0) {
+			str = str + "+";
+		} else {
+			str = str + "-";
+			tz = -tz;
+		}
+		
+		str = formatDigit(str, Math.floor(tz / 60), 2);
+		str = str + ":";
+		str = formatDigit(str, tz % 60, 2);
+		
+		return str;
+	};
+	
+	/**
+	 * DateFormat_compile
+	 * 書式文字列を解析して実行しやすい形式にする。
+	 */
+	var DateFormat_compile = function(formatString)
+	{
+		var checkTable = new Array(DATE_FIELD_COUNT);
+		var dateFields = [];
+		var formatFields = [];
+		
+		var regexp = /(g{1,4}|y{1,4}|M{1,2}|d{1,2}|H{1,2}|t{1,2}|h{1,2}|m{1,2}|s{1,2}|f+|F+|z{1,3})/g;
+		var index = 0;
+		for(;;) {
+			var m = regexp.exec(formatString);
+			if(m == null) {
+				if(index < formatString.length) {
+					var s = formatString.substr(index);
+					var i = STR_INDEX[s];
+					if(i !== undefined) {
+						formatFields.push(FORMAT_TABLE[i]);
+					} else {
+						formatFields.push(createStringAppend(s));
+					}
+				}
+				break;
+			}
+			if(index < m.index) {
+				var s = formatString.substr(index, m.index - index);
+				var i = STR_INDEX[s];
+				if(i !== undefined) {
+					formatFields.push(FORMAT_TABLE[i]);
+				} else {
+					formatFields.push(createStringAppend(s));
+				}
+			}
+			
+			var pattern = m[0];
+			if(pattern.length <= 4) {
+				var field = FORMAT_INDEX[pattern];
+				if(field == undefined) {
+					throw new Error(INVALID_MESSAGE);
+				}
+				var formatIndex = field[0];
+				var fieldIndex = field[1];
+				
+				formatFields.push(FORMAT_TABLE[formatIndex]);
+				
+				if(checkTable[fieldIndex] !== true) {
+					dateFields.push(DATE_FIELD_GETTER[fieldIndex]);
+					checkTable[fieldIndex] = true;
+				}
+			} else {
+				var c = pattern.charAt(0);
+				if(c == "f") {
+					formatFields.push(createFormatSecondFragment(pattern.length, true));
+					
+					if(checkTable[DATE_FIELD_SECOND_FRAGMENT] !== true) {
+						dateFields.push(DATE_FIELD_GETTER[DATE_FIELD_SECOND_FRAGMENT]);
+						checkTable[DATE_FIELD_SECOND_FRAGMENT] = true;
+					}
+				} else if(c == "F") {
+					formatFields.push(createFormatSecondFragment(pattern.length, false));
+					
+					if(checkTable[DATE_FIELD_SECOND_FRAGMENT] !== true) {
+						dateFields.push(DATE_FIELD_GETTER[DATE_FIELD_SECOND_FRAGMENT]);
+						checkTable[DATE_FIELD_SECOND_FRAGMENT] = true;
+					}
+				} else {
+					throw new Error(INVALID_MESSAGE);
+				}
+			}
+			
+			index = regexp.lastIndex;
+		}
+		return {
+			_formatFields: formatFields,
+			_dateFields: dateFields,
+
+			format: function(date) {
+				if(date instanceof Date) {
+					var obj = new CalendarDateTime();
+					var f = this._dateFields;
+					for(var i = 0; i < f.length; i++) {
+						f[i](obj, date);
+					}
+					date = obj;
+				}
+
+				var f = this._formatFields;
+				var s = "";
+				for(var i = 0; i < f.length; i++) {
+					s = f[i](s, date);
+				}
+				return s;
+			},
+		};
+	};
+	
+	var CACHE = {};
 	
 	/**
 	 * DateFormat_format
@@ -1562,82 +1670,135 @@ if(this.mg == undefined) {
 	 */
 	var DateFormat_format = function(formatString, date)
 	{
-		var text = formatString;
-		
-		var buf = [];
-		
-		var regexp = /(y{1,4}|M{1,2}|d{1,2}|H{1,2}|m{1,2}|s{1,2}|f+|z{1,3})/g;
-		var index = 0;
-		for(;;) {
-			var m = regexp.exec(formatString);
-			if(m == null) {
-				buf.push(formatString.substr(index));
-				break;
-			}
-			buf.push(formatString.substr(index, m.index - index));
-			
-			var pattern = m[0];
-			switch(pattern) {
-			case "y":
-				buf.push(date.year % 10);
-				break;
-			case "yy":
-				buf.push(date.year % 100);
-				break;
-			case "yyy":
-			case "yyyy":
-				formatDigit(buf, date.year, 4);
-				break;
-			case "M":
-				buf.push(date.month);
-				break;
-			case "MM":
-				formatDigit(buf, date.month, 2);
-				break;
-			case "d":
-				buf.push(date.day);
-				break;
-			case "dd":
-				formatDigit(buf, date.day, 2);
-				break;
-			case "H":
-				buf.push(date.hour);
-				break;
-			case "HH":
-				formatDigit(buf, date.hour, 2);
-				break;
-			case "m":
-				buf.push(date.minute.toString());
-				break;
-			case "mm":
-				formatDigit(buf, date.minute, 2);
-				break;
-			case "s":
-				buf.push(date.second.toString());
-				break;
-			case "ss":
-				formatDigit(buf, date.second, 2);
-				break;
-			case "z":
-			case "zz":
-			case "zzz":
-				formatTimeZone(buf, date.timeZone, pattern);
-				break;
-			default:
-				if(pattern.charAt(0) == "f") {
-					formatSecondDegimal(buf, date, pattern.length);
-				} else {
-					throw new Error(INVALID_MESSAGE);
-				}
-				break;
-			}
-			index = regexp.lastIndex;
+		var v = CACHE[formatString];
+		if(v == undefined) {
+			v = DateFormat_compile(formatString);
+			CACHE[formatString] = v;
 		}
-		return buf.join("");
+		return v.format(date);
+	}
+
+	i = 0;
+	var DATE_FIELD_YEAR = i++;
+	var DATE_FIELD_MONTH = i++;
+	var DATE_FIELD_DATE = i++;
+	var DATE_FIELD_HOUR = i++;
+	var DATE_FIELD_MINUTE = i++;
+	var DATE_FIELD_SECOND = i++;
+	var DATE_FIELD_SECOND_FRAGMENT = i++;
+	var DATE_FIELD_TIMEZONE = i++;
+	var DATE_FIELD_COUNT = i;
+	
+	var DATE_FIELD_GETTER = [
+		function(o, d) { o.year = d.getYear() + 1900; },
+		function(o, d) { o.month = d.getMonth() + 1; },
+		function(o, d) { o.date = d.getDate() + 1; },
+		function(o, d) { o.hour = d.getHours(); },
+		function(o, d) { o.minute = d.getMinutes(); },
+		function(o, d) { o.second = d.getSeconds(); },
+		function(o, d) { o.milliSecond = d.getMilliseconds(); },
+		function(o, d) { o.timeZone = -d.getTimezoneOffset(); },
+	];
+	
+	var FORMAT_TABLE = [
+		function(s, o) { return s + (o.year < 0 ? "B.C.": "A.D."); },
+		function(s, o) { return s + o.year % 10; },
+		function(s, o) { return s + o.year % 100; },
+		function(s, o) { return formatDigit(s, o.year, 4); },
+		function(s, o) { return s + o.month; },
+		function(s, o) { return formatDigit(s, o.month, 2); },
+		function(s, o) { return s + o.date; },
+		function(s, o) { return formatDigit(s, o.date, 2); },
+		function(s, o) { return s + o.hour; },
+		function(s, o) { return formatDigit(s, o.hour, 2); },
+		function(s, o) { return s + o.hour >= 12 ? "P": "A"; },
+		function(s, o) { return s + o.hour >= 12 ? "PM": "AM"; },
+		function(s, o) { return s + o.hour % 12; },
+		function(s, o) { return formatDigit(s, o.hour % 12, 2); },
+		function(s, o) { return s + o.minute; },
+		function(s, o) { return formatDigit(s, o.minute, 2); },
+		function(s, o) { return s + o.second; },
+		function(s, o) { return formatDigit(s, o.second, 2); },
+		function(s, o) { return formatTimeZone1(s, o.timeZone); },
+		function(s, o) { return formatTimeZone2(s, o.timeZone); },
+		function(s, o) { return formatTimeZone3(s, o.timeZone); },
+		function(s, o) { return formatSecondFragment(s, o, 1, true); },
+		function(s, o) { return formatSecondFragment(s, o, 2, true); },
+		function(s, o) { return formatSecondFragment(s, o, 3, true); },
+		function(s, o) { return formatSecondFragment(s, o, 4, true); },
+		function(s, o) { return formatSecondFragment(s, o, 1, false); },
+		function(s, o) { return formatSecondFragment(s, o, 2, false); },
+		function(s, o) { return formatSecondFragment(s, o, 3, false); },
+		function(s, o) { return formatSecondFragment(s, o, 4, false); },
+		function(s, o) { return s + "/"; },
+		function(s, o) { return s + "-"; },
+		function(s, o) { return s + "T"; },
+		function(s, o) { return s + " "; },
+		function(s, o) { return s + ":"; },
+		function(s, o) { return s + "."; },
+	];
+	
+	var i = 0;
+	var FORMAT_INDEX = {
+		"g":	[i,		DATE_FIELD_YEAR],
+		"gg":	[i,		DATE_FIELD_YEAR],
+		"ggg":	[i,		DATE_FIELD_YEAR],
+		"gggg":	[i++,	DATE_FIELD_YEAR],
+		"y":	[i++,	DATE_FIELD_YEAR],
+		"yy":	[i++,	DATE_FIELD_YEAR],
+		"yyy":	[i,		DATE_FIELD_YEAR],
+		"yyyy":	[i++,	DATE_FIELD_YEAR],
+		"M":	[i++,	DATE_FIELD_MONTH],
+		"MM":	[i++,	DATE_FIELD_MONTH],
+		"d":	[i++,	DATE_FIELD_DATE],
+		"dd":	[i++,	DATE_FIELD_DATE],
+		"H":	[i++,	DATE_FIELD_HOUR],
+		"HH":	[i++,	DATE_FIELD_HOUR],
+		"t":	[i++,	DATE_FIELD_HOUR],
+		"tt":	[i++,	DATE_FIELD_HOUR],
+		"h":	[i++,	DATE_FIELD_HOUR],
+		"hh":	[i++,	DATE_FIELD_HOUR],
+		"m":	[i++,	DATE_FIELD_MINUTE],
+		"mm":	[i++,	DATE_FIELD_MINUTE],
+		"s":	[i++,	DATE_FIELD_SECOND],
+		"ss":	[i++,	DATE_FIELD_SECOND],
+		"z":	[i++,	DATE_FIELD_TIMEZONE],
+		"zz":	[i++,	DATE_FIELD_TIMEZONE],
+		"zzz":	[i++,	DATE_FIELD_TIMEZONE],
+		"f":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
+		"ff":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
+		"fff":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
+		"ffff":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
+		"F":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
+		"FF":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
+		"FFF":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
+		"FFFF":	[i++,	DATE_FIELD_SECOND_FRAGMENT],
+	};
+	var STR_INDEX = {
+		"/":	i++,
+		"-":	i++,
+		"T":	i++,
+		" ":	i++,
+		":":	i++,
+		".":	i++,
+	};
+	
+	var createFormatSecondFragment = function(precision, padZero)
+	{
+		return function(s, o) {
+			return formatSecondFragment(s, o, precision, padZero);
+		};
+	};
+	var createStringAppend = function(str)
+	{
+		return function(s, o) {
+			return formatSecondFragment(s, o, str);
+		};
 	};
 	
 	mg.DateFormat = {
 		parse: DateFormat_parse,
+		compile: DateFormat_compile,
 		format: DateFormat_format,
 	};
 })();
