@@ -1689,6 +1689,21 @@ var DateFormatFormatTestCase = {
 		mg.assertEquals(mg.DateFormat.format("tt/h", mg.DateFormat.parse("3-08-10T08:10:11.12345679")), "AM/8");
 		mg.assertEquals(mg.DateFormat.format("tt/h", mg.DateFormat.parse("3-08-10T11:10:11.12345679")), "AM/11");
 	},
+	testFormat_d: function() {
+		mg.assertEquals(mg.DateFormat.format("d", mg.DateFormat.parse("2017-03-05T09:10:11.12345679")), "5");
+		mg.assertEquals(mg.DateFormat.format("dd", mg.DateFormat.parse("2017-03-05T09:10:11.12345679")), "05");
+		mg.assertEquals(mg.DateFormat.format("ddd", mg.DateFormat.parse("2017-03-05T09:10:11.12345679")), "Sun");
+		mg.assertEquals(mg.DateFormat.format("dddd", mg.DateFormat.parse("2017-03-05T09:10:11.12345679")), "Sunday");
+	},
+	testFormat_M: function() {
+		mg.assertEquals(mg.DateFormat.format("M", mg.DateFormat.parse("2017-03-05T09:10:11.12345679")), "3");
+		mg.assertEquals(mg.DateFormat.format("MM", mg.DateFormat.parse("2017-03-05T09:10:11.12345679")), "03");
+		mg.assertEquals(mg.DateFormat.format("MMM", mg.DateFormat.parse("2017-03-05T09:10:11.12345679")), "Mar");
+		mg.assertEquals(mg.DateFormat.format("MMMM", mg.DateFormat.parse("2017-03-05T09:10:11.12345679")), "March");
+	},
+	testFormat_espace: function() {
+		mg.assertEquals(mg.DateFormat.format("\\h\\hh", mg.DateFormat.parse("2017-03-05T09:10:11.12345679")), "hh9");
+	}
 };
 
 mg.testRunner.add(DateFormatParseTestCase);

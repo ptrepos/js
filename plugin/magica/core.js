@@ -1265,10 +1265,14 @@ if(this.mg == undefined) {
 (function() {
 	var INVALID_MESSAGE = "Invalid Date Format";
 	
+	var DAY_OF_WEEK_TABLE = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
+	var DAY_OF_WEEK_ABBR_TABLE = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",];
+	var MONTH_TABLE = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	var MONTH_ABBR_TABLE = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+	
 	var CalendarDate = function()
 	{
 	};
-
 	CalendarDate.prototype =
 	{
 		year: 0,
@@ -1289,7 +1293,9 @@ if(this.mg == undefined) {
 		},
 		timeZone: 0,
 		get dayOfWeek() {
-			return new Date(this.year, this.month, this.date).getDay();
+			var d = new Date(this.year, this.month - 1, this.date);
+			d.setFullYear(this.year);
+			return d.getDay();
 		},
 		toString: function()
 		{
@@ -1429,7 +1435,7 @@ if(this.mg == undefined) {
 	{
 		var formatFields = [];
 		
-		var regexp = /(g+|y{1,4}|M{1,2}|d{1,2}|H{1,2}|t{1,2}|h{1,2}|m{1,2}|s{1,2}|f+|F+|z{1,3})/g;
+		var regexp = /(g+|y{1,4}|M{1,4}|d{1,4}|H{1,2}|t{1,2}|h{1,2}|m{1,2}|s{1,2}|f+|F+|z{1,3}|\\.)/g;
 		var index = 0;
 		for(;;) {
 			var m = regexp.exec(formatString);
@@ -1449,9 +1455,15 @@ if(this.mg == undefined) {
 			if(pattern.length <= 4) {
 				var formatterIndex = FORMAT_INDEX[pattern];
 				if(formatterIndex == undefined) {
-					throw new Error(INVALID_MESSAGE);
+					if(pattern.charAt(0) == "\\") {
+						var s = pattern.substr(1);
+						formatFields.push(getAppendString(s));
+					} else {
+						throw new Error(INVALID_MESSAGE);
+					}
+				} else {
+					formatFields.push(DATE_FORMATTERS[formatterIndex]);
 				}
-				formatFields.push(DATE_FORMATTERS[formatterIndex]);
 			} else {
 				var c = pattern.charAt(0);
 				if(c === "f" || c === "F") {
@@ -1531,7 +1543,7 @@ if(this.mg == undefined) {
 		},
 		get date() {
 			if(this._date == undefined) {
-				this._date = this._d.getDate() + 1;
+				this._date = this._d.getDate();
 			}
 			return this._date;
 		},
@@ -1565,6 +1577,12 @@ if(this.mg == undefined) {
 			}
 			return this._timeZone;
 		},
+		get dayOfWeek() {
+			if(this._dayOfWeek == undefined) {
+				this._dayOfWeek = this._d.getDay();
+			}
+			return this._dayOfWeek;
+		},
 	};
 	
 	var DATE_FORMATTERS = [
@@ -1574,8 +1592,12 @@ if(this.mg == undefined) {
 		function(s, o) { return formatYear(s, o.year); },
 		function(s, o) { return s + o.month; },
 		function(s, o) { return formatDigit2(s, o.month); },
+		function(s, o) { return s + MONTH_ABBR_TABLE[o.month-1]; },
+		function(s, o) { return s + MONTH_TABLE[o.month-1]; },
 		function(s, o) { return s + o.date; },
 		function(s, o) { return formatDigit2(s, o.date); },
+		function(s, o) { return s + DAY_OF_WEEK_ABBR_TABLE[o.dayOfWeek]; },
+		function(s, o) { return s + DAY_OF_WEEK_TABLE[o.dayOfWeek]; },
 		function(s, o) { return s + o.hour; },
 		function(s, o) { return formatDigit2(s, o.hour); },
 		function(s, o) { return s + o.hour >= 12 ? "P": "A"; },
@@ -1617,8 +1639,12 @@ if(this.mg == undefined) {
 		"yyyy":	i++,
 		"M":	i++,
 		"MM":	i++,
+		"MMM":	i++,
+		"MMMM":	i++,
 		"d":	i++,
 		"dd":	i++,
+		"ddd":	i++,
+		"dddd":	i++,
 		"H":	i++,
 		"HH":	i++,
 		"t":	i++,
